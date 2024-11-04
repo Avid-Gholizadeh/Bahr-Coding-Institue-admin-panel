@@ -7,8 +7,10 @@ import { BrowserRouter } from "react-router-dom";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 
-// ** ThemeColors Context
+// ** React Query Imports
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+// ** ThemeColors Context
 import { ThemeContext } from "./utility/context/ThemeColors";
 
 // ** ThemeConfig
@@ -45,21 +47,26 @@ import * as serviceWorker from "./serviceWorker";
 // ** Lazy load app
 const LazyApp = lazy(() => import("./App"));
 
+// Create the Query Client instance
+const queryClient = new QueryClient();
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 
 root.render(
   <BrowserRouter>
     <Provider store={store}>
-      <Suspense fallback={<Spinner />}>
-        <ThemeContext>
-          <LazyApp />
-          <Toaster
-            position={themeConfig.layout.toastPosition}
-            toastOptions={{ className: "react-hot-toast" }}
-          />
-        </ThemeContext>
-      </Suspense>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={<Spinner />}>
+          <ThemeContext>
+            <LazyApp />
+            <Toaster
+              position={themeConfig.layout.toastPosition}
+              toastOptions={{ className: "react-hot-toast" }}
+            />
+          </ThemeContext>
+        </Suspense>
+      </QueryClientProvider>
     </Provider>
   </BrowserRouter>
 );

@@ -5,8 +5,7 @@ import {
   CardTitle,
   CardText,
   CardLink,
-  Row,
-  Col,
+
 } from "reactstrap";
 import StatsCard from "../components/StatsCard";
 

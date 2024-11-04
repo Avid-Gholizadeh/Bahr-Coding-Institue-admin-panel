@@ -7,29 +7,38 @@ import Avatar from '@components/avatar'
 
 // ** Reactstrap Imports
 import { Card, CardHeader, CardTitle, CardBody, CardText, Row, Col } from 'reactstrap'
+import { useQuery } from '@tanstack/react-query';
+import {getLandingReport} from '../core/index'
 
 const StatsCard = ({ cols }) => {
+  const { data:report, isLoading } = useQuery({
+    queryKey:['landing'],
+    queryFn: getLandingReport,
+  })
+  const landingData = report || [];
+
+  console.log(landingData);
   const data = [
     {
-      title: '230k',
+      title: landingData.teacherCount || 'N/A',
       subtitle: 'اساتید',
       color: 'light-primary',
       icon: <User size={24} />
     },
     {
-      title: '8.549k',
+      title: landingData.studentCount || 'N/A',
       subtitle: 'دانشجویان',
       color: 'light-info',
       icon: <Users size={24} />
     },
     {
-      title: '1.423k',
+      title: landingData.courseCount || 'N/A',
       subtitle: 'دوره ها',
       color: 'light-success',
       icon: <BookOpen size={24} />
     },
     {
-      title: '$9745',
+      title: landingData.newsCount || 'N/A',
       subtitle: 'بلاگ ها',
       color: 'light-danger',
       icon: <Paperclip size={24} />
@@ -64,7 +73,6 @@ const StatsCard = ({ cols }) => {
     <Card className='card-statistics'>
       <CardHeader>
         <CardTitle tag='h4'>Statistics</CardTitle>
-        <CardText className='card-text font-small-2 me-25 mb-0'>Updated 1 month ago</CardText>
       </CardHeader>
       <CardBody className='statistics-body'>
         <Row>{renderData()}</Row>
