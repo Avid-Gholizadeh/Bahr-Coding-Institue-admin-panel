@@ -1,77 +1,75 @@
 // ** React Imports
-import { Suspense, lazy } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import {Suspense, lazy} from 'react'
+import {createRoot} from 'react-dom/client'
+import {BrowserRouter} from 'react-router-dom'
 
 // ** Redux Imports
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
-
-// ** React Query Imports
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {store} from './redux/store'
+import {Provider} from 'react-redux'
 
 // ** ThemeColors Context
-import { ThemeContext } from "./utility/context/ThemeColors";
+
+import {ThemeContext} from './utility/context/ThemeColors'
 
 // ** ThemeConfig
-import themeConfig from "./configs/themeConfig";
+import themeConfig from './configs/themeConfig'
 
 // ** Toast
-import { Toaster } from "react-hot-toast";
+import {Toaster} from 'react-hot-toast'
 
 // ** Spinner (Splash Screen)
-import Spinner from "./@core/components/spinner/Fallback-spinner";
+import Spinner from './@core/components/spinner/Fallback-spinner'
 
 // ** Ripple Button
-import "./@core/components/ripple-button";
+import './@core/components/ripple-button'
 
 // ** PrismJS
-import "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-jsx.min";
+import 'prismjs'
+import 'prismjs/themes/prism-tomorrow.css'
+import 'prismjs/components/prism-jsx.min'
 
 // ** React Perfect Scrollbar
-import "react-perfect-scrollbar/dist/css/styles.css";
+import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** React Hot Toast Styles
-import "@styles/react/libs/react-hot-toasts/react-hot-toasts.scss";
+import '@styles/react/libs/react-hot-toasts/react-hot-toasts.scss'
 
 // ** Core styles
-import "./@core/assets/fonts/feather/iconfont.css";
-import "./@core/scss/core.scss";
-import "./assets/scss/style.scss";
+import './@core/assets/fonts/feather/iconfont.css'
+import './@core/scss/core.scss'
+import './assets/scss/style.scss'
 
 // ** Service Worker
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from './serviceWorker'
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 
 // ** Lazy load app
-const LazyApp = lazy(() => import("./App"));
+const LazyApp = lazy(() => import('./App'))
 
-// Create the Query Client instance
-const queryClient = new QueryClient();
+const container = document.getElementById('root')
+const root = createRoot(container)
 
-const container = document.getElementById("root");
-const root = createRoot(container);
+const queryClient = new QueryClient()
 
 root.render(
-  <BrowserRouter>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Spinner />}>
-          <ThemeContext>
-            <LazyApp />
-            <Toaster
-              position={themeConfig.layout.toastPosition}
-              toastOptions={{ className: "react-hot-toast" }}
-            />
-          </ThemeContext>
-        </Suspense>
-      </QueryClientProvider>
-    </Provider>
-  </BrowserRouter>
-);
+    <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+            <Provider store={store}>
+                <Suspense fallback={<Spinner />}>
+                    <ThemeContext>
+                        <LazyApp />
+                        <Toaster
+                            position={themeConfig.layout.toastPosition}
+                            toastOptions={{className: 'react-hot-toast'}}
+                        />
+                    </ThemeContext>
+                </Suspense>
+            </Provider>
+        </BrowserRouter>
+    </QueryClientProvider>
+)
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+serviceWorker.unregister()
