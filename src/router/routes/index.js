@@ -26,86 +26,85 @@ const TemplateTitle = '%s - Vuexy React Admin Template'
 // ** Default Route
 const DefaultRoute = '/home'
 
-const Home = lazy(() => import("../../pages/Home"));
-const SecondPage = lazy(() => import("../../pages/SecondPage"));
-const Login = lazy(() => import("../../pages/Login"));
-const Register = lazy(() => import("../../pages/Register"));
-const ForgotPassword = lazy(() => import("../../pages/ForgotPassword"));
-const Error = lazy(() => import("../../pages/Error"));
-const Sample = lazy(() => import("../../pages/Sample"));
+const Home = lazy(() => import('../../pages/Home'))
+const SecondPage = lazy(() => import('../../pages/SecondPage'))
+const Login = lazy(() => import('../../pages/Login'))
+const Register = lazy(() => import('../../pages/Register'))
+const ForgotPassword = lazy(() => import('../../pages/ForgotPassword'))
+const Error = lazy(() => import('../../pages/Error'))
+const Sample = lazy(() => import('../../pages/Sample'))
 
 const UserList = lazy(() => import('../../pages/user/list'))
 const UserView = lazy(() => import('../../pages/user/view'))
 const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
 
-
 // ** Merge Routes
 const Routes = [
-  {
-    path: "/",
-    index: true,
-    element: <Navigate replace to={DefaultRoute} />,
-  },
-  {
-    path: "/home",
-    element: <Home />,
-  },
-  {
-    path: "/sample",
-    element: <Sample />,
-  },
-  {
-    path: "/second-page",
-    element: <SecondPage />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-    meta: {
-      layout: "blank",
+    {
+        path: '/',
+        index: true,
+        element: <Navigate replace to={DefaultRoute} />,
     },
-  },
-  {
-    path: "/register",
-    element: <Register />,
-    meta: {
-      layout: "blank",
+    {
+        path: '/home',
+        element: <Home />,
     },
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-    meta: {
-      layout: "blank",
+    {
+        path: '/sample',
+        element: <Sample />,
     },
-  },
-  {
-    path: "/error",
-    element: <Error />,
-    meta: {
-      layout: "blank",
+    {
+        path: '/second-page',
+        element: <SecondPage />,
     },
-  },
-  {
-    path: "*",
-    element: <Error />,
-    meta: {
-      layout: "blank",
+    {
+        path: '/login',
+        element: <Login />,
+        meta: {
+            layout: 'blank',
+        },
     },
-  },
-  {
-    element: <UserView />,
-    path: '/user/view/:id'
-  },
-  {
-    element: <UserList />,
-    path: '/user/list'
-  },
-  {
-    element: <ManageComments/>,
-    path: '/comments-management'
-  }
-];
+    {
+        path: '/register',
+        element: <Register />,
+        meta: {
+            layout: 'blank',
+        },
+    },
+    {
+        path: '/forgot-password',
+        element: <ForgotPassword />,
+        meta: {
+            layout: 'blank',
+        },
+    },
+    {
+        path: '/error',
+        element: <Error />,
+        meta: {
+            layout: 'blank',
+        },
+    },
+    {
+        path: '*',
+        element: <Error />,
+        meta: {
+            layout: 'blank',
+        },
+    },
+    {
+        element: <UserView />,
+        path: '/user/view/:id',
+    },
+    {
+        element: <UserList />,
+        path: '/user/list',
+    },
+    {
+        element: <ManageComments />,
+        path: '/comments-management',
+    },
+]
 
 const getRouteMeta = route => {
     if (isObjEmpty(route.element.props)) {
