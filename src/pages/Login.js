@@ -34,9 +34,6 @@ const Login = () => {
     const dispatch = useDispatch()
     const {skin} = useSkin()
 
-    navigate('/home')
-    console.log('home')
-
     const LoginSchema = yup.object().shape({
         phoneOrGmail: yup.string().email('ایمیل قابل قبول نمی باشد').required('نمیتواند خالی باشد'),
         password: yup
