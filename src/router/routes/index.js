@@ -50,7 +50,7 @@ const Routes = [
         element: <Home />,
     },
     {
-        path: '/sample',
+        path: '/courses',
         element: <Sample />,
     },
     {
