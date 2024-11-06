@@ -6,7 +6,7 @@ import Router from './router/Router'
 const App = () => {
     return (
         <Suspense fallback={null}>
-            {/*  <div dir="rtl">
+            {/* <div dir="rtl">
                 <Router />
             </div> */}
             <Router />

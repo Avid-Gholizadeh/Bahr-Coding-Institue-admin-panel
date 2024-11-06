@@ -16,7 +16,18 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 
 // ** Reactstrap Imports
-import {Row, Col, CardTitle, CardText, Form, Label, Input, Button, FormFeedback} from 'reactstrap'
+import {
+    Row,
+    Col,
+    CardTitle,
+    CardText,
+    Form,
+    Label,
+    Input,
+    Button,
+    FormFeedback,
+    Spinner,
+} from 'reactstrap'
 
 // ** Illustrations Imports
 import illustrationsLight from '@src/assets/images/pages/login-v2.svg'
@@ -43,7 +54,6 @@ const Login = () => {
     })
 
     const {
-        reset,
         control,
         handleSubmit,
         formState: {errors},
@@ -54,13 +64,13 @@ const Login = () => {
         onSuccess: data => {
             if (data.success) {
                 toast.success(' ورود با موفقیت انجام شد. ')
-                /* dispatch(
+                dispatch(
                     tokenActions.login({
                         token: data.token,
                         id: data.id,
                         roles: data.roles,
                     })
-                ) */
+                )
                 console.log('render1')
                 navigate('/home')
                 console.log('render2')
@@ -81,7 +91,7 @@ const Login = () => {
     const source = skin === 'dark' ? illustrationsDark : illustrationsLight
 
     return (
-        <div className="auth-wrapper auth-cover">
+        <div className="auth-wrapper auth-cover" /* dir="rtl" */>
             <Row className="auth-inner m-0">
                 <Link className="brand-logo" to="/" onClick={e => e.preventDefault()}>
                     <svg viewBox="0 0 139 95" version="1.1" height="28">
@@ -188,7 +198,7 @@ const Login = () => {
                                     id="login-password"
                                 />
                             </div> */}
-                            <div className="mb-1">
+                            <div className="mb-1" dir="rtl">
                                 <Label className="form-label" for="phoneOrGmail">
                                     ایمیل
                                 </Label>
@@ -201,6 +211,7 @@ const Login = () => {
                                         <Input
                                             {...field}
                                             type="phoneOrGmail"
+                                            className="text-right"
                                             placeholder="bruce.wayne@email.com"
                                             invalid={errors.phoneOrGmail && true}
                                         />
@@ -210,7 +221,7 @@ const Login = () => {
                                     <FormFeedback>{errors.phoneOrGmail.message}</FormFeedback>
                                 )}
                             </div>
-                            <div className="mb-1">
+                            <div className="mb-1 " dir="rtl">
                                 <Label className="form-label" for="password">
                                     رمز عبور
                                 </Label>
@@ -224,7 +235,7 @@ const Login = () => {
                                         <InputPasswordToggle
                                             {...field}
                                             type="password"
-                                            className="input-group-merge"
+                                            className="input-group-merge border-right-2"
                                             placeholder="رمز عبور خود را وارد کنید"
                                             invalid={errors.password && true}
                                         />
@@ -234,7 +245,7 @@ const Login = () => {
                                     <FormFeedback>{errors.password.message}</FormFeedback>
                                 )}
                             </div>
-                            <div className="form-check mb-1">
+                            <div className="form-check mb-1 ">
                                 <Controller
                                     id="rememberMe"
                                     name="rememberMe"
@@ -252,12 +263,13 @@ const Login = () => {
                                     <FormFeedback>{errors.rememberMe.message}</FormFeedback>
                                 )}
 
-                                <Label className="form-check-label" for="rememberMe">
+                                <Label className="form-check-label " for="rememberMe">
                                     مرا به خاطر بسپار
                                 </Label>
                             </div>
-                            <Button type="submit" color="primary" block>
-                                ورود
+                            <Button type="submit" color="primary" block disabled={isPending}>
+                                <span className="me-1 font-">ورود</span>
+                                {isPending && <Spinner size="sm" color="light" />}
                             </Button>
                         </Form>
                         {/* <p className="text-center mt-2">
@@ -276,7 +288,7 @@ const Login = () => {
                             <Button color="twitter">
                                 <Twitter size={14} />
                             </Button>
-                            <Button color="google">
+                            <Button color="google" className="">
                                 <Mail size={14} />
                             </Button>
                             <Button className="" color="github">
