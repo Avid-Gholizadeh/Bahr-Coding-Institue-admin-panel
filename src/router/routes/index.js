@@ -33,6 +33,10 @@ const ForgotPassword = lazy(() => import("../../pages/ForgotPassword"));
 const Error = lazy(() => import("../../pages/Error"));
 const Sample = lazy(() => import("../../pages/Sample"));
 
+const UserList = lazy(() => import('../../pages/user/list'))
+const UserView = lazy(() => import('../../pages/user/view'))
+
+
 // ** Merge Routes
 const Routes = [
   {
@@ -41,7 +45,7 @@ const Routes = [
     element: <Navigate replace to={DefaultRoute} />,
   },
   {
-    path: "/dashboard",
+    path: "/home",
     element: <Home />,
   },
   {
@@ -86,6 +90,14 @@ const Routes = [
     meta: {
       layout: "blank",
     },
+  },
+  {
+    element: <UserView />,
+    path: '/courses/view/:id'
+  },
+  {
+    element: <UserList />,
+    path: '/user/list'
   },
 ];
 
