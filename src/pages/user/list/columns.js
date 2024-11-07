@@ -9,7 +9,7 @@ import { store } from '@store/store'
 import { getUser, deleteUser } from '../store'
 
 // ** Icons Imports
-import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
+import { Slack, User, Database, MoreVertical, FileText, Trash2, Archive, Edit, Feather, Edit3 } from 'react-feather'
 
 // ** Reactstrap Imports
 import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
@@ -18,13 +18,13 @@ import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 import jMoment from 'jalali-moment'
 
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
-import { DeleteUser } from '../../../core/services/api/User'
+import { DeleteUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 
 // ** Renders Client Columns
 const renderClient = row => {
   if (row.pictureAddress) {
-    return <Avatar className='me-1' img={row.pictureAddress != "Not-set" && row.pictureAddress} width='32' height='32' />
+    return <Avatar className='me-1' img={row.pictureAddress !== "Not-set" && row.pictureAddress} width='32' height='32' />
   } else {
     return (
       <Avatar
@@ -50,11 +50,17 @@ const renderRole = row => {
     },
     Teacher: {
       class: 'text-warning',
-      icon: Settings
+      icon: Edit3
     },
+    Writer: { // Generic entry for any role that includes "Writer"
+      class: 'text-success',
+      icon: Feather
+    }
   }
-
-  const Icon = roleObj[row.userRoles] ? roleObj[row.userRoles].icon : Edit2
+  console.log(row.userRoles);
+  const isWriter = row.userRoles && row.userRoles.includes('Writer');
+  const roleKey = isWriter ? 'Writer' : row.userRoles;
+  const Icon = roleObj[roleKey] ? roleObj[roleKey].icon : Edit
 
   return (
     <span className='text-truncate text-capitalize align-middle'>
@@ -72,7 +78,7 @@ const statusObj = {
 
 export const columns = [
   {
-    name: 'نام کاربر',
+    name: 'نام کاربری',
     sortable: true,
     minWidth: '300px',
     sortField: 'fullName',
@@ -93,32 +99,28 @@ export const columns = [
     )
   },
   {
-    name: 'دسترسی',
+    name: 'نقش',
     sortable: true,
-    minWidth: '172px',
     sortField: 'role',
     selector: row => row.userRoles,
     cell: row => renderRole(row)
   },
   {
-    name: 'تاریخ ورود',
+    name: 'تاریخ عضویت',
     sortable: true,
-    minWidth: '172px',
     sortField: 'insertDate',
     selector: row => row.insertDate,
     cell: row => <span className='text-capitalize'> {jMoment(row.insertDate).locale('fa').format('jD jMMMM jYYYY')} </span>
   },
   {
     name: 'جنیست',
-    minWidth: '230px',
     sortable: true,
     sortField: 'billing',
     selector: row => row.gender,
-    cell: row => <span className='text-capitalize'>{row.gender ? 'زن' : 'مرد'}</span>
+    cell: row => <span className='text-capitalize'>{row.gender ? 'مرد' : 'زن'}</span>
   },
   {
     name: 'وضعیت',
-    minWidth: '138px',
     sortable: true,
     sortField: 'status',
     selector: row => row.active,
@@ -129,7 +131,7 @@ export const columns = [
     )
   },
   {
-    name: 'اکشن ها',
+    name: ' عملیات',
     minWidth: '100px',
     cell: row => (
       <div style={{zIndex: 'auto'}}>
@@ -148,7 +150,7 @@ export const columns = [
             </DropdownItem>
             <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
               <Archive size={14} className='me-50' />
-              <span className='align-middle'> تغییر دسترسی </span>
+              <span className='align-middle'> تغییر نقش </span>
             </DropdownItem>
             <DropdownItem
               tag='a'
@@ -157,7 +159,7 @@ export const columns = [
                 e.preventDefault()
                 const response = await DeleteUser(row.id)
                 if(!response){
-                  toast.error(' فقط ادمین اصلی دسترسی به حذف کاربر را دارد! ')
+                  toast.error(' دسترسی ندارید ')
                 }
                 else if(response.success === true){
                   toast.success(' حذف انجام شد ')

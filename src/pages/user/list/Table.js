@@ -42,7 +42,7 @@ import {
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import { useQuery } from '@tanstack/react-query'
-import { GetUserList } from '../../../core/services/api/User'
+import { GetUserList } from '../../../@core/services/api/User'
 
 // ** Table Header
 const CustomHeader = ({ toggleSidebar, handlePerPage, handleQuery, rowsPerPage, handleFilter, searchTerm }) => {
@@ -158,7 +158,7 @@ const UsersList = () => {
 
   useEffect(() => {
     refetch()
-  }, [SortType || SortingCol || Query || PageNumber || RowsOfPage || IsActiveUser || IsDeletedUser || currentRole])
+  }, [SortType , SortingCol , Query , PageNumber , RowsOfPage ,IsActiveUser , IsDeletedUser ,currentRole])
 
   // ** Custom Pagination
   const CustomPagination = () => {
@@ -217,8 +217,8 @@ const UsersList = () => {
         </CardHeader>
         <CardBody>
           <Row>
-            <Col md='4'>
-              <Label for='role-select'>دسترسی</Label>
+            <Col md='3'>
+              <Label for='role-select'>نقش</Label>
               <Select
                 isClearable={false}
                 value={currentRole}
@@ -232,8 +232,8 @@ const UsersList = () => {
                 }}
               />
             </Col>
-            <Col md='4'>
-              <Label for='role-select'>تاریخ ورود</Label>
+            <Col md='3'>
+              <Label for='role-select'>تاریخ ثبت نام</Label>
               <Select
                 isClearable={false}
                 value={currentSort}
@@ -249,7 +249,7 @@ const UsersList = () => {
                 }}
               />
             </Col>
-            <Col md='4'>
+            <Col md='2'>
               <Label for='status-select'>وضعیت</Label>
               <Select
                 theme={selectThemeColors}
@@ -284,7 +284,7 @@ const UsersList = () => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
-            noDataComponent={<div style={{padding: '20px'}}> موجود نمی باشد </div>}
+            noDataComponent={<div style={{padding: '20px'}}> اطلاعاتی موجود نیست</div>}
             subHeaderComponent={
               <CustomHeader
                 handleFilter={handleFilter}

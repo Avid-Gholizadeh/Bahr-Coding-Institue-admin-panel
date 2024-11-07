@@ -18,8 +18,8 @@ import { Button, Label, FormText, Form, Input } from 'reactstrap'
 // ** Store & Actions
 import { addUser } from '../store'
 import { useDispatch } from 'react-redux'
-import { setItem } from '../../../core/Services/common/storage'
-import { AddUser } from '../../../core/services/api/User'
+// import { setItem } from '../../../core/Services/common/storage'
+import { AddUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 
 const defaultValues = {
@@ -42,10 +42,10 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   const [isTeacher, setIsTeacher] = useState(false)
 
   useEffect(() => {
-    if(role == 'isStudent') {
+    if(role === 'isStudent') {
       setIsStudent(true)
     }
-    else if(role == 'isTeacher') {
+    else if(role === 'isTeacher') {
       setIsTeacher(true)
     }
   }, [role])
@@ -68,7 +68,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     if(!response){
       toast.error(' کاربر اضافه نشد! ')
     }
-    else if(response.success == true){
+    else if(response.success === true){
       toast.success('کاربر اضافه شد')
     }
   }
@@ -131,7 +131,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
             name='firstName'
             control={control}
             render={({ field }) => (
-              <Input id='firstName' placeholder='Kian' invalid={errors.fullName && true} {...field} />
+              <Input id='firstName' placeholder='نام' invalid={errors.fullName && true} {...field} />
             )}
           />
         </div>
@@ -143,7 +143,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
             name='lastName'
             control={control}
             render={({ field }) => (
-              <Input id='lastName' placeholder='Janloo' invalid={errors.lastName && true} {...field} />
+              <Input id='lastName' placeholder='نام خانوادگی' invalid={errors.lastName && true} {...field} />
             )}
           />
         </div>
@@ -158,7 +158,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
               <Input
                 type='gmail'
                 id='gmail'
-                placeholder='john.doe@example.com'
+                placeholder='email@example.com'
                 invalid={errors.gmail && true}
                 {...field}
               />
@@ -176,7 +176,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
               <Input
                 type='text'
                 id='phoneNumber'
-                placeholder='09112223344'
+                placeholder='09123456789'
                 invalid={errors.phoneNumber && true}
                 {...field}
               />
@@ -192,7 +192,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
             name='password'
             control={control}
             render={({ field }) => (
-              <Input id='password' placeholder='(397) 294-5153' invalid={errors.password && true} {...field} />
+              <Input id='password' placeholder='12345678' invalid={errors.password && true} {...field} />
             )}
           />
         </div>

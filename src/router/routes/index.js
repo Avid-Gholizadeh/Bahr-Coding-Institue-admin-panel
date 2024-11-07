@@ -94,7 +94,7 @@ const Routes = [
   },
   {
     element: <UserView />,
-    path: '/courses/view/:id'
+    path: '/user/view/:id'
   },
   {
     element: <UserList />,

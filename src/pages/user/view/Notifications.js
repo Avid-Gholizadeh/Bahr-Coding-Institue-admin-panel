@@ -1,25 +1,29 @@
 // ** Reactstrap Imports
 import { useState } from 'react'
 import { Card, CardTitle, CardBody, Table, Input, Button } from 'reactstrap'
-import { AddRole } from '../../../core/Services/api/User/AddRole'
+import { AddRole } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 
 const Notifications = ({ user }) => {
 
   const typesArr = [
     {
-      title: 'دسترسی ها :',
-      defaultChecked: [user.roles.map(role => role.roleName).includes('Student') ? 'Student' : '', user.roles.map(role => role.roleName).includes('Teacher') ? 'Teacher' : '', user.roles.map(role => role.roleName).includes('Administrator') ? 'Administrator' : '']
+      title: 'نقش ها ',
+      defaultChecked: [
+         user.roles.map(role => role.roleName).includes('Student') ? 'Student' : '',
+         user.roles.map(role => role.roleName).includes('Teacher') ? 'Teacher' : '', 
+         user.roles.map(role => role.roleName).includes('Administrator') ? 'Administrator' : ''
+        ]
     },
   ]
 
   const changeRoles = async (status, roleId) => {
     const response = await AddRole(roleId, user.id, status)
     if(!response){
-      toast.error(' دسترسی ویرایش نشد ')      
+      toast.error(' نقش تغییر نکرد ')      
     }
-    else if(response.success == true){
-      toast.success(' دسترسی با موفقیت ویرایش شد ')
+    else if(response.success === true){
+      toast.success(' نقش ویرایش شد ')
     }
   }
 
@@ -27,9 +31,9 @@ const Notifications = ({ user }) => {
     <Card>
       <CardBody>
         <CardTitle className='mb-50' tag='h4'>
-          دسترسی
+        نقش
         </CardTitle>
-        <p className='mb-0'> برای تغییر دسترسی کاربر تیک آبی دسترسی را فعال کنید </p>
+        <p className='mb-0'> برای تغییر نقش کاربر تیک آبی نقش را فعال کنید </p>
       </CardBody>
       <Table className='text-nowrap text-center border-bottom' responsive>
         <thead>
@@ -48,7 +52,7 @@ const Notifications = ({ user }) => {
                 <td>
                   <div className='d-flex form-check justify-content-center'>
                     <Input type='checkbox' defaultChecked={type.defaultChecked.includes('Student')} onInput={(e) => {
-                      if(e.target.checked == true){
+                      if(e.target.checked === true){
                         changeRoles(true, 5)
                       }
                       else{
@@ -60,7 +64,7 @@ const Notifications = ({ user }) => {
                 <td>
                   <div className='d-flex form-check justify-content-center'>
                     <Input type='checkbox' defaultChecked={type.defaultChecked.includes('Teacher')} onInput={(e) => {
-                      if(e.target.checked == true){
+                      if(e.target.checked === true){
                         changeRoles(true, 2)
                       }
                       else{
@@ -72,7 +76,7 @@ const Notifications = ({ user }) => {
                 <td>
                   <div className='d-flex form-check justify-content-center'>
                     <Input type='checkbox' defaultChecked={type.defaultChecked.includes('Administrator')} onInput={(e) => {
-                      if(e.target.checked == true){
+                      if(e.target.checked === true){
                         changeRoles(true, 1)
                       }
                       else{

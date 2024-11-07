@@ -7,7 +7,7 @@ import { Row, Col, Card, Form, CardBody, Button, Badge, Modal, Input, Label, Mod
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import Select from 'react-select'
-import { Check, Briefcase, X, User } from 'react-feather'
+import { Check, Briefcase, X, User, TrendingUp } from 'react-feather'
 import { useForm, Controller } from 'react-hook-form'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -21,9 +21,9 @@ import "flatpickr/dist/themes/material_green.css";
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import { useQuery } from '@tanstack/react-query'
-import { GetDetailUser } from '../../../core/Services/api/User/GetDetailUser'
+import { GetDetailUser } from '../../../@core/services/api/User'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
-import { UpdateUser } from '../../../core/Services/api/User/UpdateUser'
+import { UpdateUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 import DatePicker from 'react-flatpickr'
 
@@ -81,7 +81,7 @@ const UserInfoCard = ({ selectedUser }) => {
 
   // ** render user img
   const renderUserImg = () => {
-    if (selectedUser !== null && selectedUser.currentPictureAddress != 'Not-set' && selectedUser.currentPictureAddress.length) {
+    if (selectedUser !== null && selectedUser.currentPictureAddress !== 'Not-set' && selectedUser.currentPictureAddress.length) {
       return (
         <img
           height='110'
@@ -120,7 +120,7 @@ const UserInfoCard = ({ selectedUser }) => {
     if (!response){
       toast.error(' عملیات موفقیت آمیز نبود ')
     }
-    else if(response.success == true){
+    else if(response.success === true){
       toast.success(' عملیات انجام شد ')
       setShow(false)
       handleReset()
@@ -160,42 +160,6 @@ const UserInfoCard = ({ selectedUser }) => {
         coursesReseves: []
     })
   }
-
-  // const handleSuspendedClick = () => {
-  //   return MySwal.fire({
-  //     title: 'Are you sure?',
-  //     text: "You won't be able to revert user!",
-  //     icon: 'warning',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Yes, Suspend user!',
-  //     customClass: {
-  //       confirmButton: 'btn btn-primary',
-  //       cancelButton: 'btn btn-outline-danger ms-1'
-  //     },
-  //     buttonsStyling: false
-  //   }).then(function (result) {
-  //     if (result.value) {
-  //       MySwal.fire({
-  //         icon: 'success',
-  //         title: 'Suspended!',
-  //         text: 'User has been suspended.',
-  //         customClass: {
-  //           confirmButton: 'btn btn-success'
-  //         }
-  //       })
-  //     } else if (result.dismiss === MySwal.DismissReason.cancel) {
-  //       MySwal.fire({
-  //         title: 'Cancelled',
-  //         text: 'Cancelled Suspension :)',
-  //         icon: 'error',
-  //         customClass: {
-  //           confirmButton: 'btn btn-success'
-  //         }
-  //       })
-  //     }
-  //   })
-  // }
-
   return (
     <div className='iranSans'>
       <Card>
@@ -225,13 +189,13 @@ const UserInfoCard = ({ selectedUser }) => {
                 <User className='font-medium-2' />
               </Badge>
               <div className='ms-75'>
-                <h4 className='mb-0'> {selectedUser.gender == true ? 'زن' : 'مرد'} </h4>
+                <h4 className='mb-0'> {selectedUser.gender === true ? 'مرد' : 'زن'} </h4>
                 <small> جنسیت </small>
               </div>
             </div>
             <div className='d-flex align-items-start'>
               <Badge color='light-primary' className='rounded p-75'>
-                <Briefcase className='font-medium-2' />
+                <TrendingUp className='font-medium-2' />
               </Badge>
               <div className='ms-75'>
                 <h4 className='mb-0'> {selectedUser.profileCompletionPercentage ? selectedUser.profileCompletionPercentage : '0'}% </h4>
@@ -244,32 +208,32 @@ const UserInfoCard = ({ selectedUser }) => {
             {selectedUser !== null ? (
               <ul className='list-unstyled'>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>نام کاربری:</span>
+                  <span className='fs-5 text fw-semibold'>نام کاربری:</span>
                   <span>{selectedUser.userName}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>ایمیل :</span>
+                  <span className='fs-5 text fw-semibold'>ایمیل :</span>
                   <span>{selectedUser.gmail}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>شماره :</span>
+                  <span className='fs-5 text fw-semibold'>شماره :</span>
                   <span>{selectedUser.phoneNumber}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>آدرس :</span>
+                  <span className='fs-5 text fw-semibold'>آدرس :</span>
                   <span>{selectedUser.homeAdderess}</span>
                 </li>
                 
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>کد ملی :</span>
+                  <span className='fs-5 text fw-semibold'>کد ملی :</span>
                   <span>{selectedUser.nationalCode}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>تاریخ تولد :</span>
-                  <span>{selectedUser.birthDay != '0001-01-01T00:00:00' ? jMoment(selectedUser.birthDay).locale('fa').format('jD jMMMM jYYYY') : ''}</span>
+                  <span className='fs-5 text fw-semibold'>تاریخ تولد :</span>
+                  <span>{selectedUser.birthDay !== '' ? jMoment(selectedUser.birthDay).locale('fa').format('jD jMMMM jYYYY') : ''}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>دسترسی:</span>
+                  <span className='fs-5 text fw-semibold'>نقش:</span>
                   <span className='text-capitalize'>{selectedUser !== null ? (
                     selectedUser.roles.map(role => {
                       return  <span style={{margin: '2px'}}> {role.roleName} </span>
@@ -277,14 +241,14 @@ const UserInfoCard = ({ selectedUser }) => {
                   ) : null}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>توضیحات کاربر:</span>
+                  <span className='fs-5 text fw-semibold'>درباره کاربر</span>
                   <span>{selectedUser.userAbout}</span>
                 </li>
               </ul>
             ) : null}
           </div>
           <div className='d-flex justify-content-center pt-2'>
-            <Button color='primary' onClick={() => {setShow(true), handleReset()}}>
+            <Button color='primary' onClick={() => {setShow(true); handleReset()}}>
               تغییر مشخصات
             </Button>
           </div>
@@ -295,7 +259,7 @@ const UserInfoCard = ({ selectedUser }) => {
         <ModalBody className='px-sm-5 pt-50 pb-5'>
           <div className='text-center mb-2'>
             <h1 className='mb-1'> تغییر مشخصات کاربر </h1>
-            <p>بروز نسانی مشخصات کاربری :</p>
+            <p>بروز نسانی مشخصات کاربر :</p>
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className='gy-1 pt-75'>
@@ -309,7 +273,7 @@ const UserInfoCard = ({ selectedUser }) => {
                   id='fName'
                   name='fName'
                   render={({ field }) => (
-                    <Input {...field} id='fName' placeholder='کیان' invalid={errors.fName && true} />
+                    <Input {...field} id='fName' placeholder='نام...' invalid={errors.fName && true} />
                   )}
                 />
               </Col>
@@ -323,7 +287,7 @@ const UserInfoCard = ({ selectedUser }) => {
                   id='lName'
                   name='lName'
                   render={({ field }) => (
-                    <Input {...field} id='lName' placeholder='جانلو' invalid={errors.lName && true} />
+                    <Input {...field} id='lName' placeholder='نام خانوادگی...' invalid={errors.lName && true} />
                   )}
                 />
               </Col>
@@ -409,7 +373,7 @@ const UserInfoCard = ({ selectedUser }) => {
                   id='nationalCode'
                   name='nationalCode'
                   render={({ field }) => (
-                    <Input {...field} id='nationalCode' placeholder='000000000000' invalid={errors.nationalCode && true} />
+                    <Input {...field} id='nationalCode' placeholder='**********' invalid={errors.nationalCode && true} />
                   )}
                 />
               </Col>
@@ -423,14 +387,14 @@ const UserInfoCard = ({ selectedUser }) => {
                   id='birthDay'
                   name='birthDay'
                   render={({ field }) => (
-                    <Input {...field} id='birthDay' placeholder='2002-02-03' invalid={errors.birthDay && true} />
+                    <Input {...field} id='birthDay' placeholder='xxxx-xx-xx' invalid={errors.birthDay && true} />
                   )}
                 />
               </Col>
 
               <Col xs={6}>
                 <Label className='form-label' for='linkdinProfile'>
-                  لینک لینکدین
+                   لینکدین
                 </Label>
                 <Controller
                   defaultValue=''
@@ -445,7 +409,7 @@ const UserInfoCard = ({ selectedUser }) => {
 
               <Col xs={6}>
                 <Label className='form-label' for='telegramLink'>
-                  لینک تلگرام
+                   تلگرام
                 </Label>
                 <Controller
                   defaultValue=''
@@ -458,24 +422,6 @@ const UserInfoCard = ({ selectedUser }) => {
                 />
               </Col>
 
-              {/* <Col xs={12}>
-                <div className='d-flex align-items-center mt-1'>
-                  <div className='form-switch'>
-                    <Input type='switch' defaultChecked id='billing-switch' name='billing-switch' />
-                    <Label className='form-check-label' htmlFor='billing-switch'>
-                      <span className='switch-icon-left'>
-                        <Check size={14} />
-                      </span>
-                      <span className='switch-icon-right'>
-                        <X size={14} />
-                      </span>
-                    </Label>
-                    <Label className='form-check-label fw-bolder' for='billing-switch'>
-                      
-                    </Label>
-                  </div>
-                </div>
-              </Col> */}
               <Col xs={12} className='text-center mt-2 pt-50'>
                 <Button type='submit' className='me-1' color='primary'>
                   تایید

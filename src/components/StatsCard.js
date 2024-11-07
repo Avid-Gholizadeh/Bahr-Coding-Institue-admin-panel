@@ -8,7 +8,7 @@ import Avatar from '@components/avatar'
 // ** Reactstrap Imports
 import { Card, CardHeader, CardTitle, CardBody, CardText, Row, Col } from 'reactstrap'
 import { useQuery } from '@tanstack/react-query';
-import {getLandingReport} from '../core/index'
+import {getLandingReport} from '../@core/services/api/dashboard.api'
 
 const StatsCard = ({ cols }) => {
   const { data:report, isLoading } = useQuery({

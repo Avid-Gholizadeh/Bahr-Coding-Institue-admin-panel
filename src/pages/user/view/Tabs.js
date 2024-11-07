@@ -5,7 +5,7 @@ import { Fragment } from 'react'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
 
 // ** Icons Imports
-import { User, Lock, Bookmark, Bell, Link } from 'react-feather'
+import { User, Lock, Bookmark, Link, Target } from 'react-feather'
 
 // ** User Components
 import SecurityTab from './SecurityTab'
@@ -26,8 +26,8 @@ const UserTabs = ({ active, toggleTab, user }) => {
         </NavItem>
         <NavItem>
           <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
-            <Bell className='font-medium-3 me-50' />
-            <span className='fw-bold'> دسترسی ها </span>
+            <Target className='font-medium-3 me-50' />
+            <span className='fw-bold'> نقش ها</span>
           </NavLink>
         </NavItem>
       </Nav>

@@ -20,7 +20,7 @@ import jMoment from 'jalali-moment'
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import { useQuery } from '@tanstack/react-query'
-import { GetDetailUser } from '../../../core/Services/api/User/GetDetailUser'
+import { GetDetailUser } from '../../../@core/services/api/User'
 import { useParams } from 'react-router-dom'
 
 export const columns = [
@@ -78,7 +78,7 @@ export const columnsReserve = [
     selector: row => row,
     cell: row => {
       return (
-        <Badge color={row.accept ? 'light-success' : 'light-warning'}> {row.accept ? 'تایید شده' : 'در حال انتظار'} </Badge>
+        <Badge color={row.accept ? 'light-success' : 'light-warning'}> {row.accept ? 'تایید شده' : ' در انتظار تایید'} </Badge>
       )
     }
   }
