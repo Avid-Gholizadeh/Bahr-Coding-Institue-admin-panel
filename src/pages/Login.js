@@ -11,7 +11,6 @@ import InputPasswordToggle from '@components/input-password-toggle'
 // ** Third Party Components
 import * as yup from 'yup'
 import toast from 'react-hot-toast'
-import {Check} from 'react-feather'
 import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 
@@ -35,6 +34,7 @@ import illustrationsDark from '@src/assets/images/pages/login-v2-dark.svg'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
+
 import {useMutation} from '@tanstack/react-query'
 import {loginUser} from '../@core/services/api/auth.api'
 import {useDispatch} from 'react-redux'
@@ -63,17 +63,19 @@ const Login = () => {
         mutationFn: loginUser,
         onSuccess: data => {
             if (data.success) {
-                toast.success(' ورود با موفقیت انجام شد. ')
-                dispatch(
-                    tokenActions.login({
-                        token: data.token,
-                        id: data.id,
-                        roles: data.roles,
-                    })
-                )
-                console.log('render1')
-                navigate('/home')
-                console.log('render2')
+                if (data.roles.find(role => role.includes('Administrator'))) {
+                    toast.success(' ورود با موفقیت انجام شد. ')
+                    dispatch(
+                        tokenActions.login({
+                            token: data.token,
+                            id: data.id,
+                            roles: data.roles,
+                        })
+                    )
+                    navigate('/home')
+                } else {
+                    toast.success('کاربر گرامی شما دسترسی لازم برای ورود به پنل ادمین را ندارید.')
+                }
             } else {
                 console.log(data)
                 toast.error('رمز‌عبور یا نام کاربری نادرست است')
@@ -184,7 +186,7 @@ const Login = () => {
                                     autoFocus
                                 />
                             </div> */}
-                            {/*  <div className="mb-1">
+                            {/* <div className="mb-1">
                                 <div className="d-flex justify-content-between">
                                     <Label className="form-label" for="login-password">
                                         رمز عبور
@@ -198,6 +200,7 @@ const Login = () => {
                                     id="login-password"
                                 />
                             </div> */}
+
                             <div className="mb-1" dir="rtl">
                                 <Label className="form-label" for="phoneOrGmail">
                                     ایمیل
@@ -234,17 +237,18 @@ const Login = () => {
                                     render={({field}) => (
                                         <InputPasswordToggle
                                             {...field}
-                                            type="password"
-                                            className="input-group-merge border-right-2"
+                                            className="input-group-merge"
                                             placeholder="رمز عبور خود را وارد کنید"
                                             invalid={errors.password && true}
                                         />
                                     )}
                                 />
+
                                 {errors.password && (
                                     <FormFeedback>{errors.password.message}</FormFeedback>
                                 )}
                             </div>
+
                             <div className="form-check mb-1 ">
                                 <Controller
                                     id="rememberMe"

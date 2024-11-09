@@ -2,20 +2,9 @@ import Avatar from '@components/avatar'
 import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
 import {Link} from 'react-router-dom'
 import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
+import {convertGrigorianDateToJalaali, pirceFormatter} from '../../@core/utils/formatter.utils'
 
 const renderCourseAvatar = row => {
-    /*if (row.tumbImageAddress) {
-        return (
-            <Avatar
-                className="me-1 overflow-hidden"
-                img={row.tumbImageAddress}
-                width="32"
-                height="32"
-            />
-        )
-    }  else {
-        return <Avatar initials className="me-1" color="light-primary" content={row.title} />
-    } */
     return (
         <Avatar
             className="me-1 overflow-hidden"
@@ -25,43 +14,6 @@ const renderCourseAvatar = row => {
         />
     )
 }
-
-/* const renderRole = row => {
-    const roleObj = {
-        subscriber: {
-            class: 'text-primary',
-            icon: User,
-        },
-        maintainer: {
-            class: 'text-success',
-            icon: Database,
-        },
-        editor: {
-            class: 'text-info',
-            icon: Edit2,
-        },
-        author: {
-            class: 'text-warning',
-            icon: Settings,
-        },
-        admin: {
-            class: 'text-danger',
-            icon: Slack,
-        },
-    }
-
-    const Icon = roleObj[row.role] ? roleObj[row.role].icon : Edit2
-
-    return (
-        <span className="text-truncate text-capitalize align-middle">
-            <Icon
-                size={18}
-                className={`${roleObj[row.role] ? roleObj[row.role].class : ''} me-50`}
-            />
-            {row.role}
-        </span>
-    )
-} */
 
 function colorSelector(status) {
     if (status === 'شروع ثبت نام') return 'light-success'
@@ -73,7 +25,7 @@ export const Columns = [
     {
         name: 'دوره',
         sortable: true,
-        minWidth: '300px',
+        minWidth: '230px',
         sortField: 'title',
         selector: row => row.title,
         cell: row => (
@@ -81,7 +33,7 @@ export const Columns = [
                 {renderCourseAvatar(row)}
                 <div className="d-flex flex-column">
                     <Link
-                        // to={`/apps/user/view/${row.id}`}
+                        to={`/courses/${row.courseId}`}
                         className="user_name text-truncate text-body"
                         // onClick={() => store.dispatch(getUser(row.id))}
                     >
@@ -101,6 +53,24 @@ export const Columns = [
         cell: row => <span className="">{row.typeName}</span>,
     },
     {
+        name: 'قیمت',
+        sortable: true,
+        minWidth: '172px',
+        sortField: 'cost',
+        selector: row => row.cost,
+        cell: row => (
+            <span className="fs-4 ">
+                {pirceFormatter(row.cost)}{' '}
+                <span
+                    className=" position-relative text-info "
+                    style={{bottom: '-3px', fontSize: '13px'}}
+                >
+                    تومان
+                </span>
+            </span>
+        ),
+    },
+    {
         name: 'وضعیت',
         minWidth: '138px',
         sortable: true,
@@ -111,6 +81,14 @@ export const Columns = [
                 {row.statusName}
             </Badge>
         ),
+    },
+    {
+        name: 'اخرین بروزرسانی',
+        minWidth: '150px',
+        sortable: true,
+        sortField: 'lastUpdate',
+        selector: row => row.lastUpdate,
+        cell: row => <span className="">{convertGrigorianDateToJalaali(row.lastUpdate)}</span>,
     },
     {
         name: 'سایر',
@@ -129,7 +107,7 @@ export const Columns = [
                             // onClick={() => store.dispatch(getUser(row.id))}
                         >
                             <FileText size={14} className="me-50" />
-                            <span className="align-middle">Details</span>
+                            <span className="align-middle">جزئیات</span>
                         </DropdownItem>
                         <DropdownItem
                             tag="a"
@@ -138,7 +116,7 @@ export const Columns = [
                             onClick={e => e.preventDefault()}
                         >
                             <Archive size={14} className="me-50" />
-                            <span className="align-middle">Edit</span>
+                            <span className="align-middle">ویرایش</span>
                         </DropdownItem>
                         <DropdownItem
                             tag="a"
@@ -150,7 +128,7 @@ export const Columns = [
                             }}
                         >
                             <Trash2 size={14} className="me-50" />
-                            <span className="align-middle">Delete</span>
+                            <span className="align-middle">حذف دوره</span>
                         </DropdownItem>
                     </DropdownMenu>
                 </UncontrolledDropdown>

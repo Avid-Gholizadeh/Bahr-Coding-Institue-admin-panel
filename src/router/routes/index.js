@@ -12,7 +12,6 @@ import PublicRoute from '@components/routes/PublicRoute'
 
 // ** Utils
 import {isObjEmpty} from '@utils'
-import PrivateRoute, {publicRoute} from '../../@core/components/routes/PrivateRoute'
 
 const getLayout = {
     blank: <BlankLayout />,
@@ -33,6 +32,7 @@ const Register = lazy(() => import('../../pages/Register'))
 const ForgotPassword = lazy(() => import('../../pages/ForgotPassword'))
 const Error = lazy(() => import('../../pages/Error'))
 const Courses = lazy(() => import('../../pages/Courses'))
+const CourseDetail = lazy(() => import('../../pages/CourseDetail'))
 
 const UserList = lazy(() => import('../../pages/user/list'))
 const UserView = lazy(() => import('../../pages/user/view'))
@@ -52,6 +52,10 @@ const Routes = [
     {
         path: '/courses',
         element: <Courses />,
+    },
+    {
+        path: '/courses/:id',
+        element: <CourseDetail />,
     },
     {
         path: '/second-page',

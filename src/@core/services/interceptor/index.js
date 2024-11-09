@@ -81,7 +81,7 @@ const handleError = error => {
         if (error.request.status === 0 && cheackTokenExpired()) {
             console.error('Network error or unauthorized access. Are you login??')
             store.dispatch(tokenActions.logout())
-            window.location.pathname = '/'
+            window.location.pathname = '/login'
         }
     } else {
         // Something happened in setting up the request that triggered an Error

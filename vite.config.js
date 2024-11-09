@@ -43,6 +43,7 @@ export const config = () => {
                 {find: 'crypto', replacement: 'crypto-browserify'},
                 {find: '@src', replacement: path.resolve(__dirname, 'src')},
                 {find: '@store', replacement: path.resolve(__dirname, 'src/redux')},
+                {find: '@core', replacement: path.resolve(__dirname, 'src/@core')},
                 {find: '@configs', replacement: path.resolve(__dirname, 'src/configs')},
                 {find: 'url', replacement: 'rollup-plugin-node-polyfills/polyfills/url'},
                 {find: '@styles', replacement: path.resolve(__dirname, 'src/@core/scss')},

@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./src",
+        "paths": {
+            "@config/*": ["config/*"],
+            "@assets/*": ["assets/*"],
+            "@layouts/*": ["layouts/*"],
+            "@pages/*": ["pages/*"],
+            "@core/*": ["@core/*"],
+            "@hooks/*": ["hooks/*"],
+            "@store/*": ["store/*"],
+            "@utilities/*": ["utilities/*"],
+            "@components/*": ["components/*"],
+            "@Components/*": ["Components/*"]
+        }
+    },
+    "include": ["src", "src/components/UserPanel/Dashboard/.js"]
+}
