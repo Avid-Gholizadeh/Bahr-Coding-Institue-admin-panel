@@ -10,7 +10,6 @@ import { User, Lock, Bookmark, Link, Target } from 'react-feather'
 // ** User Components
 import SecurityTab from './SecurityTab'
 import Connections from './Connections'
-import UserTimeline from './UserTimeline'
 import Notifications from './Notifications'
 import UserProjectsList from './UserProjectsList'
 
@@ -34,7 +33,6 @@ const UserTabs = ({ active, toggleTab, user }) => {
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
           <UserProjectsList user={user} />
-          {/* <UserTimeline /> */}
         </TabPane>
         <TabPane tabId='2'>
           <Notifications user={user} />

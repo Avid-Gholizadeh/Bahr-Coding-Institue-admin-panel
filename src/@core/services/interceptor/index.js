@@ -61,7 +61,7 @@ const handleError = error => {
                 alert('Wrong http method provided. Method not allowed.')
                 break
             case 500:
-                alert('Internal Server Error! Please try again later.')
+                // alert('Internal Server Error! Please try again later.')
                 break
 
             default:

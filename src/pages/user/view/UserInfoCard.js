@@ -78,7 +78,7 @@ const UserInfoCard = ({ selectedUser }) => {
       coursesReseves: []
     }
   })
-
+  console.log(selectedUser);
   // ** render user img
   const renderUserImg = () => {
     if (selectedUser !== null && selectedUser.currentPictureAddress !== 'Not-set' && selectedUser.currentPictureAddress.length) {
@@ -175,7 +175,7 @@ const UserInfoCard = ({ selectedUser }) => {
             </div>
           </div>
           <div className='d-flex justify-content-around my-2 pt-75'>
-            <div className='d-flex align-items-start me-2'>
+            {/* <div className='d-flex align-items-start me-2'>
               <Badge color='light-primary' className='rounded p-75'>
                 <Check className='font-medium-2' />
               </Badge>
@@ -183,7 +183,7 @@ const UserInfoCard = ({ selectedUser }) => {
                 <h4 className='mb-0'> {selectedUser.id} </h4>
                 <small> شناسه کاربر </small>
               </div>
-            </div>
+            </div> */}
             <div className='d-flex align-items-start me-2'>
               <Badge color='light-primary' className='rounded p-75'>
                 <User className='font-medium-2' />
@@ -199,7 +199,7 @@ const UserInfoCard = ({ selectedUser }) => {
               </Badge>
               <div className='ms-75'>
                 <h4 className='mb-0'> {selectedUser.profileCompletionPercentage ? selectedUser.profileCompletionPercentage : '0'}% </h4>
-                <small> وضعیت حساب </small>
+                <small> درصد تکمیل حساب </small>
               </div>
             </div>
           </div>
@@ -207,10 +207,6 @@ const UserInfoCard = ({ selectedUser }) => {
           <div className='info-container'>
             {selectedUser !== null ? (
               <ul className='list-unstyled'>
-                <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>نام کاربری:</span>
-                  <span>{selectedUser.userName}</span>
-                </li>
                 <li className='mb-75'>
                   <span className='fs-5 text fw-semibold'>ایمیل :</span>
                   <span>{selectedUser.gmail}</span>
@@ -223,7 +219,12 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span className='fs-5 text fw-semibold'>آدرس :</span>
                   <span>{selectedUser.homeAdderess}</span>
                 </li>
-                
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'> وضعیت : </span>
+                  <Badge className='text-capitalize' color={selectedUser.active ? 'light-success' : 'light-danger'}>
+                    {selectedUser.active ? 'فعال' : 'غیر فعال'}
+                  </Badge>
+                </li>
                 <li className='mb-75'>
                   <span className='fs-5 text fw-semibold'>کد ملی :</span>
                   <span>{selectedUser.nationalCode}</span>
@@ -238,10 +239,10 @@ const UserInfoCard = ({ selectedUser }) => {
                     selectedUser.roles.map(role => {
                       return  <span style={{margin: '2px'}}> {role.roleName} </span>
                     })
-                  ) : null}</span>
+                  ) : 'نامشخص'}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>درباره کاربر</span>
+                  <span className='fs-5 text fw-semibold'>درباره کاربر :</span>
                   <span>{selectedUser.userAbout}</span>
                 </li>
               </ul>
@@ -249,7 +250,7 @@ const UserInfoCard = ({ selectedUser }) => {
           </div>
           <div className='d-flex justify-content-center pt-2'>
             <Button color='primary' onClick={() => {setShow(true); handleReset()}}>
-              تغییر مشخصات
+              ویرایش مشخصات
             </Button>
           </div>
         </CardBody>
@@ -258,8 +259,8 @@ const UserInfoCard = ({ selectedUser }) => {
         <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>
           <div className='text-center mb-2'>
-            <h1 className='mb-1'> تغییر مشخصات کاربر </h1>
-            <p>بروز نسانی مشخصات کاربر :</p>
+            <h1 className='mb-1'> ویرایش مشخصات کاربر </h1>
+            <p>بروزرسانی مشخصات کاربر :</p>
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className='gy-1 pt-75'>

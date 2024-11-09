@@ -148,21 +148,31 @@ export const columns = [
               <FileText size={14} className='me-50' />
               <span className='align-middle'> مشخصات کاربر </span>
             </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+            {/* <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
               <Archive size={14} className='me-50' />
               <span className='align-middle'> تغییر نقش </span>
-            </DropdownItem>
-            <DropdownItem
+            </DropdownItem> */}
+  <DropdownItem
               tag='a'
               className='w-100'
               onClick={async (e) => {
                 e.preventDefault()
-                const response = await DeleteUser(row.id)
-                if(!response){
-                  toast.error(' دسترسی ندارید ')
-                }
-                else if(response.success === true){
-                  toast.success(' حذف انجام شد ')
+                
+                // Confirm deletion with the user
+                const confirmDelete = window.confirm('آیا مطمئن هستید که می‌خواهید این کاربر را حذف کنید؟')
+                if (!confirmDelete) return
+
+                try {
+                  const response = await DeleteUser(row.id)
+                  if (response && response.success) {
+                    toast.success(' حذف انجام شد ')
+                    // Optional: Refresh data here or update UI if necessary
+                  } else {
+                    toast.error('دسترسی ندارید')
+                  }
+                } catch (error) {
+                  toast.error('خطا در حذف کاربر')
+                  console.error('Delete user error:', error)
                 }
               }}
             >

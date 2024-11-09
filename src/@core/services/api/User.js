@@ -1,19 +1,22 @@
 import { api } from "../interceptor/index";
 
-export const AddRole = async (roleId, id, status) => {
-    try{
-     
-     const response = await api.post(`/User/AddUserAccess?Enable=${status}`, {
-         roleId: roleId,
-         userId: id
-       })
- 
-     return response
- 
-    } catch(err){
-     console.log(err)
+export const AddRole = async (roleId, id) => {
+    try {
+      const response = await api.post(`/User/AddUserAccess?Enable=true`, {
+        roleId: roleId,
+        userId: id
+      });
+      if (!response.ok) {
+        // If the response is not ok, throw an error
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      return response;
+    } catch (err) {
+      console.error(err);
+      throw err; // Re-throw the error to ensure it is caught in useMutation's onError
     }
- }
+  };
+  
 
  export const AddUser = async (data) => {
     try { 
@@ -25,19 +28,20 @@ export const AddRole = async (roleId, id, status) => {
 }
 
 export const DeleteUser = async (id) => {
-    try{
-     
-     console.log(id)
-     const response = await api.delete(`/User/DeleteUser`, {
-         userId: id
-       })
- 
-     return response
- 
-    } catch{
-     return []
-    }
- }
+  try {
+      console.log(id)
+      const response = await api.delete(`/User/DeleteUser`, {
+          data: { userId: id }
+      })
+
+      return response
+
+  } catch (err) {
+      console.log(err)
+      return { success: false, message: 'Error deleting user' }
+  }
+}
+
 
  export const GetDetailUser = async (id) => {
     try{
