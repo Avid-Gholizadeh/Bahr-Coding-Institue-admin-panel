@@ -1,5 +1,5 @@
 // ** Reactstrap Imports
-import { Badge, Card, CardHeader, Progress } from 'reactstrap'
+import { Badge, Card, CardHeader, Progress, Spinner } from 'reactstrap'
 
 // ** Third Party Components
 import { ChevronDown } from 'react-feather'
@@ -87,8 +87,11 @@ export const columnsReserve = [
 const UserProjectsList = () => {
   const {id} = useParams()
   
-  const {data} = useQuery({queryKey: ['GetDetailUser'], queryFn: () => GetDetailUser(id)})
-
+  const {data,isLoading} = useQuery({
+    queryKey: ['GetDetailUser'], 
+    queryFn: () => GetDetailUser(id)
+  })
+  if(isLoading) return <div><Spinner/> </div>
   return (
     <>
     <Card>

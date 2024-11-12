@@ -1,24 +1,8 @@
-// ** React Import
 import { useEffect, useState } from 'react'
-
-// ** Custom Components
 import Sidebar from '@components/sidebar'
-
-// ** Utils
-import { selectThemeColors } from '@utils'
-
-// ** Third Party Components
-import Select from 'react-select'
-import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-
-// ** Reactstrap Imports
-import { Button, Label, FormText, Form, Input } from 'reactstrap'
-
-// ** Store & Actions
-import { addUser } from '../store'
+import { Button, Label, Form, Input } from 'reactstrap'
 import { useDispatch } from 'react-redux'
-// import { setItem } from '../../../core/Services/common/storage'
 import { AddUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 
@@ -30,30 +14,30 @@ const defaultValues = {
   lastName: '',
 }
 
-const checkIsValid = data => {
-  return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
-}
+const checkIsValid = (data) => {
+  return Object.values(data).every(
+    (field) => (typeof field === 'object' ? field !== null : field.trim().length > 0)
+  );
+};
 
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
-  // ** States
   const [data, setData] = useState(null)
   const [role, setRole] = useState('isStudent')
   const [isStudent, setIsStudent] = useState(false)
   const [isTeacher, setIsTeacher] = useState(false)
 
   useEffect(() => {
-    if(role === 'isStudent') {
+    if (role === 'isStudent') {
       setIsStudent(true)
-    }
-    else if(role === 'isTeacher') {
+      setIsTeacher(false)
+    } else if (role === 'isTeacher') {
       setIsTeacher(true)
+      setIsStudent(false)
     }
   }, [role])
 
-  // ** Store Vars
   const dispatch = useDispatch()
 
-  // ** Vars
   const {
     control,
     setValue,
@@ -64,42 +48,30 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
 
   const onSub = async (dataObj) => {
     const response = await AddUser(dataObj)
-
-    if(!response){
+    if (!response) {
       toast.error(' کاربر اضافه نشد! ')
-    }
-    else if(response.success === true){
+    } else if (response.success === true) {
       toast.success('کاربر اضافه شد')
     }
   }
 
-  // const {mutate} = AddUser()
-
-  // ** Function to handle form submit
   const onSubmit = data => {
     setData(data)
     if (checkIsValid(data)) {
       toggleSidebar()
-        onSub({
-          gmail: data.gmail,
-          password: data.password,
-          phoneNumber: data.phoneNumber,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          isTeacher: isTeacher,
-          isStudent: isStudent
-        })
+      onSub({
+        gmail: data.gmail,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        isTeacher: isTeacher,
+        isStudent: isStudent
+      })
     } else {
       for (const key in data) {
-        if (data[key] === null) {
-          setError('country', {
-            type: 'manual'
-          })
-        }
-        if (data[key] !== null && data[key].length === 0) {
-          setError(key, {
-            type: 'manual'
-          })
+        if (!data[key]) {
+          setError(key, { type: 'manual', message: 'این فیلد ضروری است' })
         }
       }
     }
@@ -123,18 +95,24 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+        
+        {/* First Name Field */}
         <div className='mb-1'>
           <Label className='form-label' for='firstName'>
-           نام <span className='text-danger'>*</span>
+            نام <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='firstName'
             control={control}
+            rules={{ required: 'وارد کردن نام ضروری است' }}
             render={({ field }) => (
-              <Input id='firstName' placeholder='نام' invalid={errors.fullName && true} {...field} />
+              <Input id='firstName' placeholder='نام' invalid={!!errors.firstName} {...field} />
             )}
           />
+          {errors.firstName && <p className='text-danger'>{errors.firstName.message}</p>}
         </div>
+        
+        {/* Last Name Field */}
         <div className='mb-1'>
           <Label className='form-label' for='lastName'>
             نام خانوادگی <span className='text-danger'>*</span>
@@ -142,11 +120,15 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
           <Controller
             name='lastName'
             control={control}
+            rules={{ required: 'وارد کردن نام خانوادگی ضروری است' }}
             render={({ field }) => (
-              <Input id='lastName' placeholder='نام خانوادگی' invalid={errors.lastName && true} {...field} />
+              <Input id='lastName' placeholder='نام خانوادگی' invalid={!!errors.lastName} {...field} />
             )}
           />
+          {errors.lastName && <p className='text-danger'>{errors.lastName.message}</p>}
         </div>
+
+        {/* Email Field */}
         <div className='mb-1'>
           <Label className='form-label' for='gmail'>
             ایمیل <span className='text-danger'>*</span>
@@ -154,17 +136,21 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
           <Controller
             name='gmail'
             control={control}
+            rules={{
+              required: 'وارد کردن ایمیل ضروری است',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'آدرس ایمیل معتبر نیست'
+              }
+            }}
             render={({ field }) => (
-              <Input
-                type='gmail'
-                id='gmail'
-                placeholder='email@example.com'
-                invalid={errors.gmail && true}
-                {...field}
-              />
+              <Input type='email' id='gmail' placeholder='email@example.com' invalid={!!errors.gmail} {...field} />
             )}
           />
+          {errors.gmail && <p className='text-danger'>{errors.gmail.message}</p>}
         </div>
+
+        {/* Phone Number Field */}
         <div className='mb-1'>
           <Label className='form-label' for='phoneNumber'>
             شماره <span className='text-danger'>*</span>
@@ -172,18 +158,21 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
           <Controller
             name='phoneNumber'
             control={control}
+            rules={{
+              required: 'وارد کردن شماره ضروری است',
+              pattern: {
+                value: /^09\d{9}$/,
+                message: 'شماره تلفن باید با 09 شروع شود و 11 رقم باشد'
+              }
+            }}
             render={({ field }) => (
-              <Input
-                type='text'
-                id='phoneNumber'
-                placeholder='09123456789'
-                invalid={errors.phoneNumber && true}
-                {...field}
-              />
+              <Input type='text' id='phoneNumber' placeholder='09123456789' invalid={!!errors.phoneNumber} {...field} />
             )}
           />
+          {errors.phoneNumber && <p className='text-danger'>{errors.phoneNumber.message}</p>}
         </div>
 
+        {/* Password Field */}
         <div className='mb-1'>
           <Label className='form-label' for='password'>
             رمز عبور <span className='text-danger'>*</span>
@@ -191,26 +180,32 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
           <Controller
             name='password'
             control={control}
+            rules={{
+              required: 'وارد کردن رمز عبور ضروری است',
+              minLength: {
+                value: 8,
+                message: 'رمز عبور باید حداقل ۸ کاراکتر باشد'
+              }
+            }}
             render={({ field }) => (
-              <Input id='password' placeholder='12345678' invalid={errors.password && true} {...field} />
+              <Input type='password' id='password' placeholder='12345678' invalid={!!errors.password} {...field} />
             )}
           />
+          {errors.password && <p className='text-danger'>{errors.password.message}</p>}
         </div>
+
+        {/* Role Selection (not using Controller as no validation is needed) */}
         <div className='mb-1'>
-          <Label className='form-label' for='user-role'>
-            دسترسی
-          </Label>
+          <Label className='form-label' for='user-role'>دسترسی</Label>
           <Input type='select' id='user-role' name='user-role' value={role} onChange={e => setRole(e.target.value)}>
-            <option value='isStudent' className='iranSans'> دانشجو </option>
-            <option value='isTeacher' className='iranSans'> استاد </option>
+            <option value='isStudent'> دانشجو </option>
+            <option value='isTeacher'> استاد </option>
           </Input>
         </div>
-        <Button type='submit' className='me-1' color='primary'>
-          تایید
-        </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
-          برگشت
-        </Button>
+
+        {/* Submit and Reset Buttons */}
+        <Button type='submit' className='me-1' color='primary'>تایید</Button>
+        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>برگشت</Button>
       </Form>
     </Sidebar>
   )

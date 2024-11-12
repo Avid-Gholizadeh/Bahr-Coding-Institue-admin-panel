@@ -36,6 +36,18 @@ const roleColors = {
 const MySwal = withReactContent(Swal)
 
 const UserInfoCard = ({ selectedUser }) => {
+  const roleTranslations = {
+    Student: 'دانشجو',
+    Administrator: 'ادمین',
+    Teacher: 'استاد',
+    Writer: 'نویسنده',
+    Referee: 'داور',
+    'Employee.Admin': 'ادمین کارمند',
+    TournamentAdmin: 'ادمین مسابقه',
+    CourseAssistance: 'کمک دوره',
+    'Employee.Writer': 'نویسنده کارمند',
+    TournamentMentor: 'منتور مسابقه'
+  };
   // ** State
   const [show, setShow] = useState(false)
 
@@ -175,15 +187,6 @@ const UserInfoCard = ({ selectedUser }) => {
             </div>
           </div>
           <div className='d-flex justify-content-around my-2 pt-75'>
-            {/* <div className='d-flex align-items-start me-2'>
-              <Badge color='light-primary' className='rounded p-75'>
-                <Check className='font-medium-2' />
-              </Badge>
-              <div className='ms-75'>
-                <h4 className='mb-0'> {selectedUser.id} </h4>
-                <small> شناسه کاربر </small>
-              </div>
-            </div> */}
             <div className='d-flex align-items-start me-2'>
               <Badge color='light-primary' className='rounded p-75'>
                 <User className='font-medium-2' />
@@ -237,7 +240,8 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span className='fs-5 text fw-semibold'>نقش:</span>
                   <span className='text-capitalize'>{selectedUser !== null ? (
                     selectedUser.roles.map(role => {
-                      return  <span style={{margin: '2px'}}> {role.roleName} </span>
+                      const translatedRoleName = roleTranslations[role.roleName] || role.roleName;
+                      return  <span style={{margin: '2px'}}> {translatedRoleName} </span>
                     })
                   ) : 'نامشخص'}</span>
                 </li>

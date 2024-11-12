@@ -45,7 +45,7 @@ const CustomHeader = ({ toggleSidebar, handlePerPage, handleQuery, rowsPerPage, 
             onChange={(e) => handlePerPage(e.target.value)}
             style={{ width: '5rem' }}
           >
-            {[5, 7, 10].map(size => <option key={size} value={size}>{size}</option>)}
+            {[10, 25, 50].map(size => <option key={size} value={size}>{size}</option>)}
           </Input>
           <label htmlFor='rows-per-page'>عدد</label>
         </div>
@@ -77,7 +77,7 @@ const CustomHeader = ({ toggleSidebar, handlePerPage, handleQuery, rowsPerPage, 
 const UsersList = () => {
   const [sortColumn, setSortColumn] = useState('')
   const [sortOrder, setSortOrder] = useState('')
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [pageNumber, setPageNumber] = useState(1)
   const [query, setQuery] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -91,8 +91,8 @@ const UsersList = () => {
   const { data: userList, refetch, isLoading, isFetching } = useQuery({
     queryKey: ['GetUserList'],
     queryFn: () => GetUserList(sortOrder, sortColumn, query, pageNumber, rowsPerPage, isActiveUser, isDeletedUser, currentRole),
-    refetchOnWindowFocus: false,
-    keepPreviousData: true,
+    // refetchOnWindowFocus: false,
+    // keepPreviousData: true,
 })
 
 
@@ -103,9 +103,8 @@ const UsersList = () => {
     { value: '', label: 'انتخاب کنید' },
     { value: 1, label: 'ادمین' },
     { value: 2, label: 'استاد' },
-    { value: 3, label: 'کارمند ادمین' },
-    { value: 4, label: 'کارمند نویسنده' },
-    { value: 5, label: 'دانشجو' }
+    { value: 5, label: 'دانشجو' },
+    { value: 8, label: 'داور'}
   ], [])
 
   const statusOptions = useMemo(() => [
@@ -128,26 +127,35 @@ const UsersList = () => {
   // Handlers
   const handlePerPage = useCallback((val) => setRowsPerPage(val), [])
   const handleQuery = useCallback((val) => { setQuery(val); setPageNumber(1) }, [])
-  const handleSort = useCallback((val) => {
-    if (val.value === 2) {
-      setIsActiveUser(true)
-      setIsDeletedUser(false)
-    } else if (val.value === 3) {
-      setIsActiveUser(false)
-      setIsDeletedUser(true)
+
+  const handleSort = useCallback((selectedOption) => {
+    switch (selectedOption.value) {
+      case 2: // Active users
+        setIsActiveUser(true);
+        setIsDeletedUser(false);
+        break;
+      case 3:
+        setIsActiveUser(false);
+        setIsDeletedUser(true);
+        break;
+      default:
+        setIsActiveUser(null);
+        setIsDeletedUser(null);
+        break;
     }
-  }, [])
+  }, []);
+  
 
   // Custom Pagination
   const CustomPagination = useCallback(() => (
-    <ReactPaginate
+    <ReactPaginate 
       previousLabel={''}
       nextLabel={''}
       pageCount={Math.ceil(userList?.totalCount / rowsPerPage) || 1}
       activeClassName='active'
       forcePage={pageNumber - 1}
       onPageChange={(page) => setPageNumber(page.selected + 1)}
-      containerClassName='pagination react-paginate justify-content-end my-2 pe-1'
+      containerClassName='pagination react-paginate justify-content-center my-2 pe-1 '
       pageClassName='page-item rtl'
       pageLinkClassName='page-link'
       previousClassName='page-item prev'
