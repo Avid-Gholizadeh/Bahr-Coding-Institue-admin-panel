@@ -84,7 +84,6 @@ const renderRole = row => {
       icon: Briefcase
     }
   }
-  console.log(row.userRoles);
  // Split roles into an array based on the delimiter (e.g., ",")
    // Check if userRoles is null, undefined, or an empty string
    if (!row.userRoles) {

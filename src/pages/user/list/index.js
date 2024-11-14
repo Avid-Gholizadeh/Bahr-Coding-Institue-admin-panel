@@ -23,40 +23,6 @@ const UsersList = () => {
 
   return (
     <div className='app-user-list'>
-      {/* <Row>
-        <Col lg='3' sm='6'>
-          <StatsHorizontal
-            color='primary'
-            statTitle='تعداد کابران'
-            icon={<User size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>{userList?.totalCount}</h3>}
-          />
-        </Col>
-        <Col lg='3' sm='6'>
-          <StatsHorizontal
-            color='danger'
-            statTitle='پرداخت شده ها'
-            icon={<UserPlus size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>267</h3>}
-          />
-        </Col>
-        <Col lg='3' sm='6'>
-          <StatsHorizontal
-            color='success'
-            statTitle='کاربران فعال'
-            icon={<UserCheck size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>192</h3>}
-          />
-        </Col>
-        <Col lg='3' sm='6'>
-          <StatsHorizontal
-            color='warning'
-            statTitle='کاربران مسدود شده'
-            icon={<UserX size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>0</h3>}
-          />
-        </Col>
-      </Row> */}
       <Table data={userList} />
     </div>
   )
