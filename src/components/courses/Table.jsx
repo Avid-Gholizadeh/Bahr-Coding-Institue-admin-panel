@@ -1,24 +1,36 @@
-import ReactPaginate from 'react-paginate'
 import {useQuery} from '@tanstack/react-query'
-import {getAllCourses, getCreateCourseStep1} from '../../@core/services/api/courses'
+import {
+    getAllCourses,
+    getCourseByIdAdmin,
+    getCreateCourseStep1,
+} from '../../@core/services/api/courses'
 import {useCallback, useRef, useState} from 'react'
 import DataTable from 'react-data-table-component'
 import {Button, Card, Col, Input, Modal, ModalBody, ModalHeader, Row, Spinner} from 'reactstrap'
-import {Columns} from './TableColumns'
 import {ChevronDown} from 'react-feather'
+import {FormWizard} from './formWizard/formWizard'
+import {useTableColumns} from './TableColumns'
+import {CustomPagination} from '@Components/common/CustomPagination'
 
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
-import {FormWizard} from './formWizard/formWizard'
 
 export function Table() {
     const timeout = useRef(null)
     const [params, setParams] = useState({PageNumber: 1, RowsOfPage: 10, Query: ''})
     const [show, setShow] = useState(false)
+    const [showEdit, setShowEdit] = useState({currentCourseId: null, show: false})
+    const columns = useTableColumns({setShowEdit})
 
     const {data: courses, isLoading} = useQuery({
         queryKey: ['allCourses', params],
         queryFn: () => getAllCourses(params),
+    })
+
+    const {data: singleCourse} = useQuery({
+        queryKey: ['single-course', showEdit.currentCourseId],
+        queryFn: () => getCourseByIdAdmin(showEdit.currentCourseId),
+        enabled: Boolean(showEdit.currentCourseId),
     })
 
     const handlePagination = page => {
@@ -31,8 +43,8 @@ export function Table() {
         }
 
         timeout.current = setTimeout(() => {
-            setParams(prevState => ({...prevState, Query: val}))
-            params.current = {...params.current, Query: val}
+            setParams(prevState => ({...prevState, Query: val, PageNumber: 1}))
+            // params.current = {...params.current, Query: val}
             timeout.current = null
         }, 1000)
     }
@@ -78,7 +90,6 @@ export function Table() {
                                     id="search-invoice"
                                     className="ms-50 w-100"
                                     type="text"
-                                    // value={currentSearchTerm}
                                     onChange={e => handleSearch(e.target.value)}
                                 />
                             </div>
@@ -119,24 +130,13 @@ export function Table() {
         []
     )
 
-    const CustomPagination = () => {
-        const count = Number(Math.ceil(courses?.totalCount / params.RowsOfPage))
-
+    function Pagination() {
         return (
-            <ReactPaginate
-                previousLabel={''}
-                nextLabel={''}
-                pageCount={count || 1}
-                activeClassName="active"
-                forcePage={params.PageNumber !== 0 ? params.PageNumber - 1 : 0}
-                onPageChange={page => handlePagination(page)}
-                pageClassName={'page-item'}
-                nextLinkClassName={'page-link'}
-                nextClassName={'page-item next'}
-                previousClassName={'page-item prev'}
-                previousLinkClassName={'page-link'}
-                pageLinkClassName={'page-link'}
-                containerClassName={'pagination react-paginate justify-content-center my-2 pe-1'}
+            <CustomPagination
+                totalItem={courses?.totalCount}
+                rowsPerPage={params.RowsOfPage}
+                currentPage={params.PageNumber}
+                handlePagination={handlePagination}
             />
         )
     }
@@ -157,36 +157,53 @@ export function Table() {
                             <span className="my-4 fs-2 text-primary">دیتایی وجود ندارد</span>
                         }
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
-                        columns={Columns}
+                        columns={columns}
                         // onSort={handleSort}
                         sortIcon={<ChevronDown />}
                         className="react-dataTable"
-                        paginationComponent={CustomPagination}
+                        paginationComponent={Pagination}
                         data={/* dataToRender() */ courses?.courseDtos}
                         subHeaderComponent={
                             <CustomHeader
-                                // store={store}
                                 currentSearchTerm={params.Query}
                                 RowsOfPage={params.RowsOfPage}
                                 handleSearch={handleSearch}
                                 handlePerPage={handlePerPage}
-                                // toggleSidebar={toggleSidebar}
                             />
                         }
                     />
                 </div>
             </Card>
 
-            <FormWizard />
-
             <Modal
                 isOpen={show}
                 toggle={() => setShow(!show)}
+                backdrop="static"
                 className="modal-dialog-centered modal-xl "
             >
                 <ModalHeader className="bg-transparent" toggle={() => setShow(!show)}></ModalHeader>
                 <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
-                    <FormWizard />
+                    <FormWizard setShow={setShow} />
+                </ModalBody>
+            </Modal>
+
+            <Modal
+                isOpen={showEdit.show}
+                toggle={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                backdrop="static"
+                className="modal-dialog-centered modal-xl "
+            >
+                <ModalHeader
+                    className="bg-transparent"
+                    toggle={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                ></ModalHeader>
+                <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
+                    <FormWizard
+                        key={Boolean(singleCourse)}
+                        isEdit={Boolean(singleCourse)}
+                        courseData={singleCourse}
+                        setShow={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                    />
                 </ModalBody>
             </Modal>
         </>

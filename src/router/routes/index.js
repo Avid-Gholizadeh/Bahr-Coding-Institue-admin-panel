@@ -31,8 +31,10 @@ const Login = lazy(() => import('../../pages/Login'))
 const Register = lazy(() => import('../../pages/Register'))
 const ForgotPassword = lazy(() => import('../../pages/ForgotPassword'))
 const Error = lazy(() => import('../../pages/Error'))
-const Courses = lazy(() => import('../../pages/Courses'))
-const CourseDetail = lazy(() => import('../../pages/CourseDetail'))
+const Courses = lazy(() => import('../../pages/course/Courses'))
+const CourseDetail = lazy(() => import('../../pages/course/CourseDetail'))
+const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
+const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
 
 const UserList = lazy(() => import('../../pages/user/list'))
 const UserView = lazy(() => import('../../pages/user/view'))
@@ -52,6 +54,14 @@ const Routes = [
     {
         path: '/courses',
         element: <Courses />,
+    },
+    {
+        path: '/create-course',
+        element: <CreateCourse />,
+    },
+    {
+        path: '/all-reserves',
+        element: <AllReserves />,
     },
     {
         path: '/courses/:id',

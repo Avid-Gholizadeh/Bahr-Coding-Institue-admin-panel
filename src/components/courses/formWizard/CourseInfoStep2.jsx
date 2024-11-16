@@ -3,14 +3,18 @@ import {Controller, useForm} from 'react-hook-form'
 import {Button, Col, Form, Input, Label, Row} from 'reactstrap'
 import classnames from 'classnames'
 
-const defaultValues = {
-    Title: 'ری‌‌اکت',
-    Cost: '۱۰۰۰۰۰۰',
-    Describe: 'ری‌‌اکت',
-    MiniDescribe: 'ری‌‌اکت',
-}
+export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
+    const defaultValues = isEdit
+        ? {
+              Title: courseData.title,
+              Cost: courseData.cost.toFixed(0),
+              CurrentCoursePaymentNumber: courseData.paymentDoneTotal,
+              Capacity: 25,
+              Describe: courseData.describe,
+              MiniDescribe: 'sdfsdghrhrd',
+          }
+        : null
 
-export function CourseInfoStep2({stepper}) {
     const {
         control,
         watch,
@@ -18,9 +22,10 @@ export function CourseInfoStep2({stepper}) {
         formState: {errors},
     } = useForm({defaultValues})
 
-    const MiniDescribe = watch('MiniDescribe') ?? 0
+    const MiniDescribe = watch('MiniDescribe') ?? ''
 
     const onSubmit = data => {
+        handleFromData(data)
         stepper.next()
         console.log(data)
     }
@@ -65,7 +70,13 @@ export function CourseInfoStep2({stepper}) {
                             name="Cost"
                             defaultValue=""
                             control={control}
-                            rules={{required: 'نمی‌تواند خالی باشد'}}
+                            rules={{
+                                required: 'نمی‌تواند خالی باشد',
+                                pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: 'فقط عدد قابل قبول است',
+                                },
+                            }}
                             render={({field}) => (
                                 <Input
                                     {...field}
@@ -81,6 +92,69 @@ export function CourseInfoStep2({stepper}) {
                         )}
                     </Col>
                 </Row>
+
+                <Row>
+                    <Col md="6" className="mb-1">
+                        <Label className="form-label" for="Capacity">
+                            ظرفیت
+                        </Label>
+                        <Controller
+                            id="Capacity"
+                            name="Capacity"
+                            control={control}
+                            rules={{
+                                required: 'نمی‌تواند خالی باشد',
+                                pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: 'فقط عدد قابل قبول است',
+                                },
+                            }}
+                            render={({field}) => (
+                                <Input
+                                    {...field}
+                                    className="text-right"
+                                    invalid={errors.Capacity && true}
+                                />
+                            )}
+                        />
+                        {errors.Capacity && (
+                            <p className="text-danger" style={{fontSize: '12px', marginTop: '4px'}}>
+                                {errors.Capacity.message}
+                            </p>
+                        )}
+                    </Col>
+                    <Col md="6" className="mb-1">
+                        <Label className="form-label" for="CurrentCoursePaymentNumber">
+                            تعداد پراختی ها
+                        </Label>
+                        <Controller
+                            id="CurrentCoursePaymentNumber"
+                            name="CurrentCoursePaymentNumber"
+                            defaultValue=""
+                            control={control}
+                            rules={{
+                                required: 'نمی‌تواند خالی باشد',
+                                pattern: {
+                                    value: /^[0-9]+$/,
+                                    message: 'فقط عدد قابل قبول است',
+                                },
+                            }}
+                            render={({field}) => (
+                                <Input
+                                    {...field}
+                                    className="text-right"
+                                    invalid={errors.CurrentCoursePaymentNumber && true}
+                                />
+                            )}
+                        />
+                        {errors.CurrentCoursePaymentNumber && (
+                            <p className="text-danger" style={{fontSize: '12px', marginTop: '4px'}}>
+                                {errors.CurrentCoursePaymentNumber.message}
+                            </p>
+                        )}
+                    </Col>
+                </Row>
+
                 <Row>
                     <Col md="6" className="mb-1">
                         <Label className="form-label" for="Describe">

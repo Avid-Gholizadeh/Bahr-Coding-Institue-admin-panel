@@ -2,27 +2,32 @@ import Avatar from '@components/avatar'
 import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
 import {Link} from 'react-router-dom'
 import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
-import {convertGrigorianDateToJalaali, pirceFormatter} from '../../@core/utils/formatter.utils'
-import {useMutation} from '@tanstack/react-query'
-import {deleteCourse} from '@core/services/api/courses'
-import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
-import CourseFallback from '../../assets/images/courses-fallback.jpg'
+import {convertGrigorianDateToJalaali, pirceFormatter} from '../../../@core/utils/formatter.utils'
+import CourseFallback from '../../../assets/images/courses-fallback.jpg'
 
-export function useTableColumns({setShowEdit}) {
+import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
+import {deleteCourseReserve} from '@core/services/api/courses'
+import {useMutation, useQueryClient} from '@tanstack/react-query'
+
+export function useReserveColumns({handleModalOpen}) {
+    const queryClient = useQueryClient()
     const {mutate: deleteMutate, isPending} = useMutation({
-        mutationFn: deleteCourse,
+        mutationFn: deleteCourseReserve,
     })
 
     const {handleDeleteAlert} = useSweetDelAlert({
-        actionFn: courseId => handleDeleteCourse(courseId),
+        actionFn: reserveId => handleDeleteCourseReserve(reserveId),
     })
 
-    function handleDeleteCourse(courseId) {
+    function handleDeleteCourseReserve(reserveId) {
         return new Promise((resolve, reject) => {
             deleteMutate(
-                {active: true, id: courseId},
+                {id: reserveId},
                 {
                     onSuccess: data => {
+                        queryClient.setQueryData(['all-course-reserve'], oldReserves =>
+                            oldReserves.filter(reserve => reserve.reserveId !== reserveId)
+                        )
                         return resolve(data)
                     },
                     onError: err => reject(err),
@@ -35,7 +40,7 @@ export function useTableColumns({setShowEdit}) {
         return (
             <Avatar
                 className="me-1 overflow-hidden"
-                img={row.tumbImageAddress || CourseFallback}
+                img={row.tumbImageAddress || row.imageAddress || CourseFallback}
                 width="32"
                 height="32"
             />
@@ -48,17 +53,13 @@ export function useTableColumns({setShowEdit}) {
         else if (status === 'درحال برگزاری') return 'light-warning'
     }
 
-    function handleCourseEdit(course) {
-        setShowEdit(prevS => ({currentCourseId: course.courseId, show: !prevS.show}))
-    }
-
     return [
         {
             name: 'دوره',
-            sortable: true,
+            sortable: false,
             minWidth: '230px',
-            sortField: 'title',
-            selector: row => row.title,
+            sortField: 'courseName',
+            selector: row => row.courseName,
             cell: row => (
                 <div className="d-flex justify-content-left align-items-center ">
                     {renderCourseAvatar(row)}
@@ -67,58 +68,47 @@ export function useTableColumns({setShowEdit}) {
                             to={`/courses/${row.courseId}`}
                             className="user_name text-truncate text-body"
                         >
-                            <span className="fw-bolder">{row.title}</span>
+                            <span className="fw-bolder">{row.courseName}</span>
                         </Link>
-                        <small className="text-truncate text-muted mb-0">{row.levelName}</small>
                     </div>
                 </div>
             ),
         },
         {
-            name: 'نوع کلاس',
-            sortable: true,
+            name: 'دانشجو',
+            sortable: false,
             minWidth: '172px',
-            sortField: 'typeName',
-            selector: row => row.typeName,
-            cell: row => <span className="">{row.typeName}</span>,
+            sortField: 'studentName',
+            selector: row => row.studentName,
+            cell: row => <span className="fs-5">{row.studentName}</span>,
         },
         {
-            name: 'قیمت',
+            name: 'تاریخ رزرو',
+            minWidth: '150px',
             sortable: true,
-            minWidth: '172px',
-            sortField: 'cost',
-            selector: row => row.cost,
+            sortField: 'reserverDate',
+            selector: row => row.reserverDate,
             cell: row => (
-                <span className="fs-4 ">
-                    {pirceFormatter(row.cost)}{' '}
-                    <span
-                        className=" position-relative text-info "
-                        style={{bottom: '-3px', fontSize: '13px'}}
-                    >
-                        تومان
-                    </span>
-                </span>
+                <span className="">{convertGrigorianDateToJalaali(row.reserverDate)}</span>
             ),
         },
         {
             name: 'وضعیت',
             minWidth: '138px',
             sortable: true,
-            sortField: 'statusName',
-            selector: row => row.statusName,
+            sortField: 'accept',
+            selector: row => row.accept,
             cell: row => (
-                <Badge className="text-capitalize" color={colorSelector(row.statusName)} pill>
-                    {row.statusName}
+                <Badge
+                    className="text-capitalize"
+                    color={row.accept ? 'light-success' : 'light-warning'}
+                    pill
+                >
+                    <span /* className="fs-6" */>
+                        {row.accept ? 'تایید شده' : 'در انتظار تایید'}
+                    </span>
                 </Badge>
             ),
-        },
-        {
-            name: 'اخرین بروزرسانی',
-            minWidth: '150px',
-            sortable: true,
-            sortField: 'lastUpdate',
-            selector: row => row.lastUpdate,
-            cell: row => <span className="">{convertGrigorianDateToJalaali(row.lastUpdate)}</span>,
         },
         {
             name: 'سایر',
@@ -138,19 +128,25 @@ export function useTableColumns({setShowEdit}) {
                                 <FileText size={14} className="me-50" />
                                 <span className="align-middle">جزئیات</span>
                             </DropdownItem>
+                            {!row.accept && (
+                                <>
+                                    <DropdownItem
+                                        className="w-100"
+                                        onClick={() => handleModalOpen(row)}
+                                    >
+                                        <Archive size={14} className="me-50" />
+                                        <span className="align-middle">تایید</span>
+                                    </DropdownItem>
 
-                            <DropdownItem className="w-100" onClick={() => handleCourseEdit(row)}>
-                                <Archive size={14} className="me-50" />
-                                <span className="align-middle">ویرایش</span>
-                            </DropdownItem>
-
-                            <DropdownItem
-                                className="w-100"
-                                onClick={() => handleDeleteAlert(row.courseId)}
-                            >
-                                <Trash2 size={14} className="me-50" />
-                                <span className="align-middle">حذف </span>
-                            </DropdownItem>
+                                    <DropdownItem
+                                        className="w-100"
+                                        onClick={() => handleDeleteAlert(row.reserveId)}
+                                    >
+                                        <Trash2 size={14} className="me-50" />
+                                        <span className="align-middle">حذف </span>
+                                    </DropdownItem>
+                                </>
+                            )}
                         </DropdownMenu>
                     </UncontrolledDropdown>
                 </div>

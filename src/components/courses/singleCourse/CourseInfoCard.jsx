@@ -1,16 +1,100 @@
 import {Check, PlusCircle, ShoppingCart, Users} from 'react-feather'
-import {Badge, Button, Card, CardBody, Modal} from 'reactstrap'
+import {
+    Badge,
+    Button,
+    Card,
+    CardBody,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Modal,
+    ModalBody,
+    ModalHeader,
+    Spinner,
+    UncontrolledButtonDropdown,
+} from 'reactstrap'
 import {convertGrigorianDateToJalaali, pirceFormatter} from '../../../@core/utils/formatter.utils'
 import CourseFallback from '../../../assets/images/courses-fallback.jpg'
 import {useState} from 'react'
+import {FormWizard} from '../formWizard/FormWizard'
+import {useMutation, useQueryClient} from '@tanstack/react-query'
+import {activeAndDeactive, changeCourseStatus, deleteCourse} from '@core/services/api/courses'
+import toast from 'react-hot-toast'
+import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 
 export function CourseInfoCard({course}) {
+    const queryClient = useQueryClient()
     const [show, setShow] = useState(false)
+    const [courseStatus, setCourseStatus] = useState(course.courseStatusName)
+
+    const {mutate: deleteMutate} = useMutation({
+        mutationFn: deleteCourse,
+    })
+
+    const {handleDeleteAlert} = useSweetDelAlert({
+        actionFn: courseId => handleDeleteCourse(courseId),
+        isSingleCourse: true,
+    })
+
+    function handleDeleteCourse(courseId) {
+        return new Promise((resolve, reject) => {
+            deleteMutate(
+                {active: true, id: courseId},
+                {
+                    onSuccess: (data, variables) => {
+                        console.log(variables)
+                        return resolve(data)
+                    },
+                    onError: err => reject(err),
+                }
+            )
+        })
+    }
+
+    const {mutate, isPending} = useMutation({
+        mutationFn: activeAndDeactive,
+        onSuccess: data => {
+            if (data.success) {
+                queryClient.invalidateQueries(['single-course', course.courseId])
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
+        },
+        onError: err => {
+            toast.error(err.message)
+        },
+    })
+
+    const {mutate: statusMutate, isPending: statusPending} = useMutation({
+        mutationFn: changeCourseStatus,
+        onSuccess: (data, variables) => {
+            if (data.success) {
+                const status =
+                    variables.StatusId === 1
+                        ? 'شروع ثبت نام'
+                        : variables.StatusId === 2
+                        ? 'منقضی شده'
+                        : 'درحال برگزاری'
+                setCourseStatus(status)
+                toast.success(data.message)
+            } else {
+                toast.error(data.message)
+            }
+        },
+        onError: err => {
+            toast.error(err.message)
+        },
+    })
 
     function colorSelector(status) {
-        if (status === 'شروع ثبت نام') return 'light-success'
-        else if (status === 'منقضی شده') return 'light-danger'
-        else if (status === 'درحال برگزاری') return 'light-warning'
+        if (status === 'شروع ثبت نام') return 'success'
+        else if (status === 'منقضی شده') return 'danger'
+        else if (status === 'درحال برگزاری') return 'warning'
+    }
+
+    function handleActiveState() {
+        mutate({active: !course.isActive, id: course.courseId})
     }
 
     const renderCourseImg = () => {
@@ -28,6 +112,10 @@ export function CourseInfoCard({course}) {
         )
     }
 
+    function handleStatusSelect(id) {
+        statusMutate({CourseId: course.courseId, StatusId: id})
+    }
+
     return (
         <>
             <Card>
@@ -39,12 +127,42 @@ export function CourseInfoCard({course}) {
                                 <div className="user-info">
                                     <h2 className="mb-1">{course.title}</h2>
 
-                                    <Badge
-                                        color={colorSelector(course.courseStatusName)}
-                                        className="text-capitalize"
-                                    >
-                                        {course.courseStatusName}
-                                    </Badge>
+                                    <UncontrolledButtonDropdown>
+                                        <DropdownToggle
+                                            color={'flat-' + colorSelector(courseStatus)}
+                                            caret
+                                            size="sm"
+                                        >
+                                            {statusPending && (
+                                                <Spinner
+                                                    className="me-1"
+                                                    size="sm"
+                                                    color={colorSelector(courseStatus)}
+                                                />
+                                            )}
+                                            {courseStatus}
+                                        </DropdownToggle>
+                                        <DropdownMenu>
+                                            <DropdownItem
+                                                onClick={() => handleStatusSelect(1)}
+                                                className="w-100"
+                                            >
+                                                شروع ثبت نام
+                                            </DropdownItem>
+                                            <DropdownItem
+                                                onClick={() => handleStatusSelect(3)}
+                                                className="w-100"
+                                            >
+                                                در حال برگزاری
+                                            </DropdownItem>
+                                            <DropdownItem
+                                                onClick={() => handleStatusSelect(2)}
+                                                className="w-100"
+                                            >
+                                                منقضی شده
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </UncontrolledButtonDropdown>
                                 </div>
                             </div>
                         </div>
@@ -92,12 +210,12 @@ export function CourseInfoCard({course}) {
                             </li>
                             <li className="mb-75">
                                 <span className="fw-bolder me-25">قیمت:</span>
-                                {/* <span>{pirceFormatter(course.cost)}</span> */}
+
                                 <span className="fs-4 ">
                                     {pirceFormatter(course.cost)}
                                     <span
-                                        className=" position-relative text-info "
-                                        style={{bottom: '-3px', fontSize: '13px'}}
+                                        className="position-relative text-info"
+                                        style={{bottom: '-3px', right: '5px', fontSize: '13px'}}
                                     >
                                         تومان
                                     </span>
@@ -107,7 +225,7 @@ export function CourseInfoCard({course}) {
                                 <span className="fw-bolder me-25">وضعیت:</span>
                                 <Badge
                                     className="text-capitalize"
-                                    color={course.isActive ? 'info' : 'danger'}
+                                    color={course.isActive ? 'success' : 'danger'}
                                 >
                                     {course.isActive ? 'فعال' : 'غیرفعال'}
                                 </Badge>
@@ -163,18 +281,52 @@ export function CourseInfoCard({course}) {
                         </ul>
                     </div>
                     <div className="d-flex justify-content-center pt-2">
-                        <Button color="primary" /* onClick={() => setShow(true)} */>ویرایش</Button>
+                        <Button color="primary" onClick={() => setShow(true)}>
+                            ویرایش
+                        </Button>
+
+                        <Button
+                            className="ms-1"
+                            color={course.isActive ? 'warning' : 'success'}
+                            outline
+                            onClick={handleActiveState}
+                        >
+                            {course.isActive ? 'غیر فعال کردن' : 'فعال کردن'}
+                            {isPending && (
+                                <Spinner
+                                    className="ms-1"
+                                    size="sm"
+                                    color={course.isActive ? 'warning' : 'success'}
+                                />
+                            )}
+                        </Button>
                         <Button
                             className="ms-1"
                             color="danger"
-                            outline
-                            // onClick={handleSuspendedClick}
+                            onClick={() => handleDeleteAlert(course.courseId)}
                         >
-                            فعال کردن
+                            حذف
+                            {isPending && <Spinner className="ms-1" size="sm" color="danger" />}
                         </Button>
                     </div>
                 </CardBody>
             </Card>
+
+            <Modal
+                isOpen={show}
+                toggle={() => setShow(!show)}
+                backdrop="static"
+                className="modal-dialog-centered modal-xl "
+            >
+                <ModalHeader className="bg-transparent" toggle={() => setShow(!show)}></ModalHeader>
+                <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
+                    <FormWizard
+                        isEdit
+                        courseData={course}
+                        setShow={() => setShow(prevS => !prevS)}
+                    />
+                </ModalBody>
+            </Modal>
         </>
     )
 }

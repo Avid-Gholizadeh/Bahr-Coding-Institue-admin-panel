@@ -14,7 +14,11 @@ export function SingleCourse() {
     })
 
     if (isLoading) {
-        return <Spinner color="primary" />
+        return (
+            <div className="text-center mt-5">
+                <Spinner color="primary" className="mx-auto" />
+            </div>
+        )
     }
 
     return course !== null && course !== undefined ? (

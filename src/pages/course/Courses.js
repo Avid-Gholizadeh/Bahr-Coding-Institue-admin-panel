@@ -1,6 +1,6 @@
 import React from 'react'
 import {Card, CardBody} from 'reactstrap'
-import {Table} from '../Components/courses/Table'
+import {Table} from '@Components/courses/Table'
 
 const Courses = () => {
     return (

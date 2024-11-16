@@ -63,7 +63,10 @@ const Login = () => {
         mutationFn: loginUser,
         onSuccess: data => {
             if (data.success) {
-                if (data.roles.find(role => role.includes('Administrator'))) {
+                const hasAccess = data.roles.some(
+                    role => role.includes('Administrator') || role.includes('Teacher')
+                )
+                if (hasAccess) {
                     toast.success(' ورود با موفقیت انجام شد. ')
                     dispatch(
                         tokenActions.login({
@@ -163,7 +166,12 @@ const Login = () => {
                         <img className="img-fluid" src={source} alt="Login Cover" />
                     </div>
                 </Col>
-                <Col className="d-flex align-items-center auth-bg px-2 p-lg-5" lg="4" sm="12">
+                <Col
+                    className="d-flex align-items-center auth-bg px-2 p-lg-5"
+                    lg="4"
+                    sm="12"
+                    dir="rtl"
+                >
                     <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
                         <CardTitle tag="h2" className="fw-bold mb-1 text-center">
                             به پنل ادمین سایت <br />
@@ -201,7 +209,7 @@ const Login = () => {
                                 />
                             </div> */}
 
-                            <div className="mb-1" dir="rtl">
+                            <div className="mb-1" /* dir="rtl" */>
                                 <Label className="form-label" for="phoneOrGmail">
                                     ایمیل
                                 </Label>
@@ -224,20 +232,18 @@ const Login = () => {
                                     <FormFeedback>{errors.phoneOrGmail.message}</FormFeedback>
                                 )}
                             </div>
-                            <div className="mb-1 " dir="rtl">
+                            <div className="mb-1 " /* dir="rtl" */>
                                 <Label className="form-label" for="password">
                                     رمز عبور
                                 </Label>
                                 <Controller
                                     id="password"
                                     name="password"
-                                    defaultValue=""
-                                    className="input-group-merge"
                                     control={control}
                                     render={({field}) => (
                                         <InputPasswordToggle
                                             {...field}
-                                            className="input-group-merge"
+                                            className="input-group-merge "
                                             placeholder="رمز عبور خود را وارد کنید"
                                             invalid={errors.password && true}
                                         />
@@ -249,7 +255,7 @@ const Login = () => {
                                 )}
                             </div>
 
-                            <div className="form-check mb-1 ">
+                            <div className="mb-1" dir="rtl">
                                 <Controller
                                     id="rememberMe"
                                     name="rememberMe"
@@ -267,7 +273,7 @@ const Login = () => {
                                     <FormFeedback>{errors.rememberMe.message}</FormFeedback>
                                 )}
 
-                                <Label className="form-check-label " for="rememberMe">
+                                <Label className="form-check-label me-1" for="rememberMe">
                                     مرا به خاطر بسپار
                                 </Label>
                             </div>

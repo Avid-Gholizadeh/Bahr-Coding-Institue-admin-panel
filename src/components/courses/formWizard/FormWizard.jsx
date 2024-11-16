@@ -1,45 +1,76 @@
 import Wizard from '@components/wizard'
-import {useRef, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {CourseStatusStep1} from './CourseStatusStep1'
-import {Link} from 'react-router-dom'
-import {FileText, MapPin, User} from 'react-feather'
 import {CourseInfoStep2} from './CourseInfoStep2'
 import {CourseLinksStep3} from './CourseLinksStep3'
-import {CourseImgDateStep4} from './CourseImgDateStep4'
+import {CourseImgStep4} from './CourseImgStep4'
 
-export function FormWizard() {
+export function FormWizard({isEdit, courseData, setShow}) {
     const ref = useRef(null)
     const [stepper, setStepper] = useState(null)
     const [formData, setFormData] = useState(null)
+
+    function handleFromData(data) {
+        setFormData(prevS => ({...prevS, ...data}))
+    }
 
     const steps = [
         {
             id: 'account-details',
             title: 'جزعیات دوره',
             subtitle: 'جزعیات دوره را انتخاب کنید',
-            content: <CourseStatusStep1 stepper={stepper} />,
-            // icon: <FileText size={18} />,
+            content: (
+                <CourseStatusStep1
+                    stepper={stepper}
+                    isEdit={isEdit}
+                    handleFromData={handleFromData}
+                    courseData={courseData}
+                />
+            ),
         },
         {
             id: 'personal-info',
             title: 'اطلاعات دوره',
             subtitle: 'اطلاعات دوره را وارد کنید',
-            // icon: <User size={18} />,
-            content: <CourseInfoStep2 stepper={stepper} />,
+
+            content: (
+                <CourseInfoStep2
+                    stepper={stepper}
+                    isEdit={isEdit}
+                    handleFromData={handleFromData}
+                    courseData={courseData}
+                />
+            ),
         },
         {
             id: 'step-address',
-            title: 'لینک ها',
-            subtitle: 'لینک ها را وارد کنید',
-            // icon: <MapPin size={18} />,
-            content: <CourseLinksStep3 stepper={stepper} />,
+            title: 'لینک ها و تاریخ',
+            subtitle: 'لینک ها و تاریخ را وارد کنید',
+
+            content: (
+                <CourseLinksStep3
+                    stepper={stepper}
+                    isEdit={isEdit}
+                    handleFromData={handleFromData}
+                    courseData={courseData}
+                />
+            ),
         },
         {
             id: 'social-links',
-            title: 'تصویر و تاریخ',
-            subtitle: 'تصویر و تاریخ را وارد کنید',
-            // icon: <Link size={18} />,
-            content: <CourseImgDateStep4 stepper={stepper} />,
+            title: 'تصویر ',
+            subtitle: 'تصویر را انتخاب کنید',
+
+            content: (
+                <CourseImgStep4
+                    stepper={stepper}
+                    isEdit={isEdit}
+                    courseData={courseData}
+                    handleFromData={handleFromData}
+                    formData={formData}
+                    setShow={setShow}
+                />
+            ),
         },
     ]
 
@@ -49,10 +80,10 @@ export function FormWizard() {
                 instance={el => setStepper(el)}
                 ref={ref}
                 steps={steps}
-                /* type="modern-horizontal"
+                type={isEdit ? 'modern-horizontal' : null}
                 options={{
-                    linear: false,
-                }} */
+                    linear: isEdit ? false : true,
+                }}
             />
         </div>
     )
