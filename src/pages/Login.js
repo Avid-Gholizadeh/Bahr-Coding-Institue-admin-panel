@@ -170,7 +170,7 @@ const Login = () => {
                     className="d-flex align-items-center auth-bg px-2 p-lg-5"
                     lg="4"
                     sm="12"
-                    dir="rtl"
+                    // dir="rtl"
                 >
                     <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
                         <CardTitle tag="h2" className="fw-bold mb-1 text-center">
@@ -209,8 +209,8 @@ const Login = () => {
                                 />
                             </div> */}
 
-                            <div className="mb-1" /* dir="rtl" */>
-                                <Label className="form-label" for="phoneOrGmail">
+                            <div className="mb-1">
+                                <Label className="form-label text-end  w-100" for="phoneOrGmail">
                                     ایمیل
                                 </Label>
                                 <Controller
@@ -233,7 +233,7 @@ const Login = () => {
                                 )}
                             </div>
                             <div className="mb-1 " /* dir="rtl" */>
-                                <Label className="form-label" for="password">
+                                <Label className="form-label text-end  w-100" for="password">
                                     رمز عبور
                                 </Label>
                                 <Controller
@@ -273,7 +273,11 @@ const Login = () => {
                                     <FormFeedback>{errors.rememberMe.message}</FormFeedback>
                                 )}
 
-                                <Label className="form-check-label me-1" for="rememberMe">
+                                <Label
+                                    className="form-check-label me-1"
+                                    style={{fontSize: 12}}
+                                    for="rememberMe"
+                                >
                                     مرا به خاطر بسپار
                                 </Label>
                             </div>

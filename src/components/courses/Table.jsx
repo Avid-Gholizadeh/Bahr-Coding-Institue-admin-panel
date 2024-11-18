@@ -1,12 +1,8 @@
-import {useQuery} from '@tanstack/react-query'
-import {
-    getAllCourses,
-    getCourseByIdAdmin,
-    getCreateCourseStep1,
-} from '../../@core/services/api/courses'
-import {useCallback, useRef, useState} from 'react'
 import DataTable from 'react-data-table-component'
-import {Button, Card, Col, Input, Modal, ModalBody, ModalHeader, Row, Spinner} from 'reactstrap'
+import {useQuery} from '@tanstack/react-query'
+import {getAllCourses, getCourseByIdAdmin} from '../../@core/services/api/courses'
+import {useState} from 'react'
+import {Card, Modal, ModalBody, ModalHeader, Row, Spinner} from 'reactstrap'
 import {ChevronDown} from 'react-feather'
 import {FormWizard} from './formWizard/formWizard'
 import {useTableColumns} from './TableColumns'
@@ -14,13 +10,22 @@ import {CustomPagination} from '@Components/common/CustomPagination'
 
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
+import {CustomHeader} from './CustomHeader'
 
-export function Table() {
-    const timeout = useRef(null)
+export function Table({selectable, onSelect}) {
     const [params, setParams] = useState({PageNumber: 1, RowsOfPage: 10, Query: ''})
     const [show, setShow] = useState(false)
     const [showEdit, setShowEdit] = useState({currentCourseId: null, show: false})
-    const columns = useTableColumns({setShowEdit})
+
+    const columns = useTableColumns({setShowEdit, selectable})
+
+    function handleSelectedRowsChange({selectedRows}) {
+        onSelect(selectedRows[0])
+    }
+
+    function handleToggleModal() {
+        setShow(prevS => !prevS)
+    }
 
     const {data: courses, isLoading} = useQuery({
         queryKey: ['allCourses', params],
@@ -33,20 +38,8 @@ export function Table() {
         enabled: Boolean(showEdit.currentCourseId),
     })
 
-    const handlePagination = page => {
-        setParams(prevState => ({...prevState, PageNumber: page.selected + 1}))
-    }
-
-    const handleSearch = val => {
-        if (timeout.current) {
-            clearTimeout(timeout.current)
-        }
-
-        timeout.current = setTimeout(() => {
-            setParams(prevState => ({...prevState, Query: val, PageNumber: 1}))
-            // params.current = {...params.current, Query: val}
-            timeout.current = null
-        }, 1000)
+    function handleSearch(val) {
+        setParams(prevState => ({...prevState, Query: val, PageNumber: 1}))
     }
 
     /* const dataToRender = () => {
@@ -73,62 +66,9 @@ export function Table() {
         setParams(prevState => ({...prevState, RowsOfPage: value}))
     }
 
-    const CustomHeader = useCallback(
-        ({handlePerPage, RowsOfPage, handleSearch, currentSearchTerm}) => {
-            return (
-                <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
-                    <Row>
-                        <Col
-                            xl="6"
-                            className="d-flex align-items-sm-center justify-content-xl-start justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1"
-                        >
-                            <div className="d-flex align-items-center mb-sm-0 mb-1 me-1">
-                                <label className="mb-0" htmlFor="search-invoice">
-                                    جستوجو:
-                                </label>
-                                <Input
-                                    id="search-invoice"
-                                    className="ms-50 w-100"
-                                    type="text"
-                                    onChange={e => handleSearch(e.target.value)}
-                                />
-                            </div>
-                        </Col>
-                        <Col
-                            xl="6"
-                            className="d-flex gap-5 align-items-center justify-content-start justify-content-xl-end p-0 mt-2 mt-xl-0"
-                        >
-                            <div className="d-flex align-items-center  ">
-                                <label htmlFor="rows-per-page">تعداد</label>
-                                <Input
-                                    className="mx-50"
-                                    type="select"
-                                    id="rows-per-page"
-                                    value={RowsOfPage}
-                                    onChange={handlePerPage}
-                                    style={{width: '5rem'}}
-                                >
-                                    <option value="10">10</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
-                                </Input>
-                                <label htmlFor="rows-per-page">دوره در صفحه</label>
-                            </div>
-
-                            <Button
-                                className="add-new-user"
-                                color="primary"
-                                onClick={() => setShow(prevS => !prevS)}
-                            >
-                                ایجاد دوره جدید
-                            </Button>
-                        </Col>
-                    </Row>
-                </div>
-            )
-        },
-        []
-    )
+    const handlePagination = page => {
+        setParams(prevState => ({...prevState, PageNumber: page.selected + 1}))
+    }
 
     function Pagination() {
         return (
@@ -163,12 +103,18 @@ export function Table() {
                         className="react-dataTable"
                         paginationComponent={Pagination}
                         data={/* dataToRender() */ courses?.courseDtos}
+                        selectableRows={selectable}
+                        selectableRowsSingle
+                        onSelectedRowsChange={handleSelectedRowsChange}
                         subHeaderComponent={
                             <CustomHeader
-                                currentSearchTerm={params.Query}
                                 RowsOfPage={params.RowsOfPage}
-                                handleSearch={handleSearch}
+                                handleToggleModal={handleToggleModal}
                                 handlePerPage={handlePerPage}
+                                buttonText="ایجاد دوره جدید"
+                                pageTitle="دوره"
+                                onSearch={handleSearch}
+                                selectable={selectable}
                             />
                         }
                     />
@@ -177,32 +123,32 @@ export function Table() {
 
             <Modal
                 isOpen={show}
-                toggle={() => setShow(!show)}
+                toggle={handleToggleModal}
                 backdrop="static"
                 className="modal-dialog-centered modal-xl "
             >
-                <ModalHeader className="bg-transparent" toggle={() => setShow(!show)}></ModalHeader>
+                <ModalHeader className="bg-transparent" toggle={handleToggleModal}></ModalHeader>
                 <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
-                    <FormWizard setShow={setShow} />
+                    <FormWizard setShow={handleToggleModal} />
                 </ModalBody>
             </Modal>
 
             <Modal
                 isOpen={showEdit.show}
-                toggle={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                toggle={() => setShowEdit({currentCourseId: null, show: false})}
                 backdrop="static"
                 className="modal-dialog-centered modal-xl "
             >
                 <ModalHeader
                     className="bg-transparent"
-                    toggle={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                    toggle={() => setShowEdit({currentCourseId: null, show: false})}
                 ></ModalHeader>
                 <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
                     <FormWizard
                         key={Boolean(singleCourse)}
                         isEdit={Boolean(singleCourse)}
                         courseData={singleCourse}
-                        setShow={() => setShowEdit(prevS => ({...prevS, show: !prevS.show}))}
+                        setShow={() => setShowEdit({currentCourseId: null, show: false})}
                     />
                 </ModalBody>
             </Modal>

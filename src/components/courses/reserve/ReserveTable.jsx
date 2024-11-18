@@ -18,6 +18,7 @@ import {useReserveColumns} from './useReserveColumns'
 import {CustomPagination} from '@Components/common/CustomPagination'
 import {useRef, useState} from 'react'
 import toast from 'react-hot-toast'
+import {CustomHeader} from './CustomHeader'
 
 export function ReserveTable() {
     const selectedGroup = useRef(null)
@@ -161,32 +162,6 @@ export function ReserveTable() {
                     index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
             )
         }
-    }
-    function CustomHeader({handlePerPage, RowsOfPage}) {
-        return (
-            <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
-                <Row>
-                    <Col xl="6" className="">
-                        <div className="d-flex align-items-center  ">
-                            <label htmlFor="rows-per-page">تعداد</label>
-                            <Input
-                                className="mx-50"
-                                type="select"
-                                id="rows-per-page"
-                                value={RowsOfPage}
-                                onChange={handlePerPage}
-                                style={{width: '5rem'}}
-                            >
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </Input>
-                            <label htmlFor="rows-per-page">رزرو در صفحه</label>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-        )
     }
 
     return (

@@ -25,10 +25,12 @@ export function useReserveColumns({handleModalOpen}) {
                 {id: reserveId},
                 {
                     onSuccess: data => {
-                        queryClient.setQueryData(['all-course-reserve'], oldReserves =>
-                            oldReserves.filter(reserve => reserve.reserveId !== reserveId)
-                        )
-                        return resolve(data)
+                        if (data.success) {
+                            queryClient.setQueryData(['all-course-reserve'], oldReserves =>
+                                oldReserves.filter(reserve => reserve.reserveId !== reserveId)
+                            )
+                            return resolve(data)
+                        }
                     },
                     onError: err => reject(err),
                 }

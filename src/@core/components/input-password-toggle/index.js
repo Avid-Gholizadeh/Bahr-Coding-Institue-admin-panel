@@ -51,6 +51,7 @@ const InputPasswordToggle = forwardRef((props, ref) => {
                     [className]: className,
                     'is-invalid': invalid,
                 })}
+                // style={{flexDirection: 'row'}}
             >
                 <Input
                     ref={ref}

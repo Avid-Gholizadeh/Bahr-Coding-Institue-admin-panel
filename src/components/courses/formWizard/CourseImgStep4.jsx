@@ -1,6 +1,6 @@
 import {ImagePicker} from '@Components/common/ImagePicker'
-import {ArrowLeft, ArrowRight} from 'react-feather'
-import {Button, Col, Form, Input, Label, Row, Spinner} from 'reactstrap'
+import {ArrowLeft} from 'react-feather'
+import {Button, Spinner} from 'reactstrap'
 import toast from 'react-hot-toast'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {addCourseTechStep3, CreateCourseStep2, updateCourse} from '@core/services/api/courses'

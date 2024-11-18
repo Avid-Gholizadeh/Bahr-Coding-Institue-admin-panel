@@ -147,3 +147,45 @@ export async function getAllCoursesGroups(params) {
         throw new Error(error)
     }
 }
+export async function createCourseGroupe(data) {
+    const fd = new FormData()
+
+    Object.entries(data).forEach(([key, value]) => {
+        fd.append(key, value)
+    })
+
+    try {
+        const response = await api.post('/CourseGroup', fd)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+export async function updateCourseGroupe(data) {
+    const fd = new FormData()
+
+    Object.entries(data).forEach(([key, value]) => {
+        fd.append(key, value)
+    })
+
+    try {
+        const response = await api.put('/CourseGroup', fd)
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+export async function deleteCourseGroup(data) {
+    const fd = new FormData()
+
+    Object.entries(data).forEach(([key, value]) => {
+        fd.append(key, value)
+    })
+
+    try {
+        const response = await api.delete('/CourseGroup', {data: fd})
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}

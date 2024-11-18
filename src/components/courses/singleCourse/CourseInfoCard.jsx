@@ -290,6 +290,7 @@ export function CourseInfoCard({course}) {
                             color={course.isActive ? 'warning' : 'success'}
                             outline
                             onClick={handleActiveState}
+                            disabled={isPending}
                         >
                             {course.isActive ? 'غیر فعال کردن' : 'فعال کردن'}
                             {isPending && (
@@ -304,6 +305,7 @@ export function CourseInfoCard({course}) {
                             className="ms-1"
                             color="danger"
                             onClick={() => handleDeleteAlert(course.courseId)}
+                            disabled={isPending}
                         >
                             حذف
                             {isPending && <Spinner className="ms-1" size="sm" color="danger" />}

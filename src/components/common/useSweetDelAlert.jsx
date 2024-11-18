@@ -45,6 +45,7 @@ export function useSweetDelAlert({actionFn, isSingleCourse}) {
                         }
                     })
                     .catch(error => {
+                        console.log(error)
                         MySwal.fire({
                             icon: 'error',
                             title: 'خطا!',

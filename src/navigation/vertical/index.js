@@ -51,6 +51,12 @@ export default [
                 icon: <Circle className="ms-1" size={20} />,
                 navLink: '/all-reserves',
             },
+            {
+                id: '/all-groups',
+                title: 'گروه ها',
+                icon: <Circle className="ms-1" size={20} />,
+                navLink: '/all-groups',
+            },
         ],
     },
     {

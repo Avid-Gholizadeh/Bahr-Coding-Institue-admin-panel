@@ -35,6 +35,7 @@ const Courses = lazy(() => import('../../pages/course/Courses'))
 const CourseDetail = lazy(() => import('../../pages/course/CourseDetail'))
 const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
 const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
+const AllGroups = lazy(() => import('../../pages/course/AllGroups'))
 
 const UserList = lazy(() => import('../../pages/user/list'))
 const UserView = lazy(() => import('../../pages/user/view'))
@@ -62,6 +63,10 @@ const Routes = [
     {
         path: '/all-reserves',
         element: <AllReserves />,
+    },
+    {
+        path: '/all-groups',
+        element: <AllGroups />,
     },
     {
         path: '/courses/:id',
