@@ -27,14 +27,14 @@ export function CourseComment() {
   },[pageNumber, rowsOfPage, sortingCol, sortType, query, isAccept,refetch])
   return (
     <>
-    <Card>
+    {/* <Card>
       <CardHeader>
         <CardTitle tag='h4'>فیلتر ها</CardTitle>
       </CardHeader>
       <CardBody>
 
       </CardBody>
-    </Card>
+    </Card> */}
     <Card>
       <CardHeader>
       <TableCardHeader

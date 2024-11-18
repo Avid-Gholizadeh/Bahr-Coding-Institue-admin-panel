@@ -54,14 +54,14 @@ export const DeleteUser = async (id) => {
     }
  }
 
-//  export async function GetTotalCount () {
-//     try {        
-//         const response = await api.get(`/User/UserMannage?PageNumber=1&RowsOfPage=10`)
-//         return response
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+ export async function GetTotalCount () {
+    try {        
+        const response = await api.get(`/User/UserMannage?PageNumber=1&RowsOfPage=10`)
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export async function GetUserList (SortType, SortingCol, Query, PageNumber, RowsOfPage, IsActiveUser, IsDeletedUser, currentRole) {
     try {        
