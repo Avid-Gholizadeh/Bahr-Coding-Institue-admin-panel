@@ -170,7 +170,6 @@ const UsersList = () => {
     if (userList?.listUser?.length > 0) return userList.listUser
     return isLoading || isFetching ? [] : []
   }
- console.log(dataToRender());
   return (
     <Fragment>
       <Card>

@@ -37,8 +37,8 @@ const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
 const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
 const AllGroups = lazy(() => import('../../pages/course/AllGroups'))
 
-const UserList = lazy(() => import('../../pages/user/list'))
-const UserView = lazy(() => import('../../pages/user/view'))
+const UserList = lazy(() => import('../../pages/UserList'))
+const UserView = lazy(() => import('../../pages/UserDetail'))
 const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
 
 // ** Merge Routes

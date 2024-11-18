@@ -14,6 +14,8 @@ import faDate from 'moment-jalaali'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
+import failedImage from '@src/assets/images/portrait/small/avatar-s-11.jpg'
+
 
 import "flatpickr/dist/themes/material_green.css";
 
@@ -24,6 +26,7 @@ import { GetDetailUser } from '../../../@core/services/api/User'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { UpdateUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
+
 
 // const MySwal = withReactContent(Swal)
 
@@ -40,6 +43,16 @@ const UserInfoCard = ({ selectedUser }) => {
     'Employee.Writer': 'نویسنده کارمند',
     TournamentMentor: 'منتور مسابقه'
   };
+  const roleColors = {
+    Writer: 'light-info',
+    Administrator: 'light-danger',
+    Referee: 'light-warning',
+    Teacher: 'light-success',
+    Student: 'light-primary',
+    TournamentAdmin:'light-danger',
+    CourseAssistance:'light-success',
+    TournamentMentor:'light-info',
+  }
   // ** State
   const [show, setShow] = useState(false)
 
@@ -82,23 +95,29 @@ const UserInfoCard = ({ selectedUser }) => {
       coursesReseves: []
     }
   })
-  console.log(selectedUser);
+
   // ** render user img
   const renderUserImg = () => {
     if (selectedUser.currentPictureAddress !== 'Not-set') {
       return (
         <img
-          height='110'
-          width='110'
-          alt='user-avatar'
+          height='200'
+          width='200'
+          alt='avatar'
           src={selectedUser.currentPictureAddress}
           className='img-fluid rounded mt-3 mb-2'
         />
       )
     } else {
       return (
-        <p>کاربر عکسی ندارد</p>
-      )
+      < img 
+        alt=''
+        src={failedImage}
+        height='200'
+        width='200'
+        className='img-fluid rounded mt-3 mb-2'
+        />      
+    )
     }
   }
   
@@ -113,17 +132,32 @@ const UserInfoCard = ({ selectedUser }) => {
       }
     },
   });
-
+  console.log(selectedUser);
   return (
-    <div className='iranSans'>
+    <div >
       <Card>
         <CardBody>
           <div className='user-avatar-section'>
             <div className='d-flex align-items-center flex-column'>
               {renderUserImg()}
               <div className='d-flex flex-column align-items-center text-center'>
-                <div className='user-info'>
+                <div className='user-info gap'>
                   <h4>{selectedUser.fName !== null && selectedUser.lName !== null ? (selectedUser.fName + ' ' + selectedUser.lName) : ''}</h4>
+                  {
+                     (
+                      selectedUser.roles.length > 0 ? (
+                        selectedUser.roles.map((role, index) => {
+                          const translatedRoleName = roleTranslations[role.roleName] || role.roleName;
+                          return (
+                            <Badge key={index} color={roleColors[role.roleName]} className='m-1'>
+                              {translatedRoleName}
+                            </Badge>
+                          );
+                        })
+                      ) : (
+                        'هیچ نقشی ندارد'
+                      ))
+                    }
                 </div>
               </div>
             </div>
@@ -166,26 +200,6 @@ const UserInfoCard = ({ selectedUser }) => {
                     {selectedUser.active ? 'فعال' : 'غیر فعال'}
                   </Badge>
                 </li>
-                <li className="mb-75">
-                  <span className="fs-5 text fw-semibold">نقش:</span>
-                  <span className="text-capitalize">
-                    {
-                     (
-                      selectedUser.roles.length > 0 ? (
-                        selectedUser.roles.map((role, index) => {
-                          const translatedRoleName = roleTranslations[role.roleName] || role.roleName;
-                          return (
-                            <span key={index} style={{ margin: '2px' }}>
-                              {translatedRoleName}
-                            </span>
-                          );
-                        })
-                      ) : (
-                        'هیچ نقشی ندارد'
-                      ))
-                    }
-                  </span>
-                </li>
 
               </ul>
             ) : null}
@@ -197,7 +211,7 @@ const UserInfoCard = ({ selectedUser }) => {
           </div>
         </CardBody>
       </Card>
-      <Modal isOpen={show} toggle={() => setShow(!show)} className='modal-dialog-centered modal-lg iranSans'>
+      <Modal isOpen={show} toggle={() => setShow(!show)} className='modal-dialog-centered modal-lg '>
         <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>
           <div className='text-center mb-2'>

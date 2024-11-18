@@ -15,7 +15,7 @@ import htmlLabel from '@src/assets/images/icons/brands/html-label.png'
 import reactLabel from '@src/assets/images/icons/brands/react-label.png'
 import sketchLabel from '@src/assets/images/icons/brands/sketch-label.png'
 
-import jMoment from 'jalali-moment'
+import fMoment from 'moment-jalaali'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'
@@ -23,6 +23,7 @@ import { useQuery } from '@tanstack/react-query'
 import { GetDetailUser } from '../../../@core/services/api/User'
 import { useParams } from 'react-router-dom'
 
+fMoment.loadPersian();
 export const columns = [
   {
     sortable: true,
@@ -37,7 +38,6 @@ export const columns = [
           </div>
           <div className='d-flex flex-column'>
             <span className='text-truncate fw-bolder'>{row.title}</span>
-            <small className='text-muted' style={{height: '20px', overflow: 'hidden'}}>{row.describe}</small>
           </div>
         </div>
       )
@@ -45,7 +45,7 @@ export const columns = [
   },
   {
     name: 'تاریخ دوره',
-    selector: row => jMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY')
+    selector: row => fMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY')
   }
 ]
 
@@ -63,7 +63,6 @@ export const columnsReserve = [
           </div>
           <div className='d-flex flex-column'>
             <span className='text-truncate fw-bolder'>{row.courseName}</span>
-            <small className='text-muted' style={{height: '20px', overflow: 'hidden'}}>{row.studentName}</small>
           </div>
         </div>
       )
@@ -71,7 +70,7 @@ export const columnsReserve = [
   },
   {
     name: 'تاریخ دوره',
-    selector: row => jMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY')
+    selector: row => fMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY')
   },
   {
     name: 'وضعیت دوره',
@@ -83,7 +82,6 @@ export const columnsReserve = [
     }
   }
 ]
-
 const UserProjectsList = () => {
   const {id} = useParams()
   
@@ -92,6 +90,7 @@ const UserProjectsList = () => {
     queryFn: () => GetDetailUser(id)
   })
   if(isLoading) return <div><Spinner/> </div>
+  console.log(data);
   return (
     <>
     <Card>

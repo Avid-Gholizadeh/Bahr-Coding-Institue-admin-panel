@@ -5,7 +5,7 @@ export function MoreDetail({user}) {
   return (
     <Card>
       <CardTitle>
-        اطلاعات بیشتر
+        
       </CardTitle>
     </Card>
   )

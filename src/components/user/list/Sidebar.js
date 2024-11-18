@@ -89,8 +89,8 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
       size='lg'
       open={open}
       title='ساخت کاربر'
-      headerClassName='mb-1 iranSans'
-      contentClassName='pt-0 iranSans'
+      headerClassName='mb-1'
+      contentClassName='pt-0 '
       toggleSidebar={toggleSidebar}
       onClosed={handleSidebarClosed}
     >
