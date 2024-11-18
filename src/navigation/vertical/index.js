@@ -1,7 +1,6 @@
-import {title} from 'process'
-import {Mail, Home, Airplay, Circle, User, Table} from 'react-feather'
+import {Home, Circle, User, Table, Book} from 'react-feather'
 
-export default [
+const array = [
     {
         id: 'home',
         title: 'خانه',
@@ -66,3 +65,5 @@ export default [
         navLink: '/comments-management',
     },
 ]
+
+export default array
