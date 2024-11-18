@@ -90,7 +90,7 @@ export function useTableColumns({setShowEdit, selectable}) {
             sortField: 'cost',
             selector: row => row.cost,
             cell: row => (
-                <span className="fs-4 ">
+                <span className="fs-5">
                     {pirceFormatter(row.cost)}{' '}
                     <span
                         className=" position-relative text-info "
