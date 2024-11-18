@@ -58,7 +58,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   const onSubmit = data => {
     setData(data)
     if (checkIsValid(data)) {
-      toggleSidebar()
+      toggleSidebar(false)
       onSub({
         gmail: data.gmail,
         password: data.password,

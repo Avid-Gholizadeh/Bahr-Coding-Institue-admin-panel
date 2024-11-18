@@ -1,4 +1,5 @@
-import { Mail, Home, Airplay, Circle,User } from "react-feather";
+import { title } from "process";
+import { Mail, Home, Airplay, Circle,User, Table } from "react-feather";
 
 export default [
   {
@@ -40,4 +41,10 @@ export default [
       },
     ],
   },
+  {
+    id:'commentManagement',
+    title:' مدیریت کامنت',
+    icon: <Table size={12}/>,
+    navLink:'/comments-management'
+  }
 ];

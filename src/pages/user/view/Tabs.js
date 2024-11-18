@@ -5,13 +5,13 @@ import { Fragment } from 'react'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
 
 // ** Icons Imports
-import { User, Lock, Bookmark, Link, Target } from 'react-feather'
+import { User, Lock, Bookmark, Link, Target, Book } from 'react-feather'
 
 // ** User Components
-import SecurityTab from './SecurityTab'
-import Connections from './Connections'
+
 import Notifications from './Notifications'
 import UserProjectsList from './UserProjectsList'
+import { MoreDetail } from './MoreDetail'
 
 const UserTabs = ({ active, toggleTab, user }) => {
   return (
@@ -29,6 +29,12 @@ const UserTabs = ({ active, toggleTab, user }) => {
             <span className='fw-bold'> نقش ها</span>
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
+            <Book className='font-medium-3 me-50' />
+            <span className='fw-bold'> اطلاعات بیشتر </span>
+          </NavLink>
+        </NavItem>
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
@@ -36,6 +42,9 @@ const UserTabs = ({ active, toggleTab, user }) => {
         </TabPane>
         <TabPane tabId='2'>
           <Notifications user={user} />
+        </TabPane>
+        <TabPane tabId='3'>
+          <MoreDetail user={user} />
         </TabPane>
       </TabContent>
     </Fragment>

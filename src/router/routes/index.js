@@ -34,8 +34,9 @@ const ForgotPassword = lazy(() => import("../../pages/ForgotPassword"));
 const Error = lazy(() => import("../../pages/Error"));
 const Sample = lazy(() => import("../../pages/Sample"));
 
-const UserList = lazy(() => import('../../pages/user/list'))
+const UserList = lazy(() => import('../../pages/user/list/Table'))
 const UserView = lazy(() => import('../../pages/user/view'))
+const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
 
 
 // ** Merge Routes
@@ -100,6 +101,10 @@ const Routes = [
     element: <UserList />,
     path: '/user/list'
   },
+  {
+    element: <ManageComments/>,
+    path: '/comments-management'
+  }
 ];
 
 const getRouteMeta = route => {

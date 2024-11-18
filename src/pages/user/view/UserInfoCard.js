@@ -5,13 +5,12 @@ import { useState, Fragment } from 'react'
 import { Row, Col, Card, Form, CardBody, Button, Badge, Modal, Input, Label, ModalBody, ModalHeader } from 'reactstrap'
 
 // ** Third Party Components
-import Swal from 'sweetalert2'
-import Select from 'react-select'
-import { Check, Briefcase, X, User, TrendingUp } from 'react-feather'
+// import Swal from 'sweetalert2'
+// import Select from 'react-select'
+import { User, TrendingUp } from 'react-feather'
 import { useForm, Controller } from 'react-hook-form'
-import withReactContent from 'sweetalert2-react-content'
 
-import jMoment from 'jalali-moment'
+import faDate from 'moment-jalaali'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -20,20 +19,13 @@ import "flatpickr/dist/themes/material_green.css";
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { GetDetailUser } from '../../../@core/services/api/User'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { UpdateUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
-import DatePicker from 'react-flatpickr'
 
-const roleColors = {
-  Administrator: 'light-danger',
-  Teacher: 'light-warning',
-  Student: 'light-primary'
-}
-
-const MySwal = withReactContent(Swal)
+// const MySwal = withReactContent(Swal)
 
 const UserInfoCard = ({ selectedUser }) => {
   const roleTranslations = {
@@ -93,7 +85,7 @@ const UserInfoCard = ({ selectedUser }) => {
   console.log(selectedUser);
   // ** render user img
   const renderUserImg = () => {
-    if (selectedUser !== null && selectedUser.currentPictureAddress !== 'Not-set' && selectedUser.currentPictureAddress.length) {
+    if (selectedUser.currentPictureAddress !== 'Not-set') {
       return (
         <img
           height='110'
@@ -105,73 +97,23 @@ const UserInfoCard = ({ selectedUser }) => {
       )
     } else {
       return (
-        <Avatar
-          initials
-          color={selectedUser.currentPictureAddress || 'light-primary'}
-          className='rounded mt-3 mb-2'
-          content={(selectedUser.fName)}
-          contentStyles={{
-            borderRadius: 0,
-            fontSize: 'calc(48px)',
-            width: '100%',
-            height: '100%'
-          }}
-          style={{
-            height: '110px',
-            width: '100%'
-          }}
-        />
+        <p>کاربر عکسی ندارد</p>
       )
     }
   }
+  
+  const { mutate: submitMutate } = useMutation({
+    mutationFn: (data) => UpdateUser(data), // Ensure UpdateUser returns the response object
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success(' عملیات انجام شد ');
+        setShow(false)
+      } else {
+        toast.error(' عملیات موفقیت آمیز نبود ');
+      }
+    },
+  });
 
-  const navigate = useNavigate()
-
-  const onSubmit = async data => {
-    const response = await UpdateUser(data)
-    if (!response){
-      toast.error(' عملیات موفقیت آمیز نبود ')
-    }
-    else if(response.success === true){
-      toast.success(' عملیات انجام شد ')
-      setShow(false)
-      handleReset()
-      navigate(`/user/view/${data.id}`)
-    }
-  }
-
-  const handleReset = () => {
-    reset({
-        id: selectedUser?.id,
-        fName: selectedUser?.fName,
-        lName: selectedUser?.lName,
-        userName: selectedUser?.userName,
-        gmail: selectedUser?.gmail,
-        phoneNumber: selectedUser?.phoneNumber,
-        active: selectedUser?.active,
-        isDelete: selectedUser?.isDelete,
-        isTecher: selectedUser?.isTeacher,
-        isStudent: selectedUser?.isStudent,
-        recoveryEmail: selectedUser?.recoveryEmail,
-        twoStepAuth: selectedUser?.twoStepAuth,
-        userAbout: selectedUser?.userAbout,
-        currentPictureAddress: selectedUser?.currentPictureAddress,
-        profileCompletionPercentage: selectedUser?.profileCompletionPercentage,
-        linkdinProfile: selectedUser?.linkdinProfile,
-        telegramLink: selectedUser?.telegramLink,
-        receiveMessageEvent: selectedUser?.receiveMessageEvent,
-        homeAdderess: selectedUser?.homeAdderess,
-        nationalCode: selectedUser?.nationalCode,
-        gender: selectedUser?.gender,
-        latitude: selectedUser?.latitude,
-        longitude: selectedUser?.longitude,
-        insertDate: selectedUser?.insertDate,
-        birthDay: selectedUser?.birthDay,
-        roles: [],
-        courses: [],
-        coursesReseves: []
-    })
-  }
   return (
     <div className='iranSans'>
       <Card>
@@ -181,7 +123,7 @@ const UserInfoCard = ({ selectedUser }) => {
               {renderUserImg()}
               <div className='d-flex flex-column align-items-center text-center'>
                 <div className='user-info'>
-                  <h4>{selectedUser.fName !== null && selectedUser.lName !== null ? (selectedUser.fName + ' ' + selectedUser.lName) : 'نامشخص'}</h4>
+                  <h4>{selectedUser.fName !== null && selectedUser.lName !== null ? (selectedUser.fName + ' ' + selectedUser.lName) : ''}</h4>
                 </div>
               </div>
             </div>
@@ -219,41 +161,37 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span>{selectedUser.phoneNumber}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>آدرس :</span>
-                  <span>{selectedUser.homeAdderess}</span>
-                </li>
-                <li className='mb-75'>
                   <span className='fw-bolder me-25'> وضعیت : </span>
                   <Badge className='text-capitalize' color={selectedUser.active ? 'light-success' : 'light-danger'}>
                     {selectedUser.active ? 'فعال' : 'غیر فعال'}
                   </Badge>
                 </li>
-                <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>کد ملی :</span>
-                  <span>{selectedUser.nationalCode}</span>
+                <li className="mb-75">
+                  <span className="fs-5 text fw-semibold">نقش:</span>
+                  <span className="text-capitalize">
+                    {
+                     (
+                      selectedUser.roles.length > 0 ? (
+                        selectedUser.roles.map((role, index) => {
+                          const translatedRoleName = roleTranslations[role.roleName] || role.roleName;
+                          return (
+                            <span key={index} style={{ margin: '2px' }}>
+                              {translatedRoleName}
+                            </span>
+                          );
+                        })
+                      ) : (
+                        'هیچ نقشی ندارد'
+                      ))
+                    }
+                  </span>
                 </li>
-                <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>تاریخ تولد :</span>
-                  <span>{selectedUser.birthDay !== '' ? jMoment(selectedUser.birthDay).locale('fa').format('jD jMMMM jYYYY') : ''}</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>نقش:</span>
-                  <span className='text-capitalize'>{selectedUser !== null ? (
-                    selectedUser.roles.map(role => {
-                      const translatedRoleName = roleTranslations[role.roleName] || role.roleName;
-                      return  <span style={{margin: '2px'}}> {translatedRoleName} </span>
-                    })
-                  ) : 'نامشخص'}</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fs-5 text fw-semibold'>درباره کاربر :</span>
-                  <span>{selectedUser.userAbout}</span>
-                </li>
+
               </ul>
             ) : null}
           </div>
           <div className='d-flex justify-content-center pt-2'>
-            <Button color='primary' onClick={() => {setShow(true); handleReset()}}>
+            <Button color='primary' onClick={() => {setShow(true);}}>
               ویرایش مشخصات
             </Button>
           </div>
@@ -266,7 +204,7 @@ const UserInfoCard = ({ selectedUser }) => {
             <h1 className='mb-1'> ویرایش مشخصات کاربر </h1>
             <p>بروزرسانی مشخصات کاربر :</p>
           </div>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit(submitMutate)}>
             <Row className='gy-1 pt-75'>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='fName'>
@@ -306,7 +244,7 @@ const UserInfoCard = ({ selectedUser }) => {
                   id='userName'
                   name='userName'
                   render={({ field }) => (
-                    <Input {...field} id='userName' placeholder='kian1234UI' invalid={errors.userName && true} />
+                    <Input {...field} id='userName' placeholder='' invalid={errors.userName && true} />
                   )}
                 />
               </Col>
@@ -436,7 +374,6 @@ const UserInfoCard = ({ selectedUser }) => {
                   color='secondary'
                   outline
                   onClick={() => {
-                    handleReset()
                     setShow(false)
                   }}
                 >

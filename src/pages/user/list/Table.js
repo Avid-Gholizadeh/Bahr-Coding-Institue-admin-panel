@@ -90,7 +90,8 @@ const UsersList = () => {
   // Fetch user data with React Query
   const { data: userList, refetch, isLoading, isFetching } = useQuery({
     queryKey: ['GetUserList'],
-    queryFn: () => GetUserList(sortOrder, sortColumn, query, pageNumber, rowsPerPage, isActiveUser, isDeletedUser, currentRole),
+    queryFn: () => GetUserList(
+      sortOrder, sortColumn, query, pageNumber, rowsPerPage, isActiveUser, isDeletedUser, currentRole),
     // refetchOnWindowFocus: false,
     // keepPreviousData: true,
 })
@@ -169,7 +170,7 @@ const UsersList = () => {
     if (userList?.listUser?.length > 0) return userList.listUser
     return isLoading || isFetching ? [] : []
   }
-
+ console.log(dataToRender());
   return (
     <Fragment>
       <Card>
