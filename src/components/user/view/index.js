@@ -17,7 +17,7 @@ import Tabs from './Tabs'
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 import { useQuery } from '@tanstack/react-query'
-import { GetDetailUser } from '../../../@core/services/api/User'
+import { getDetailUser } from '../../../@core/services/api/User'
 
 function UserView () {
   // ** Hooks
@@ -32,8 +32,8 @@ function UserView () {
   }
 
   const { data: user, isLoading, isError } = useQuery({
-    queryKey: ['GetDetailUser', id],
-    queryFn:() => GetDetailUser(id)
+    queryKey: ['getDetailUser', id],
+    queryFn:() => getDetailUser(id)
   })
 
   if (isLoading) {

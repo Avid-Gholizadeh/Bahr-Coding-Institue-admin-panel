@@ -26,7 +26,7 @@ import avatar15 from "@src/assets/images/portrait/small/avatar-s-15.jpg";
 
 const NotificationDropdown = () => {
   // ** Notification Array
-  const notificationsArray = [
+  const GiveRoleArray = [
     {
       img: avatar3,
       subtitle: "Won the monthly best seller badge.",
@@ -56,7 +56,7 @@ const NotificationDropdown = () => {
       ),
     },
     {
-      title: <h6 className="fw-bolder me-auto mb-0">System Notifications</h6>,
+      title: <h6 className="fw-bolder me-auto mb-0">System GiveRole</h6>,
       switch: (
         <div className="form-check form-switch">
           <Input
@@ -100,7 +100,7 @@ const NotificationDropdown = () => {
     },
   ];
 
-  // ** Function to render Notifications
+  // ** Function to render GiveRole
   /*eslint-disable */
   const renderNotificationItems = () => {
     return (
@@ -111,7 +111,7 @@ const NotificationDropdown = () => {
           wheelPropagation: false,
         }}
       >
-        {notificationsArray.map((item, index) => {
+        {GiveRoleArray.map((item, index) => {
           return (
             <a
               key={index}
@@ -189,7 +189,7 @@ const NotificationDropdown = () => {
       <DropdownMenu end tag="ul" className="dropdown-menu-media mt-0">
         <li className="dropdown-menu-header">
           <DropdownItem className="d-flex" tag="div" header>
-            <h4 className="notification-title mb-0 me-auto">Notifications</h4>
+            <h4 className="notification-title mb-0 me-auto">GiveRole</h4>
             <Badge tag="div" color="light-primary" pill>
               6 New
             </Badge>
@@ -198,7 +198,7 @@ const NotificationDropdown = () => {
         {renderNotificationItems()}
         <li className="dropdown-menu-footer">
           <Button color="primary" block>
-            Read all notifications
+            Read all GiveRole
           </Button>
         </li>
       </DropdownMenu>

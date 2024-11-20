@@ -10,7 +10,7 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown } from 'react-feather'
 import { selectThemeColors } from '@utils'
 import { useQuery } from '@tanstack/react-query'
-import { GetUserList } from '../../../@core/services/api/User'
+import { getUserList } from '../../../@core/services/api/User'
 
 // ** Reactstrap Imports
 import {
@@ -89,14 +89,14 @@ const UsersList = () => {
 
   // Fetch user data with React Query
   const { data: userList, refetch, isLoading, isFetching } = useQuery({
-    queryKey: ['GetUserList'],
-    queryFn: () => GetUserList(
+    queryKey: ['getUserList'],
+    queryFn: () => getUserList(
       sortOrder, sortColumn, query, pageNumber, rowsPerPage, isActiveUser, isDeletedUser, currentRole),
     // refetchOnWindowFocus: false,
     // keepPreviousData: true,
 })
 
-
+  console.log(userList);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   // Filter and sort options
@@ -110,6 +110,7 @@ const UsersList = () => {
 
   const statusOptions = useMemo(() => [
     { value: '', label: 'انتخاب کنید' },
+    { value: 1, label: 'کاربران غیر فعال' },
     { value: 2, label: 'کاربران فعال' },
     { value: 3, label: 'کاربران حذف شده' },
   ], [])
@@ -131,6 +132,10 @@ const UsersList = () => {
 
   const handleSort = useCallback((selectedOption) => {
     switch (selectedOption.value) {
+      case 1:
+        setIsActiveUser(false);
+        setIsDeletedUser(null);
+        break;
       case 2: // Active users
         setIsActiveUser(true);
         setIsDeletedUser(false);

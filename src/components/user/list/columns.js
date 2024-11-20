@@ -15,21 +15,21 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'react
 import jMoment from 'jalali-moment'
 
 import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
-import { DeleteUser } from '../../../@core/services/api/User'
+import { deleteUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 
 // ** Renders Client Columns
-const useDeleteUser = () => {
+const usedeleteUser = () => {
 
   return useMutation({
-    mutationFn: (userId) => DeleteUser(userId),
+    mutationFn: (userId) => deleteUser(userId),
     onSuccess: (response) => {
       if(response.ok){
         toast.success('حذف انجام شد')
       } else {
-        toast.error('خطا در حذف کاربر')
+        toast.error(response.message)
 
       }
     },
@@ -38,18 +38,18 @@ const useDeleteUser = () => {
 }
 
 const renderClient = row => {
-  if (row.pictureAddress) {
-    return <Avatar className='me-1' img={row.pictureAddress !== "Not-set" && row.pictureAddress} width='32' height='32' />
-  } else {
     return (
       <Avatar
-        initials
-        className='me-1'
-        color={row.pictureAddress || 'light-primary'}
-        content={row.fname || 'John Doe'}
-      />
+      className="me-1"
+      img={row.pictureAddress && row.pictureAddress !== "Not-set" && row.pictureAddress !== "C:\\fakepath\\Wall.jpg" ? row.pictureAddress : defaultAvatar}
+      initials={!row.pictureAddress || row.pictureAddress === "Not-set"}
+      color="light-primary"
+      content={row.fname || "John Doe"}
+      width="32"
+      height="32"
+    />
     )
-  }
+  
 }
 const roleTranslations = {
   Student: 'دانشجو',
@@ -61,7 +61,7 @@ const roleTranslations = {
   TournamentAdmin: 'ادمین مسابقه',
   CourseAssistance: 'کمک دوره',
   'Employee.Writer': 'نویسنده کارمند',
-  TournamentMentor: 'منتور مسابقه'
+  TournamentMentor: 'منتور'
 }
 
 // ** Renders Role Columns
@@ -87,7 +87,7 @@ const renderRole = row => {
  // Split roles into an array based on the delimiter (e.g., ",")
    // Check if userRoles is null, undefined, or an empty string
    if (!row.userRoles) {
-    return <span className='text-muted'>نقش نامشخص</span>
+    return <span className='text-muted'> بدون نقش</span>
   }
 
  const roles = row.userRoles.split(',')
@@ -100,7 +100,7 @@ const renderRole = row => {
   const roleName = roleTranslations[trimmedRole] || trimmedRole // Translate role to Farsi if available
 
   return (
-    <span key={trimmedRole} >
+    <span key={trimmedRole} className='text-tuncate' >
       <Icon size={18} className={`${roleClass} me-50`} />
       {roleName}
     </span>
@@ -112,9 +112,8 @@ return <div className='d-flex flex-wrap'>{renderedRoles}</div>
 }
 
 const statusObj = {
-  pending: 'light-warning',
   active: 'light-success',
-  inactive: 'light-secondary'
+  inactive: 'light-warning'
 }
 
 export const columns = [
@@ -162,17 +161,24 @@ export const columns = [
     sortable: true,
     sortField: 'status',
     // selector: row => row.active,
-    cell: row => (
-      <Badge className='text-capitalize' color={statusObj[row.active ? 'active' : 'pending']} pill>
-        {row.active ? 'فعال' : 'حذف شده'}
-      </Badge>
-    )
+    cell: row => {
+      const isActive = row.active === 'True'; // Convert string to boolean
+      return (
+        <Badge 
+          className='text-capitalize' 
+          color={statusObj[isActive ? 'active' : 'inactive']} 
+          pill
+        >
+          {isActive ? 'فعال' : 'غیرفعال'}
+        </Badge>
+      );
+    }
   },
   {
     name: ' عملیات',
     width: '120px',
     cell: row => {
-      const { mutate: deleteUser } = useDeleteUser()
+      const { mutate: deleteUser } = usedeleteUser()
       const [centeredModal, setCenteredModal] = useState(false)
 
       return (

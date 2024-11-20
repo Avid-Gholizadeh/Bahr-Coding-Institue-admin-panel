@@ -3,7 +3,7 @@ import Sidebar from '@components/sidebar'
 import { useForm, Controller } from 'react-hook-form'
 import { Button, Label, Form, Input } from 'reactstrap'
 import { useDispatch } from 'react-redux'
-import { AddUser } from '../../../@core/services/api/User'
+import { addUser } from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 
 const defaultValues = {
@@ -47,7 +47,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   } = useForm({ defaultValues })
 
   const onSub = async (dataObj) => {
-    const response = await AddUser(dataObj)
+    const response = await addUser(dataObj)
     if (!response) {
       toast.error(' کاربر اضافه نشد! ')
     } else if (response.success === true) {

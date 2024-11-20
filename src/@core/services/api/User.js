@@ -1,8 +1,8 @@
 import { api } from "../interceptor/index";
 
-export const AddRole = async (roleId, id) => {
+export async function addRole (roleId, id) {
     try {
-      const response = await api.post(`/User/AddUserAccess?Enable=true`, {
+      const response = await api.post(`/User/addUserAccess?Enable=true`, {
         roleId: roleId,
         userId: id
       });
@@ -18,7 +18,7 @@ export const AddRole = async (roleId, id) => {
   };
   
 
- export const AddUser = async (data) => {
+ export async function addUser(data) {
     try { 
         const response = await api.post(`/User/CreateUser`, data)
         return response
@@ -27,10 +27,10 @@ export const AddRole = async (roleId, id) => {
     }
 }
 
-export const DeleteUser = async (id) => {
+export async function deleteUser(id) {
   try {
       console.log(id)
-      const response = await api.delete(`/User/DeleteUser`, {
+      const response = await api.delete(`/User/deleteUser`, {
           data: { userId: id }
       })
 
@@ -42,8 +42,20 @@ export const DeleteUser = async (id) => {
   }
 }
 
+export async function recoverUser (id){
+    try {
+        const response = await api.put(`/User/ReverseToActiveUser`,{
+            data: { userId: id }
+        }
+    )
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
 
- export const GetDetailUser = async (id) => {
+
+ export async function getDetailUser (id) {
     try{
      
      const response = await api.get(`/User/UserDetails/${id}`)
@@ -54,16 +66,7 @@ export const DeleteUser = async (id) => {
     }
  }
 
- export async function GetTotalCount () {
-    try {        
-        const response = await api.get(`/User/UserMannage?PageNumber=1&RowsOfPage=10`)
-        return response
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export async function GetUserList (SortType, SortingCol, Query, PageNumber, RowsOfPage, IsActiveUser, IsDeletedUser, currentRole) {
+export async function getUserList (SortType, SortingCol, Query, PageNumber, RowsOfPage, IsActiveUser, IsDeletedUser, currentRole) {
     try {        
         const response = await api.get(`/User/UserMannage?PageNumber=${PageNumber}&RowsOfPage=${RowsOfPage}&SortingCol=${SortingCol}&SortType=${SortType}&Query=${Query}${IsActiveUser !== null ? `&IsActiveUser=${IsActiveUser}` : ''}${IsDeletedUser !== null ? `&IsDeletedUser=${IsDeletedUser}` : ''}&roleId=${currentRole.value}`)
         return response
@@ -72,14 +75,23 @@ export async function GetUserList (SortType, SortingCol, Query, PageNumber, Rows
     }
 }
 
-export async function UpdateUser (data) {
+export async function updateUser (data) {
     try{
      
-     const response = await api.put(`/User/UpdateUser`, data)
+     const response = await api.put(`/User/updateUser`, data)
  
      return response
  
     } catch(err){
      return err.message
+    }
+ }
+
+ export async function getUserComments(userId){
+    try {
+        const response = await api.get(`/Course/CommentManagment?userId=${userId}`)
+        return response
+    } catch (error) {
+        console.log(error);
     }
  }
