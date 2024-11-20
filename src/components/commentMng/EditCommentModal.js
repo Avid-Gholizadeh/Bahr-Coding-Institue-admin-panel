@@ -8,7 +8,6 @@ export function EditCommentModal({ formModal, setFormModal, comment }) {
   const [commentTitle, setCommentTitle] = useState(comment?.commentTitle || '');
   const [commentDescription, setCommentDescription] = useState(comment?.describe || '');
   const queryClient = useQueryClient();
-  console.log(comment);
 
   useEffect(() => {
     if (comment) {
@@ -64,9 +63,9 @@ export function EditCommentModal({ formModal, setFormModal, comment }) {
           />
         </div>
       </ModalBody>
-      <ModalFooter>
-        <Button color="primary" onClick={handleSave}>Save</Button>{' '}
-        <Button color="secondary" onClick={() => setFormModal(false)}>Cancel</Button>
+      <ModalFooter className='m-auto'>
+        <Button color="primary" onClick={handleSave}>ذخیره</Button>{' '}
+        <Button color="secondary" onClick={() => setFormModal(false)}>انصراف</Button>
       </ModalFooter>
     </Modal>
   );

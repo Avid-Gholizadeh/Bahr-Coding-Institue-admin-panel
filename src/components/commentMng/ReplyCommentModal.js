@@ -8,7 +8,6 @@ export function ReplyCommentModal({ formModal, setFormModal, comment }) {
   const [commentTitle, setCommentTitle] = useState('');
   const [commentDescription, setCommentDescription] = useState('');
   const queryClient = useQueryClient();
-  console.log(comment);
 
 
   const {mutate: replyCommentMutate} = useMutation({

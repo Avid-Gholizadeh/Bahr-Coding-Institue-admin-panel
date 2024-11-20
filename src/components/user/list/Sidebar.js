@@ -64,21 +64,15 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     setData(data);
     if (checkIsValid(data)) {
       toggleSidebar(false);
-      try {
-        // Trigger the mutation with the data
-        await addUserMutation({
-          gmail: data.gmail,
-          password: data.password,
-          phoneNumber: data.phoneNumber,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          isTeacher: isTeacher,
-          isStudent: isStudent,
-        });
-      } catch (error) {
-        // This will be handled by the onError callback of the mutation
-        console.error('Error adding user:', error);
-      }
+      addUserMutation({
+        gmail: data.gmail,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        isTeacher: isTeacher,
+        isStudent: isStudent,
+      });
     } else {
       for (const key in data) {
         if (!data[key]) {

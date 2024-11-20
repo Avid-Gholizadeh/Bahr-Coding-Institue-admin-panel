@@ -5,15 +5,11 @@ import DataTable from 'react-data-table-component';
 import { Badge, Card, Spinner } from 'reactstrap';
 
 export function UserComment({ userId }) {
-    console.log(userId);
 
     const { data, isLoading, isError } = useQuery({
         queryKey: ['userDetailComment', userId],
         queryFn: () => getUserComments(userId),
     });
-
-    console.log(data?.comments[0]);
-
 
     if (isError) {
         return <div>خطایی رخ داده است. لطفا دوباره تلاش کنید.</div>;

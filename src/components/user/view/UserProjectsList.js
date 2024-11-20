@@ -11,7 +11,6 @@ import fMoment from 'moment-jalaali';
 fMoment.loadPersian();
 
 export const UserProjectsList = ({user}) => {
-console.log(user);
   const columns = [
     {
       sortable: true,
