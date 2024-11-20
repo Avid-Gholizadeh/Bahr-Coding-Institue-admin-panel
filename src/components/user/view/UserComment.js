@@ -22,17 +22,17 @@ export function UserComment({ userId }) {
     const columns = [
         {
             name: 'عنوان',
-            maxWidth: '20%',
+            maxWidth: '150px',
             selector: (row) => row.commentTitle, // Ensure this field exists in the API response
         },
         {
             name: 'شرح',
-            maxWidth: '40%',
+            maxWidth: '300px',
             selector: (row) => row.describe, // Ensure this field exists in the API response
         },
         {
             name: 'وضعیت',
-            maxWidth: '10%',
+            maxWidth: '100px',
             selector: (row) => row.accept ? (
                 <Badge pill color="light-success" className="me-1">
                   تایید شده
@@ -45,7 +45,7 @@ export function UserComment({ userId }) {
         },
         {
             name: 'دوره',
-            maxWidth: '25%',
+            maxWidth: '150px',
             selector: (row) => row.courseTitle, // Ensure this field exists in the API response
         },
     ];
