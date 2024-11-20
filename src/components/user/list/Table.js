@@ -23,7 +23,7 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 import FilterCard from './FilterCard'
 import { CustomHeader } from './CustomHeader'
 
-const UsersList = () => {
+const UsersListTable = () => {
   const [sortColumn, setSortColumn] = useState('')
   const [sortOrder, setSortOrder] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(10)
@@ -143,4 +143,4 @@ const UsersList = () => {
   )
 }
 
-export default UsersList
+export default UsersListTable

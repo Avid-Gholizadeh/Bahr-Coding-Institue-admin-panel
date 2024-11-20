@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
-import Sidebar from '@components/sidebar'
-import { useForm, Controller } from 'react-hook-form'
-import { Button, Label, Form, Input } from 'reactstrap'
-import { useDispatch } from 'react-redux'
-import { addUser } from '../../../@core/services/api/User'
-import toast from 'react-hot-toast'
+import { useEffect, useState } from 'react';
+import Sidebar from '@components/sidebar';
+import { useForm, Controller } from 'react-hook-form';
+import { Button, Label, Form, Input } from 'reactstrap';
+import { addUser } from '../../../@core/services/api/User';
+import toast from 'react-hot-toast';
+import { useMutation } from '@tanstack/react-query';
 
 const defaultValues = {
   phoneNumber: '',
@@ -12,7 +12,7 @@ const defaultValues = {
   password: '',
   firstName: '',
   lastName: '',
-}
+};
 
 const checkIsValid = (data) => {
   return Object.values(data).every(
@@ -21,68 +21,79 @@ const checkIsValid = (data) => {
 };
 
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
-  const [data, setData] = useState(null)
-  const [role, setRole] = useState('isStudent')
-  const [isStudent, setIsStudent] = useState(false)
-  const [isTeacher, setIsTeacher] = useState(false)
+  const [data, setData] = useState(null);
+  const [role, setRole] = useState('isStudent');
+  const [isStudent, setIsStudent] = useState(false);
+  const [isTeacher, setIsTeacher] = useState(false);
 
   useEffect(() => {
     if (role === 'isStudent') {
-      setIsStudent(true)
-      setIsTeacher(false)
+      setIsStudent(true);
+      setIsTeacher(false);
     } else if (role === 'isTeacher') {
-      setIsTeacher(true)
-      setIsStudent(false)
+      setIsTeacher(true);
+      setIsStudent(false);
     }
-  }, [role])
-
-  const dispatch = useDispatch()
+  }, [role]);
 
   const {
     control,
     setValue,
     setError,
     handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
+    formState: { errors },
+  } = useForm({ defaultValues });
 
-  const onSub = async (dataObj) => {
-    const response = await addUser(dataObj)
-    if (!response) {
-      toast.error(' کاربر اضافه نشد! ')
-    } else if (response.success === true) {
-      toast.success('کاربر اضافه شد')
-    }
-  }
+  // Mutate function using Tanstack Query v5
+  const { mutateAsync: addUserMutation, isLoading, isError } = useMutation({
+    mutationKey: ['userAdditions'],
+    mutationFn: (dataObj) => addUser(dataObj),
+    onSuccess: (response) => {
+      if (!response) {
+        toast.error(' کاربر اضافه نشد! ');
+      } else if (response.success === true) {
+        toast.success('کاربر اضافه شد');
+      }
+    },
+    onError: () => {
+      toast.error('کاربر اضافه نشد!');
+    },
+  });
 
-  const onSubmit = data => {
-    setData(data)
+  const onSubmit = async (data) => {
+    setData(data);
     if (checkIsValid(data)) {
-      toggleSidebar(false)
-      onSub({
-        gmail: data.gmail,
-        password: data.password,
-        phoneNumber: data.phoneNumber,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        isTeacher: isTeacher,
-        isStudent: isStudent
-      })
+      toggleSidebar(false);
+      try {
+        // Trigger the mutation with the data
+        await addUserMutation({
+          gmail: data.gmail,
+          password: data.password,
+          phoneNumber: data.phoneNumber,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          isTeacher: isTeacher,
+          isStudent: isStudent,
+        });
+      } catch (error) {
+        // This will be handled by the onError callback of the mutation
+        console.error('Error adding user:', error);
+      }
     } else {
       for (const key in data) {
         if (!data[key]) {
-          setError(key, { type: 'manual', message: 'این فیلد ضروری است' })
+          setError(key, { type: 'manual', message: 'این فیلد ضروری است' });
         }
       }
     }
-  }
+  };
 
   const handleSidebarClosed = () => {
     for (const key in defaultValues) {
-      setValue(key, '')
+      setValue(key, '');
     }
-    setRole('isStudent')
-  }
+    setRole('isStudent');
+  };
 
   return (
     <Sidebar
@@ -209,6 +220,6 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
       </Form>
     </Sidebar>
   )
-}
+};
 
-export default SidebarNewUsers
+export default SidebarNewUsers;
