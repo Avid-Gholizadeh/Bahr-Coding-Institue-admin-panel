@@ -5,7 +5,7 @@ import { EditCommentModal } from './EditCommentModal';
 import { ReplyCommentModal } from './ReplyCommentModal';
 
 export function TableBodyContent({ List }) {
-  const { acceptComment, rejectComment } = useCommentActions();
+  const { acceptComment, rejectComment,deleteComment } = useCommentActions();
   const [formModal, setFormModal] = useState(false);
   const [editingComment, setEditingComment] = useState(null);
   const [replyComment, setReplyComment] = useState(null);
@@ -30,7 +30,8 @@ export function TableBodyContent({ List }) {
             onAccept={acceptComment.mutate}
             onReject={rejectComment.mutate}
             onEdit={handleEditClick}
-            onReply={handleReplyClick} // Pass reply handler
+            onReply={handleReplyClick}
+            onDelete= {deleteComment}
           />
         ))}
       </tbody>

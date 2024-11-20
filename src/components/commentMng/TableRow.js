@@ -8,6 +8,7 @@ export const TableRow = ({
   onReject,
   onEdit,
   onReply, // Add onReply handler
+  onDelete
 }) => (
   <tr>
     <td className="w-25">
@@ -28,12 +29,25 @@ export const TableRow = ({
         </Badge>
       )}
     </td>
-    <td style={{ width: '15%' }}>
+    <td >
       <UncontrolledDropdown>
         <DropdownToggle className="icon-btn hide-arrow" color="transparent" size="sm" caret>
           <MoreVertical size={15} />
         </DropdownToggle>
         <DropdownMenu>
+          {comment.accept?(
+          <DropdownItem
+          className="text-warning"
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            onReject(comment.commentId);
+          }}
+        >
+          <X className="me-50" size={15} /> <span className="align-middle">رد کردن</span>
+        </DropdownItem>
+          ):(
+
           <DropdownItem
             className="text-success"
             href="#"
@@ -44,16 +58,19 @@ export const TableRow = ({
           >
             <Check className="me-50" size={15} /> <span className="align-middle">تایید کردن</span>
           </DropdownItem>
+          )}
+
           <DropdownItem
-            className="text-warning"
-            href="#"
+            className="text-danger"
+            href=""
             onClick={(e) => {
               e.preventDefault();
-              onReject(comment.commentId);
+              onDelete(comment.commentId);
             }}
           >
-            <X className="me-50" size={15} /> <span className="align-middle">رد کردن</span>
+            <Trash className="me-50" size={15} /> <span className="align-middle">پاک کردن</span>
           </DropdownItem>
+
           <DropdownItem
             className="text-primary"
             href="#"
@@ -84,6 +101,17 @@ export const TableRow = ({
           )}
         </DropdownMenu>
       </UncontrolledDropdown>
+    </td>
+    <td>
+      {comment.replyCommentId?( 
+        <Badge color='light-info'>
+        پاسخ
+        </Badge>
+      ):(
+        <Badge>
+          کامنت
+        </Badge>
+      )}
     </td>
   </tr>
 );

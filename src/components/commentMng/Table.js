@@ -13,6 +13,7 @@ const TableHover = ({ data }) => {
           <th style={{ width: '20%' }}>نام دوره</th>
           <th style={{ width: '10%' }}>وضعیت</th>
           <th style={{ width: '10%' }}>عملیات</th>
+          <th style={{ width: '10%' }}>نوع</th>
         </tr>
       </thead>
       <TableBodyContent List={List} />
