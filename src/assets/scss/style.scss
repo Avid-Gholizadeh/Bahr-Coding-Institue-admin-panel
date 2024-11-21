@@ -12,5 +12,10 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 @import '../../@core/assets/fonts/iransans/iransans';
 
 body {
-    font-family: 'IRANSans_FarsiNumeral', 'IRANSans', sans-serif !important;
+    font-family: 'IRANSans_FarsiNumeral', 'IRANSans', sans-serif;
+}
+
+.groupName-hover:hover {
+    color: #0d6efd; /* Matches Bootstrap's "danger" color */
+    transition: all 0.3s;
 }

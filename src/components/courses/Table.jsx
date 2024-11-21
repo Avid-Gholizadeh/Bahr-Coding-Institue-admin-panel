@@ -84,7 +84,7 @@ export function Table({selectable, onSelect}) {
     return (
         <>
             <Card className="overflow-hidden">
-                <div className="react-dataTable">
+                <div className="react-dataTable app-user-list">
                     <DataTable
                         noHeader
                         subHeader
@@ -94,7 +94,7 @@ export function Table({selectable, onSelect}) {
                         paginationServer
                         progressPending={isLoading}
                         noDataComponent={
-                            <span className="my-4 fs-2 text-primary">دیتایی وجود ندارد</span>
+                            <span className="my-4 fs-4 text-primary">دیتایی وجود ندارد</span>
                         }
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
                         columns={columns}

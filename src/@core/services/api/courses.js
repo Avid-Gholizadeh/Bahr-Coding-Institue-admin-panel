@@ -189,3 +189,12 @@ export async function deleteCourseGroup(data) {
         throw new Error(error)
     }
 }
+export async function getCourseUserList(params) {
+    try {
+        const response = await api.get('/CourseUser/GetCourseUserList', {params})
+
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
