@@ -20,19 +20,27 @@ import {useRef, useState} from 'react'
 import toast from 'react-hot-toast'
 import {CustomHeader} from './CustomHeader'
 
-export function ReserveTable() {
+export function ReserveTable({singleCourseId}) {
     const selectedGroup = useRef(null)
     const queryClient = useQueryClient()
     const [showEdit, setShowEdit] = useState({currentCourseId: null, show: false})
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerpage] = useState(10)
     const [sort, setSort] = useState({reserverDate: false, accept: false, direction: 'desc'})
-    const columns = useReserveColumns({handleModalOpen})
+    const columns = useReserveColumns({handleModalOpen, singleCourseId})
 
-    const {data: reserves, isLoading} = useQuery({
+    let {data: reserves, isLoading} = useQuery({
         queryKey: ['all-course-reserve'],
         queryFn: getAllCourseReserve,
     })
+
+    // console.log(reserves)
+
+    if (singleCourseId && reserves) {
+        reserves = reserves.filter(
+            reserve => reserve.courseId === singleCourseId && !reserve.accept
+        )
+    }
 
     const {data: currentCourse, isLoading: courseLoading} = useQuery({
         queryKey: ['single-course', showEdit.currentCourseId?.courseId],
@@ -109,12 +117,16 @@ export function ReserveTable() {
 
     function Pagination() {
         return (
-            <CustomPagination
-                totalItem={reserves.length}
-                rowsPerPage={rowsPerPage}
-                currentPage={currentPage}
-                handlePagination={handlePagination}
-            />
+            <>
+                {!singleCourseId && (
+                    <CustomPagination
+                        totalItem={reserves.length}
+                        rowsPerPage={rowsPerPage}
+                        currentPage={currentPage}
+                        handlePagination={handlePagination}
+                    />
+                )}
+            </>
         )
     }
 
@@ -167,7 +179,7 @@ export function ReserveTable() {
     return (
         <>
             <Card className="overflow-hidden">
-                <div className="react-dataTable">
+                <div className="react-dataTable app-user-list">
                     <DataTable
                         noHeader
                         subHeader
@@ -177,7 +189,7 @@ export function ReserveTable() {
                         paginationServer
                         progressPending={isLoading}
                         noDataComponent={
-                            <span className="my-4 fs-2 text-primary">دیتایی وجود ندارد</span>
+                            <span className="my-4 fs-4 text-primary">دیتایی وجود ندارد</span>
                         }
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
                         columns={columns}
@@ -187,7 +199,11 @@ export function ReserveTable() {
                         paginationComponent={Pagination}
                         data={dataToRender()}
                         subHeaderComponent={
-                            <CustomHeader RowsOfPage={rowsPerPage} handlePerPage={handlePerPage} />
+                            <CustomHeader
+                                RowsOfPage={rowsPerPage}
+                                handlePerPage={handlePerPage}
+                                singleCourseId={singleCourseId}
+                            />
                         }
                     />
                 </div>
@@ -239,7 +255,7 @@ export function ReserveTable() {
                                 {isPending && <Spinner className="ms-1" size="sm" />}
                             </Button>
                             <Button
-                                color="secondary"
+                                color="danger"
                                 outline
                                 onClick={() => setShowEdit({currentCourseId: null, show: false})}
                             >

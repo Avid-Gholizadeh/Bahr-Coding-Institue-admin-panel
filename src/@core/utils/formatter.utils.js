@@ -23,3 +23,11 @@ export function convertPersianDateToGerigorian2(persianDate) {
     moment.loadPersian()
     return moment(persianDate, 'jYYYY-jMM-jDD').format('YYYY-MM-DD')
 }
+export function isValidUrl(string) {
+    try {
+        const url = new URL(string) // This will throw an error if it's not a valid URL
+        return url.protocol === 'http:' || url.protocol === 'https:' // Checks for HTTP/HTTPS
+    } catch (_) {
+        return false
+    }
+}

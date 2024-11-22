@@ -2,7 +2,11 @@ import Avatar from '@components/avatar'
 import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
 import {Link} from 'react-router-dom'
 import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
-import {convertGrigorianDateToJalaali, pirceFormatter} from '../../@core/utils/formatter.utils'
+import {
+    convertGrigorianDateToJalaali,
+    isValidUrl,
+    pirceFormatter,
+} from '../../@core/utils/formatter.utils'
 import {useMutation} from '@tanstack/react-query'
 import {deleteCourse} from '@core/services/api/courses'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
@@ -35,7 +39,7 @@ export function useTableColumns({setShowEdit, selectable}) {
         return (
             <Avatar
                 className="me-1 overflow-hidden"
-                img={row.tumbImageAddress || CourseFallback}
+                img={isValidUrl(row.tumbImageAddress) ? row.tumbImageAddress : CourseFallback}
                 width="32"
                 height="32"
             />

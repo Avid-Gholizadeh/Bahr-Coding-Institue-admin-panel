@@ -13,7 +13,11 @@ import {
     Spinner,
     UncontrolledButtonDropdown,
 } from 'reactstrap'
-import {convertGrigorianDateToJalaali, pirceFormatter} from '../../../@core/utils/formatter.utils'
+import {
+    convertGrigorianDateToJalaali,
+    isValidUrl,
+    pirceFormatter,
+} from '../../../@core/utils/formatter.utils'
 import CourseFallback from '../../../assets/images/courses-fallback.jpg'
 import {useState} from 'react'
 import {FormWizard} from '../formWizard/FormWizard'
@@ -27,7 +31,7 @@ export function CourseInfoCard({course}) {
     const [show, setShow] = useState(false)
     const [courseStatus, setCourseStatus] = useState(course.courseStatusName)
 
-    const {mutate: deleteMutate} = useMutation({
+    const {mutate: deleteMutate, isPending: deletePending} = useMutation({
         mutationFn: deleteCourse,
     })
 
@@ -104,10 +108,10 @@ export function CourseInfoCard({course}) {
                     height="100%"
                     width="100%"
                     alt="course-image"
-                    src={course.imageAddress || CourseFallback}
+                    src={isValidUrl(course.imageAddress) ? course.imageAddress : CourseFallback}
                     className="img-cover"
                 />
-                <PlusCircle />
+                {/* <PlusCircle /> */}
             </div>
         )
     }
@@ -292,7 +296,7 @@ export function CourseInfoCard({course}) {
                             onClick={handleActiveState}
                             disabled={isPending}
                         >
-                            {course.isActive ? 'غیر فعال کردن' : 'فعال کردن'}
+                            {course.isActive ? 'غیر فعال ' : 'فعال '}
                             {isPending && (
                                 <Spinner
                                     className="ms-1"
@@ -305,10 +309,10 @@ export function CourseInfoCard({course}) {
                             className="ms-1"
                             color="danger"
                             onClick={() => handleDeleteAlert(course.courseId)}
-                            disabled={isPending}
+                            disabled={deletePending}
                         >
                             حذف
-                            {isPending && <Spinner className="ms-1" size="sm" color="danger" />}
+                            {deletePending && <Spinner className="ms-1" size="sm" color="light" />}
                         </Button>
                     </div>
                 </CardBody>

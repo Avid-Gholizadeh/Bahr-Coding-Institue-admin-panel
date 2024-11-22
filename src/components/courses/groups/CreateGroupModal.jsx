@@ -22,7 +22,7 @@ import {createCourseGroupe, updateCourseGroupe} from '@core/services/api/courses
 import toast from 'react-hot-toast'
 import {useSelector} from 'react-redux'
 
-export function CreateGroupModal({handleToggleModal, show, course, params}) {
+export function CreateGroupModal({handleToggleModal, show, course, params, courseDetailPage}) {
     const queryClient = useQueryClient()
     const [selectedCourse, setSelectedCourse] = useState(null)
     const {skin} = useSelector(state => state.layout)
@@ -31,7 +31,15 @@ export function CreateGroupModal({handleToggleModal, show, course, params}) {
         mutationFn: createCourseGroupe,
         onSuccess: data => {
             if (data.success) {
-                queryClient.invalidateQueries(['all-groups'])
+                if (courseDetailPage) {
+                    queryClient.invalidateQueries([
+                        'single-course-groupe',
+                        courseDetailPage.courseId,
+                    ])
+                } else {
+                    queryClient.invalidateQueries(['all-groups'])
+                }
+
                 toast.success('گروه با موفقیت ساخته شد')
                 handleToggleModal()
             } else {
@@ -49,7 +57,15 @@ export function CreateGroupModal({handleToggleModal, show, course, params}) {
         mutationFn: updateCourseGroupe,
         onSuccess: (data, variables) => {
             if (data.success) {
-                updateCashedGroupes(variables)
+                if (courseDetailPage) {
+                    queryClient.invalidateQueries([
+                        'single-course-groupe',
+                        courseDetailPage.courseId,
+                    ])
+                } else {
+                    updateCashedGroupes(variables)
+                }
+
                 toast.success('گروه با موفقیت ویرایش شد.')
                 handleToggleModal()
             } else {
@@ -106,10 +122,14 @@ export function CreateGroupModal({handleToggleModal, show, course, params}) {
 
     function onSubmit(data) {
         if (!course) {
-            if (selectedCourse) {
-                mutate({...data, CourseId: selectedCourse.courseId})
+            if (courseDetailPage) {
+                mutate({...data, CourseId: courseDetailPage.courseId})
             } else {
-                toast.error('لطفا ابتدا یک دوره را از لیست زیر انتخاب کنید')
+                if (selectedCourse) {
+                    mutate({...data, CourseId: selectedCourse.courseId})
+                } else {
+                    toast.error('لطفا ابتدا یک دوره را از لیست زیر انتخاب کنید')
+                }
             }
         } else {
             if (isChanged) {
@@ -220,7 +240,7 @@ export function CreateGroupModal({handleToggleModal, show, course, params}) {
                             </Col>
                         </Row>
                     </Card>
-                    {!course && (
+                    {!course && !courseDetailPage && (
                         <>
                             <Label className="mb-1 fs-5">یک دوره را انتخاب کنید :</Label>
                             <Table selectable onSelect={course => setSelectedCourse(course)} />

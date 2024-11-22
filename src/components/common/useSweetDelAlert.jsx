@@ -19,22 +19,24 @@ export function useSweetDelAlert({actionFn, isSingleCourse}) {
                 cancelButton: 'btn btn-outline-danger ms-1',
             },
             buttonsStyling: false,
-        }).then(result => {
-            if (result.isConfirmed) {
-                actionFn(courseId)
+            preConfirm: () => {
+                Swal.showLoading()
+
+                return actionFn(courseId)
                     .then(data => {
                         if (data.success) {
-                            MySwal.fire({
+                            return MySwal.fire({
                                 icon: 'success',
                                 title: 'حذف شد!',
                                 text: 'عملیات با موفقیت انجام شد',
                                 customClass: {
                                     confirmButton: 'btn btn-success',
                                 },
+                            }).then(() => {
+                                if (isSingleCourse) navigate('/courses')
                             })
-                            if (isSingleCourse) navigate('/courses')
                         } else {
-                            MySwal.fire({
+                            return MySwal.fire({
                                 icon: 'error',
                                 title: 'خطا!',
                                 text: 'مشکلی پیش آمده لطفا بعدا امتحان کنید.',
@@ -45,8 +47,9 @@ export function useSweetDelAlert({actionFn, isSingleCourse}) {
                         }
                     })
                     .catch(error => {
-                        console.log(error)
-                        MySwal.fire({
+                        console.error(error)
+
+                        return MySwal.fire({
                             icon: 'error',
                             title: 'خطا!',
                             text: 'مشکلی پیش آمده لطفا بعدا امتحان کنید.',
@@ -55,7 +58,7 @@ export function useSweetDelAlert({actionFn, isSingleCourse}) {
                             },
                         })
                     })
-            }
+            },
         })
     }
 

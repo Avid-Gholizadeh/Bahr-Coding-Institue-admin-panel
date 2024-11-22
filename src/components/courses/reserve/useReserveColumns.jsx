@@ -1,7 +1,14 @@
 import Avatar from '@components/avatar'
-import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
+import {Archive, CheckCircle, FileText, MoreVertical, Trash2, XCircle} from 'react-feather'
 import {Link} from 'react-router-dom'
-import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
+import {
+    Badge,
+    Button,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    UncontrolledDropdown,
+} from 'reactstrap'
 import {convertGrigorianDateToJalaali, pirceFormatter} from '../../../@core/utils/formatter.utils'
 import CourseFallback from '../../../assets/images/courses-fallback.jpg'
 
@@ -9,7 +16,7 @@ import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import {deleteCourseReserve} from '@core/services/api/courses'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 
-export function useReserveColumns({handleModalOpen}) {
+export function useReserveColumns({handleModalOpen, singleCourseId}) {
     const queryClient = useQueryClient()
     const {mutate: deleteMutate, isPending} = useMutation({
         mutationFn: deleteCourseReserve,
@@ -57,6 +64,7 @@ export function useReserveColumns({handleModalOpen}) {
 
     return [
         {
+            omit: singleCourseId,
             name: 'دوره',
             sortable: false,
             minWidth: '230px',
@@ -82,7 +90,19 @@ export function useReserveColumns({handleModalOpen}) {
             minWidth: '172px',
             sortField: 'studentName',
             selector: row => row.studentName,
-            cell: row => <span className="fs-5">{row.studentName}</span>,
+            cell: row => (
+                <div className="d-flex justify-content-left align-items-center ">
+                    {renderCourseAvatar(row)}
+                    <div className="d-flex flex-column overflow-hidden" style={{maxWidth: 170}}>
+                        <Link
+                            to={`/user/view/${row.studentId}`}
+                            className="user_name text-truncate text-body"
+                        >
+                            <span className="fw-bolder fs-5">{row.studentName}</span>
+                        </Link>
+                    </div>
+                </div>
+            ),
         },
         {
             name: 'تاریخ رزرو',
@@ -101,18 +121,54 @@ export function useReserveColumns({handleModalOpen}) {
             sortField: 'accept',
             selector: row => row.accept,
             cell: row => (
-                <Badge
-                    className="text-capitalize"
-                    color={row.accept ? 'light-success' : 'light-warning'}
-                    pill
-                >
-                    <span /* className="fs-6" */>
-                        {row.accept ? 'تایید شده' : 'در انتظار تایید'}
-                    </span>
-                </Badge>
+                <>
+                    {!singleCourseId && (
+                        <Badge
+                            className="text-capitalize"
+                            color={row.accept ? 'light-success' : 'light-warning'}
+                            pill
+                        >
+                            <span /* className="fs-6" */>
+                                {row.accept ? 'تایید شده' : 'در انتظار تایید'}
+                            </span>
+                        </Badge>
+                    )}
+                    {singleCourseId && (
+                        <>
+                            {row.accept && (
+                                <Badge
+                                    className="text-capitalize"
+                                    color={row.accept ? 'light-success' : 'light-warning'}
+                                    pill
+                                >
+                                    <span>تایید شده</span>
+                                </Badge>
+                            )}
+                            {!row.accept && (
+                                <div className="d-flex">
+                                    <Button.Ripple
+                                        className="btn-icon"
+                                        color="flat-info"
+                                        onClick={() => handleModalOpen(row)}
+                                    >
+                                        <CheckCircle size={20} />
+                                    </Button.Ripple>
+                                    <Button.Ripple
+                                        className="btn-icon"
+                                        color="flat-danger"
+                                        onClick={() => handleDeleteAlert(row.reserveId)}
+                                    >
+                                        <XCircle size={20} />
+                                    </Button.Ripple>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </>
             ),
         },
         {
+            omit: singleCourseId,
             name: 'سایر',
             minWidth: '100px',
             cell: row => (

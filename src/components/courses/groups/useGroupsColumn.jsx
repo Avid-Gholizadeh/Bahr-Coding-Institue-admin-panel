@@ -7,7 +7,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {deleteCourseGroup} from '@core/services/api/courses'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 
-export function useGroupsColumn({setCurrentCourse, params}) {
+export function useGroupsColumn({setCurrentCourse, params, course, handleSetSingleGroupModal}) {
     const queryClient = useQueryClient()
     const {mutate: deleteMutate, isPending} = useMutation({
         mutationFn: deleteCourseGroup,
@@ -24,15 +24,23 @@ export function useGroupsColumn({setCurrentCourse, params}) {
                 {
                     onSuccess: data => {
                         if (data.success) {
-                            queryClient.setQueryData(['all-groups', params], oldGroups => {
-                                const newGroups = oldGroups.courseGroupDtos.filter(
-                                    group => group.groupId !== groupId
+                            if (course) {
+                                queryClient.setQueryData(
+                                    ['single-course-groupe', course.courseId],
+                                    oldGroups =>
+                                        oldGroups.filter(group => group.groupId !== groupId)
                                 )
-                                return {
-                                    courseGroupDtos: newGroups,
-                                    totalCount: oldGroups.totalCount - 1,
-                                }
-                            })
+                            } else {
+                                queryClient.setQueryData(['all-groups', params], oldGroups => {
+                                    const newGroups = oldGroups.courseGroupDtos.filter(
+                                        group => group.groupId !== groupId
+                                    )
+                                    return {
+                                        courseGroupDtos: newGroups,
+                                        totalCount: oldGroups.totalCount - 1,
+                                    }
+                                })
+                            }
 
                             return resolve(data)
                         }
@@ -59,6 +67,7 @@ export function useGroupsColumn({setCurrentCourse, params}) {
 
     return [
         {
+            omit: Boolean(course),
             name: 'دوره',
             sortable: true,
             minWidth: '230px',
@@ -80,15 +89,26 @@ export function useGroupsColumn({setCurrentCourse, params}) {
         },
         {
             name: 'نام گروه',
-            sortable: true,
+            sortable: false,
             minWidth: '172px',
             sortField: 'groupName',
             selector: row => row.groupName,
-            cell: row => <span className="fs-5">{row.groupName}</span>,
+            // cell: row => <span className="fs-5">{row.groupName}</span>,
+            cell: row => (
+                <span
+                    className="user_name text-truncate text-body cursor-pointer"
+                    onClick={() => handleSetSingleGroupModal(row)}
+                >
+                    <span className="fw-bolder fs-5 groupName-hover" style={{}}>
+                        {row.groupName}
+                    </span>
+                </span>
+            ),
         },
         {
+            omit: Boolean(course),
             name: 'مدرس',
-            sortable: true,
+            sortable: false,
             minWidth: '172px',
             sortField: 'teacherName',
             selector: row => row.teacherName,
@@ -97,22 +117,23 @@ export function useGroupsColumn({setCurrentCourse, params}) {
         {
             name: 'ظرفیت گروه',
             minWidth: '138px',
-            sortable: true,
+            sortable: false,
             sortField: 'groupCapacity',
             selector: row => row.groupCapacity,
-            cell: row => <span className=" text-center w-50">{row.groupCapacity}</span>,
+            cell: row => <span className=" text-center w-25">{row.groupCapacity}</span>,
         },
         {
+            omit: Boolean(course),
             name: 'ظرفیت دوره',
             minWidth: '150px',
-            sortable: true,
+            sortable: false,
             sortField: 'courseCapacity',
             selector: row => row.courseCapacity,
             cell: row => <div className="text-center w-50">{row.courseCapacity}</div>,
         },
         {
             name: 'سایر',
-            minWidth: '100px',
+            minWidth: '200px',
             cell: row => (
                 <div className="column-action ">
                     <UncontrolledDropdown>
@@ -120,14 +141,16 @@ export function useGroupsColumn({setCurrentCourse, params}) {
                             <MoreVertical size={14} className="cursor-pointer" />
                         </DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem
-                                tag={Link}
-                                className="w-100"
-                                to={`/courses/${row.courseId}`}
-                            >
-                                <FileText size={14} className="me-50" />
-                                <span className="align-middle">جزئیات</span>
-                            </DropdownItem>
+                            {!course && (
+                                <DropdownItem
+                                    tag={Link}
+                                    className="w-100"
+                                    to={`/courses/${row.courseId}`}
+                                >
+                                    <FileText size={14} className="me-50" />
+                                    <span className="align-middle">جزئیات</span>
+                                </DropdownItem>
+                            )}
 
                             <DropdownItem className="w-100" onClick={() => setCurrentCourse(row)}>
                                 <Archive size={14} className="me-50" />
