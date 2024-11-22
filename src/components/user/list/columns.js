@@ -47,7 +47,7 @@ export function useUserColumns({selectable}) {
     const renderClient = row => {
         return (
             <Avatar
-                className="me-1"
+                className="me-1 overflow-hidden"
                 img={
                     row.pictureAddress &&
                     row.pictureAddress !== 'Not-set' &&
@@ -200,7 +200,7 @@ export function useUserColumns({selectable}) {
             name: ' عملیات',
             width: '120px',
             cell: row => {
-                const {mutate: deleteUser} = usedeleteUser()
+                const {mutate: deleteUser} = useDeleteUser()
                 const [centeredModal, setCenteredModal] = useState(false)
 
                 return (

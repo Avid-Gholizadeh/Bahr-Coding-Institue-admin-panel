@@ -1,5 +1,5 @@
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
-import UserTable from '../../../pages/user/list/Table'
+import UsersListTable from '@Components/user/list/Table'
 import {useRef, useState} from 'react'
 import {useSelector} from 'react-redux'
 import {Button, Card, Col, Label, Modal, ModalBody, ModalHeader, Row, Spinner} from 'reactstrap'
@@ -150,7 +150,7 @@ export function AddStudentModal({handleToggleModal, show, course, singleGroup}) 
                         </Row>
                     </Card>
                     <Label className="mb-1 fs-5">یک کاربر را انتخاب کنید :</Label>
-                    <UserTable selectable onSelect={user => setSelectedUser(user)} />
+                    <UsersListTable selectable onSelect={user => setSelectedUser(user)} />
                 </ModalBody>
             </Modal>
         </>
