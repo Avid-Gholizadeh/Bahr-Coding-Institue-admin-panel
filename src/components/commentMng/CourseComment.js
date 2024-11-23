@@ -50,7 +50,7 @@ export function CourseComment({singleCourse}) {
     }, [pageNumber, rowsOfPage, sortingCol, sortType, query, isAccept, refetch])
 
     let filteredData = singleCourseComments ? [...singleCourseComments] : []
-    if (isAccept !== null) {
+    if (isAccept !== null && singleCourse) {
         filteredData = singleCourseComments.filter(comment => comment.accept === isAccept)
     }
 

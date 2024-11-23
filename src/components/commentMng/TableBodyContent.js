@@ -6,18 +6,19 @@ import {ReplyCommentModal} from './ReplyCommentModal'
 
 export function TableBodyContent({List, singleCourse}) {
     const {acceptComment, rejectComment, deleteComment} = useCommentActions()
-    const [formModal, setFormModal] = useState(false)
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
+    const [isReplyModalOpen, setReplyModalOpen] = useState(false);
     const [editingComment, setEditingComment] = useState(null)
     const [replyComment, setReplyComment] = useState(null)
 
     const handleEditClick = comment => {
         setEditingComment(comment)
-        setFormModal(true)
+        setEditModalOpen(true)
     }
 
     const handleReplyClick = comment => {
         setReplyComment(comment)
-        setFormModal(true)
+        setReplyModalOpen(true)
     }
 
     return (
@@ -38,15 +39,15 @@ export function TableBodyContent({List, singleCourse}) {
             </tbody>
             {editingComment && (
                 <EditCommentModal
-                    formModal={formModal}
-                    setFormModal={setFormModal}
+                    formModal={isEditModalOpen}
+                    setFormModal={setEditModalOpen}
                     comment={editingComment}
                 />
             )}
             {replyComment && (
                 <ReplyCommentModal
-                    formModal={formModal}
-                    setFormModal={setFormModal}
+                    formModal={isReplyModalOpen}
+                    setFormModal={setReplyModalOpen}
                     comment={replyComment}
                 />
             )}

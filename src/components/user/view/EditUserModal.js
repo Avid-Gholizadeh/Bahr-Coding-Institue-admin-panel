@@ -13,6 +13,7 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 
 const EditUserModal = ({ isOpen, toggle, onSubmit, user }) => {
+  console.log(user);
   const {
     reset,
     control,

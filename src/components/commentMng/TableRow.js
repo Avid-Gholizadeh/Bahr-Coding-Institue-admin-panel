@@ -43,6 +43,9 @@ export const TableRow = ({
                 <PortalDropdownMenu>
                     <DropdownMenu>
                         {comment.accept ? (
+                            null
+                        ) : (
+                            <>
                             <DropdownItem
                                 className="text-warning"
                                 href="#"
@@ -54,7 +57,7 @@ export const TableRow = ({
                                 <X className="me-50" size={15} />{' '}
                                 <span className="align-middle">رد کردن</span>
                             </DropdownItem>
-                        ) : (
+                            
                             <DropdownItem
                                 className="text-success"
                                 href="#"
@@ -66,6 +69,8 @@ export const TableRow = ({
                                 <Check className="me-50" size={15} />{' '}
                                 <span className="align-middle">تایید کردن</span>
                             </DropdownItem>
+                            </>
+
                         )}
 
                         <DropdownItem
@@ -93,10 +98,7 @@ export const TableRow = ({
                         </DropdownItem>
                         {comment?.replyCommentId ||
                         !comment?.parentId === '00000000-0000-0000-0000-000000000000' ? (
-                            <DropdownItem className="inactive-dropdown-item" disabled>
-                                <FileText className="me-50" size={15} />
-                                <span className="align-middle">پاسخ دادن</span>
-                            </DropdownItem>
+                            null
                         ) : (
                             <DropdownItem
                                 className="active-dropdown-item"
