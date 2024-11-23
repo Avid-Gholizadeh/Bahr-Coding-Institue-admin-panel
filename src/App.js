@@ -4,11 +4,9 @@ import React, {Suspense} from 'react'
 import Router from './router/Router'
 
 const App = () => {
+    console.log(Router)
     return (
         <Suspense fallback={null}>
-            {/* <div dir="rtl">
-                <Router />
-            </div> */}
             <Router />
         </Suspense>
     )

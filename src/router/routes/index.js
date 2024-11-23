@@ -73,10 +73,6 @@ const Routes = [
         element: <CourseDetail />,
     },
     {
-        path: '/second-page',
-        element: <SecondPage />,
-    },
-    {
         path: '/login',
         element: <Login />,
         meta: {

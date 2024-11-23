@@ -90,6 +90,8 @@ const handleError = error => {
         if (error.request.status === 0 && cheackTokenExpired()) {
             store.dispatch(tokenActions.logout())
             window.location.pathname = '/login'
+        } else if (error.request.status === 0) {
+            window.location.pathname = '/error'
         }
     } else {
         // Something happened in setting up the request that triggered an Error

@@ -3,6 +3,7 @@ import {Bell, Link, ShoppingCart, Users} from 'react-feather'
 import {ReserveTable} from '../reserve/ReserveTable'
 import {StudentsTable} from './StudentsTable'
 import {GroupsTable} from '../groups/GroupsTable'
+import {CourseComment} from '@Components/commentMng/CourseComment'
 
 export function Tabs({active, toggleTab, singleCourseId, course}) {
     return (
@@ -43,7 +44,9 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                 <TabPane tabId="3">
                     <GroupsTable course={course} />
                 </TabPane>
-                <TabPane tabId="4">{/* <Notifications /> */}</TabPane>
+                <TabPane tabId="4">
+                    <CourseComment singleCourse />
+                </TabPane>
             </TabContent>
         </>
     )

@@ -161,7 +161,6 @@ export function useUserColumns({selectable}) {
         {
             name: 'نقش',
             width: '250px',
-
             sortable: true,
             sortField: 'role',
             // selector: row => row.userRoles,

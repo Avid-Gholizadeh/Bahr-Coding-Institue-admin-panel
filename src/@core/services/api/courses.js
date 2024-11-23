@@ -198,3 +198,12 @@ export async function getCourseUserList(params) {
         throw new Error(error)
     }
 }
+export async function getCourseComment(id) {
+    try {
+        const response = await api.get('/Course/GetCourseCommnets/' + id)
+
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
