@@ -29,6 +29,11 @@ import {deleteUser} from '../../../@core/services/api/User'
 import toast from 'react-hot-toast'
 import {useMutation} from '@tanstack/react-query'
 import {useState} from 'react'
+import {createPortal} from 'react-dom'
+
+const PortalDropdownMenu = ({children}) => {
+    return createPortal(children, document.getElementById('portal-root'))
+}
 
 export function useUserColumns({selectable}) {
     const useDeleteUser = () => {
@@ -197,60 +202,62 @@ export function useUserColumns({selectable}) {
         },
         {
             omit: selectable,
-            name: ' عملیات',
+            name: 'عملیات',
             width: '120px',
             cell: row => {
                 const {mutate: deleteUser} = useDeleteUser()
                 const [centeredModal, setCenteredModal] = useState(false)
 
                 return (
-                    <div style={{zIndex: 'auto'}}>
+                    <div className="" style={{zIndex: 'auto'}}>
                         <UncontrolledDropdown>
                             <DropdownToggle tag="div" className="btn btn-sm">
                                 <MoreVertical size={14} className="cursor-pointer" />
                             </DropdownToggle>
-                            <DropdownMenu>
-                                <DropdownItem
-                                    tag={Link}
-                                    className="w-100"
-                                    to={`/user/view/${row.id}`}
-                                >
-                                    <FileText size={14} className="me-50" />
-                                    <span className="align-middle"> مشخصات کاربر </span>
-                                </DropdownItem>
-                                <DropdownItem
-                                    tag="a"
-                                    className="w-100"
-                                    onClick={() => setCenteredModal(!centeredModal)}
-                                >
-                                    <Modal
-                                        isOpen={centeredModal}
-                                        toggle={() => setCenteredModal(!centeredModal)}
-                                        className="modal-dialog-centered"
+                            <PortalDropdownMenu>
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        tag={Link}
+                                        className="w-100"
+                                        to={`/user/view/${row.id}`}
                                     >
-                                        <ModalBody>
-                                            از حذف کاربر به شناسه {row.id} مطمئنید؟
-                                        </ModalBody>
-                                        <ModalFooter className="m-auto">
-                                            <Button
-                                                color="primary"
-                                                onClick={() => deleteUser(row.id)}
-                                            >
-                                                بله
-                                            </Button>
-                                            <Button
-                                                color="secondary"
-                                                onClick={() => setCenteredModal(false)}
-                                            >
-                                                خیر
-                                            </Button>
-                                        </ModalFooter>
-                                    </Modal>
+                                        <FileText size={14} className="me-50" />
+                                        <span className="align-middle"> مشخصات کاربر </span>
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        tag="a"
+                                        className="w-100"
+                                        onClick={() => setCenteredModal(!centeredModal)}
+                                    >
+                                        <Modal
+                                            isOpen={centeredModal}
+                                            toggle={() => setCenteredModal(!centeredModal)}
+                                            className="modal-dialog-centered"
+                                        >
+                                            <ModalBody>
+                                                از حذف کاربر به شناسه {row.id} مطمئنید؟
+                                            </ModalBody>
+                                            <ModalFooter className="m-auto">
+                                                <Button
+                                                    color="primary"
+                                                    onClick={() => deleteUser(row.id)}
+                                                >
+                                                    بله
+                                                </Button>
+                                                <Button
+                                                    color="secondary"
+                                                    onClick={() => setCenteredModal(false)}
+                                                >
+                                                    خیر
+                                                </Button>
+                                            </ModalFooter>
+                                        </Modal>
 
-                                    <Trash2 size={14} className="me-50 text-danger" />
-                                    <span className="align-middle text-danger"> حذف </span>
-                                </DropdownItem>
-                            </DropdownMenu>
+                                        <Trash2 size={14} className="me-50 text-danger" />
+                                        <span className="align-middle text-danger"> حذف </span>
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </PortalDropdownMenu>
                         </UncontrolledDropdown>
                     </div>
                 )
@@ -261,7 +268,7 @@ export function useUserColumns({selectable}) {
             width: '120px',
             sortable: true,
             sortField: 'billing',
-            // selector: row => row.gender,
+            selector: row => row.gender,
             cell: row => <span className="text-capitalize">{row.gender ? 'مرد' : 'زن'}</span>,
         },
     ]

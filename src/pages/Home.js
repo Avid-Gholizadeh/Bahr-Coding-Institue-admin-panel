@@ -1,20 +1,11 @@
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  CardText,
-  CardLink,
-
-} from "reactstrap";
-import StatsCard from "../components/StatsCard";
+import {Card, CardHeader, CardBody, CardTitle, CardText, CardLink} from 'reactstrap'
+import StatsCard from '@Components/StatsCard'
 
 const Home = () => {
-  return (
-    <div>
-      <StatsCard cols={{ xl: '3', sm: '6' }} />
-
-      <Card>
+    return (
+        <div>
+            <StatsCard cols={{xl: '3', sm: '6'}} />
+            {/* <Card>
         <CardHeader>
           <CardTitle>Want to integrate JWT? 🔒</CardTitle>
         </CardHeader>
@@ -34,9 +25,9 @@ const Home = () => {
             to get more out of JWT authentication.
           </CardText>
         </CardBody>
-      </Card>
-    </div>
-  );
-};
+      </Card> */}
+        </div>
+    )
+}
 
-export default Home;
+export default Home

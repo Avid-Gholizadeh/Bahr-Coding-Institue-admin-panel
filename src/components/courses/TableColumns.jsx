@@ -11,6 +11,11 @@ import {useMutation} from '@tanstack/react-query'
 import {deleteCourse} from '@core/services/api/courses'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import CourseFallback from '../../assets/images/courses-fallback.jpg'
+import {createPortal} from 'react-dom'
+
+const PortalDropdownMenu = ({children}) => {
+    return createPortal(children, document.getElementById('portal-root'))
+}
 
 export function useTableColumns({setShowEdit, selectable}) {
     const {mutate: deleteMutate, isPending} = useMutation({
@@ -135,29 +140,34 @@ export function useTableColumns({setShowEdit, selectable}) {
                         <DropdownToggle tag="div" className="btn btn-sm">
                             <MoreVertical size={14} className="cursor-pointer" />
                         </DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem
-                                tag={Link}
-                                className="w-100"
-                                to={`/courses/${row.courseId}`}
-                            >
-                                <FileText size={14} className="me-50" />
-                                <span className="align-middle">جزئیات</span>
-                            </DropdownItem>
+                        <PortalDropdownMenu>
+                            <DropdownMenu>
+                                <DropdownItem
+                                    tag={Link}
+                                    className="w-100"
+                                    to={`/courses/${row.courseId}`}
+                                >
+                                    <FileText size={14} className="me-50" />
+                                    <span className="align-middle">جزئیات</span>
+                                </DropdownItem>
 
-                            <DropdownItem className="w-100" onClick={() => handleCourseEdit(row)}>
-                                <Archive size={14} className="me-50" />
-                                <span className="align-middle">ویرایش</span>
-                            </DropdownItem>
+                                <DropdownItem
+                                    className="w-100"
+                                    onClick={() => handleCourseEdit(row)}
+                                >
+                                    <Archive size={14} className="me-50" />
+                                    <span className="align-middle">ویرایش</span>
+                                </DropdownItem>
 
-                            <DropdownItem
-                                className="w-100"
-                                onClick={() => handleDeleteAlert(row.courseId)}
-                            >
-                                <Trash2 size={14} className="me-50" />
-                                <span className="align-middle">حذف </span>
-                            </DropdownItem>
-                        </DropdownMenu>
+                                <DropdownItem
+                                    className="w-100"
+                                    onClick={() => handleDeleteAlert(row.courseId)}
+                                >
+                                    <Trash2 size={14} className="me-50" />
+                                    <span className="align-middle">حذف </span>
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </PortalDropdownMenu>
                     </UncontrolledDropdown>
                 </div>
             ),

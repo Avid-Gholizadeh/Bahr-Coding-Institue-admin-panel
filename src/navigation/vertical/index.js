@@ -18,12 +18,6 @@ const array = [
                 icon: <Circle size={12} />,
                 navLink: '/user/list',
             },
-            {
-                id: 'view',
-                title: 'نمایش کاربر',
-                icon: <Circle size={12} />,
-                navLink: '/user/view',
-            },
         ],
     },
     {
