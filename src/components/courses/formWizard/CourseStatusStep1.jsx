@@ -5,13 +5,20 @@ import Select from 'react-select'
 import {selectThemeColors} from '@utils'
 import {useQuery} from '@tanstack/react-query'
 import {getCreateCourseStep1} from '@core/services/api/courses'
-import {useEffect, useMemo} from 'react'
+import {forwardRef, useEffect, useImperativeHandle, useMemo} from 'react'
 
-export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData}) {
+export const CourseStatusStep1 = forwardRef(function CourseStatusStep1(
+    {stepper, handleFromData, isEdit, courseData},
+    ref
+) {
     const {data: status, isLoading} = useQuery({
         queryKey: ['courseStatus'],
         queryFn: () => getCreateCourseStep1(),
     })
+
+    useImperativeHandle(ref, () => ({
+        handleProgrammaticSubmit,
+    }))
 
     let courseType = renderArray(status?.courseTypeDtos, 'typeName')
     let courseLevel = renderArray(status?.courseLevelDtos, 'levelName')
@@ -20,26 +27,21 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
     let courseTerm = renderArray(status?.termDtos, 'termName')
     let courseTech = renderArray(status?.technologyDtos, 'techName')
 
-    const defaultValues = useMemo(
-        () =>
-            isEdit && status
-                ? {
-                      courseLevel: getDefaultValue(courseLevel, courseData.courseLevelName),
-                      courseType: getDefaultValue(courseType, courseData.courseTypeName),
-                      courseClassRoom: getDefaultValue(
-                          courseClassRoom,
-                          courseData.courseClassRoomName
-                      ),
-                      courseTeacher: getDefaultValue(courseTeacher, courseData.teacherName) || {
-                          value: courseData.teacherId,
-                          label: courseData.teacherName,
-                      },
-                      courseTerm: courseTerm[0],
-                      courseTech: getDefaultValue(courseTech, courseData.courseTeches),
-                  }
-                : null,
-        [status]
-    )
+    const defaultValues = useMemo(() => {
+        return isEdit && status
+            ? {
+                  courseLevel: getDefaultValue(courseLevel, courseData.courseLevelName),
+                  courseType: getDefaultValue(courseType, courseData.courseTypeName),
+                  courseClassRoom: getDefaultValue(courseClassRoom, courseData.courseClassRoomName),
+                  courseTeacher: getDefaultValue(courseTeacher, courseData.teacherName) || {
+                      value: courseData.teacherId,
+                      label: courseData.teacherName,
+                  },
+                  courseTerm: courseTerm[0],
+                  courseTech: getDefaultValue(courseTech, courseData.courseTeches),
+              }
+            : null
+    }, [status])
 
     const {
         control,
@@ -63,8 +65,21 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
     useEffect(() => {
         if (defaultValues) {
             reset(defaultValues)
+            handleFromData({
+                CourseTypeId: defaultValues.courseType?.value,
+                TremId: defaultValues.courseType?.value,
+                ClassId: defaultValues.courseType?.value,
+                CourseLvlId: defaultValues.courseLevel?.value,
+                TeacherId: defaultValues.courseTeacher?.value,
+                courseTech: defaultValues.courseTech?.map(tech => ({techId: tech.value})),
+                TumbImageAddress: courseData?.imageAddress,
+            })
         }
-    }, [status, reset, defaultValues])
+    }, [status])
+
+    function stepperSubmit() {
+        stepper.next()
+    }
 
     const onSubmit = data => {
         const newData = {
@@ -77,8 +92,16 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
             TumbImageAddress: courseData?.imageAddress,
         }
         handleFromData(newData)
-        stepper.next()
-        console.log(newData)
+        // console.log(newData)
+    }
+
+    async function handleProgrammaticSubmit() {
+        let isValid = true
+        await handleSubmit(onSubmit, () => {
+            isValid = false
+        })()
+
+        return isValid
     }
 
     return (
@@ -87,7 +110,7 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
                 <h5 className="mb-0">جزعیات دوره</h5>
                 <small className="text-muted">جزعیات دوره را انتخاب کنید</small>
             </div>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(stepperSubmit)}>
                 {status && isEdit !== false && (
                     <>
                         <Row>
@@ -147,31 +170,7 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
                                     </p>
                                 )}
                             </Col>
-                            {/* <Col md="4" className="mb-1">
-                        <Label className="form-label">وضعیت</Label>
-                        <Controller
-                            control={control}
-                            id="courseStatus"
-                            name="courseStatus"
-                            rules={{required: 'نمی‌تواند خالی باشد'}}
-                            render={({field}) => (
-                                <Select
-                                    {...field}
-                                    theme={selectThemeColors}
-                                    className="react-select"
-                                    classNamePrefix="select"
-                                    placeholder="انتخاب کنید"
-                                    options={courseStatus}
-                                    isClearable={false}
-                                />
-                            )}
-                        />
-                        {errors.courseStatus && (
-                            <p className="text-danger" style={{fontSize: '12px', marginTop: '4px'}}>
-                                {errors.courseStatus.message}
-                            </p>
-                        )}
-                    </Col> */}
+
                             <Col md="4" className="mb-1">
                                 <Label className="form-label">نام کلاس</Label>
                                 <Controller
@@ -308,4 +307,4 @@ export function CourseStatusStep1({stepper, handleFromData, isEdit, courseData})
             </Form>
         </>
     )
-}
+})

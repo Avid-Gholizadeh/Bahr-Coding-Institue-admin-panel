@@ -18,6 +18,7 @@ const PortalDropdownMenu = ({children}) => {
 }
 
 export function useTableColumns({setShowEdit, selectable}) {
+    //
     const {mutate: deleteMutate, isPending} = useMutation({
         mutationFn: deleteCourse,
     })

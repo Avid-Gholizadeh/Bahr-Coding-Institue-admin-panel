@@ -2,8 +2,16 @@ import {ArrowLeft, ArrowRight} from 'react-feather'
 import {Controller, useForm} from 'react-hook-form'
 import {Button, Col, Form, Input, Label, Row} from 'reactstrap'
 import classnames from 'classnames'
+import {forwardRef, useEffect, useImperativeHandle, useMemo} from 'react'
 
-export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
+export const CourseInfoStep2 = forwardRef(function CourseInfoStep2(
+    {stepper, isEdit, handleFromData, courseData},
+    ref
+) {
+    useImperativeHandle(ref, () => ({
+        handleProgrammaticSubmit,
+    }))
+
     const defaultValues = isEdit
         ? {
               Title: courseData.title,
@@ -17,17 +25,35 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
 
     const {
         control,
-        watch,
         handleSubmit,
+        watch,
         formState: {errors},
     } = useForm({defaultValues})
 
+    useEffect(() => {
+        if (isEdit) {
+            handleFromData(defaultValues)
+        }
+    }, [])
+
     const MiniDescribe = watch('MiniDescribe') ?? ''
+
+    function stepperSubmit() {
+        stepper.next()
+    }
 
     const onSubmit = data => {
         handleFromData(data)
-        stepper.next()
-        console.log(data)
+        // console.log(data)
+    }
+
+    async function handleProgrammaticSubmit() {
+        let isValid = true
+        await handleSubmit(onSubmit, () => {
+            isValid = false
+        })()
+
+        return isValid
     }
 
     return (
@@ -36,7 +62,7 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
                 <h5 className="mb-0">لینک ها</h5>
                 <small className="text-muted">لینک ها را وارد کنید</small>
             </div>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(stepperSubmit)}>
                 <Row>
                     <Col md="6" className="mb-1">
                         <Label className="form-label" for="Title">
@@ -74,7 +100,7 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
                                 required: 'نمی‌تواند خالی باشد',
                                 pattern: {
                                     value: /^[0-9]+$/,
-                                    message: 'فقط عدد قابل قبول است',
+                                    message: 'فقط عدد لاتین قابل قبول است',
                                 },
                             }}
                             render={({field}) => (
@@ -106,7 +132,7 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
                                 required: 'نمی‌تواند خالی باشد',
                                 pattern: {
                                     value: /^[0-9]+$/,
-                                    message: 'فقط عدد قابل قبول است',
+                                    message: 'فقط عدد لاتین قابل قبول است',
                                 },
                             }}
                             render={({field}) => (
@@ -136,7 +162,7 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
                                 required: 'نمی‌تواند خالی باشد',
                                 pattern: {
                                     value: /^[0-9]+$/,
-                                    message: 'فقط عدد قابل قبول است',
+                                    message: 'فقط عدد لاتین قابل قبول است',
                                 },
                             }}
                             render={({field}) => (
@@ -239,4 +265,4 @@ export function CourseInfoStep2({stepper, isEdit, handleFromData, courseData}) {
             </Form>
         </>
     )
-}
+})

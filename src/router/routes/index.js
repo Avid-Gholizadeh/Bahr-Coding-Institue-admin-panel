@@ -36,10 +36,12 @@ const CourseDetail = lazy(() => import('../../pages/course/CourseDetail'))
 const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
 const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
 const AllGroups = lazy(() => import('../../pages/course/AllGroups'))
-
 const UserList = lazy(() => import('../../pages/UserList'))
 const UserView = lazy(() => import('../../pages/UserDetail'))
 const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
+const AllArticles = lazy(() => import('../../pages/articles/AllArticles'))
+const CreateArticle = lazy(() => import('../../pages/articles/CreateArticle'))
+const ArticleDetails = lazy(() => import('../../pages/articles/ArticleDetails'))
 
 // ** Merge Routes
 const Routes = [
@@ -71,6 +73,18 @@ const Routes = [
     {
         path: '/courses/:id',
         element: <CourseDetail />,
+    },
+    {
+        path: '/all-articles',
+        element: <AllArticles />,
+    },
+    {
+        path: '/create-article',
+        element: <CreateArticle />,
+    },
+    {
+        path: '/article/:id',
+        element: <ArticleDetails />,
     },
     {
         path: '/login',

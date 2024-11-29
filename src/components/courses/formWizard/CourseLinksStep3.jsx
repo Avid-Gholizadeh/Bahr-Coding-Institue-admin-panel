@@ -6,8 +6,16 @@ import {
     convertGrigorianDateToJalaali3,
     convertPersianDateToGerigorian2,
 } from '@core/utils/formatter.utils'
+import {forwardRef, useEffect, useImperativeHandle, useMemo} from 'react'
 
-export function CourseLinksStep3({stepper, handleFromData, isEdit, courseData}) {
+export const CourseLinksStep3 = forwardRef(function CourseLinksStep3(
+    {stepper, handleFromData, isEdit, courseData},
+    ref
+) {
+    useImperativeHandle(ref, () => ({
+        handleProgrammaticSubmit,
+    }))
+
     const options = {date: true, delimiter: '-', datePattern: ['Y', 'm', 'd']}
 
     const defaultValues = isEdit
@@ -28,12 +36,33 @@ export function CourseLinksStep3({stepper, handleFromData, isEdit, courseData}) 
         formState: {errors},
     } = useForm({defaultValues})
 
+    useEffect(() => {
+        if (isEdit) {
+            const data = {...defaultValues}
+            data.StartTime = convertPersianDateToGerigorian2(data.StartTime)
+            data.EndTime = convertPersianDateToGerigorian2(data.EndTime)
+            handleFromData(data)
+        }
+    }, [])
+
+    function stepperSubmit() {
+        stepper.next()
+    }
+
     const onSubmit = data => {
         data.StartTime = convertPersianDateToGerigorian2(data.StartTime)
         data.EndTime = convertPersianDateToGerigorian2(data.EndTime)
         handleFromData(data)
-        stepper.next()
-        console.log(data)
+        // console.log(data)
+    }
+
+    async function handleProgrammaticSubmit() {
+        let isValid = true
+        await handleSubmit(onSubmit, error => {
+            isValid = false
+        })()
+
+        return isValid
     }
 
     return (
@@ -42,7 +71,7 @@ export function CourseLinksStep3({stepper, handleFromData, isEdit, courseData}) 
                 <h5 className="mb-0">لینک ها و تاریخ</h5>
                 <small className="text-muted">لینک ها و تاریخ را وارد کنید</small>
             </div>
-            <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(stepperSubmit)}>
                 <Row>
                     <Col md="4" className="mb-1">
                         <Label className="form-label" for="GoogleTitle">
@@ -204,7 +233,7 @@ export function CourseLinksStep3({stepper, handleFromData, isEdit, courseData}) 
                                 required: 'نمی‌تواند خالی باشد',
                                 pattern: {
                                     value: /^[0-9]+$/,
-                                    message: 'فقط عدد قابل قبول است',
+                                    message: 'فقط عدد لاتین قابل قبول است',
                                 },
                             }}
                             render={({field}) => (
@@ -235,4 +264,4 @@ export function CourseLinksStep3({stepper, handleFromData, isEdit, courseData}) 
             </Form>
         </>
     )
-}
+})

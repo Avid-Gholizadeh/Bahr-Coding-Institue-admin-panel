@@ -58,6 +58,31 @@ const array = [
         icon: <Table size={12} />,
         navLink: '/comments-management',
     },
+    {
+        id: 'articles',
+        title: 'اخبار و مقالات',
+        icon: <User size={20} />,
+        children: [
+            {
+                id: 'all-articles',
+                title: 'لیست مقالات',
+                icon: <Circle size={12} />,
+                navLink: '/all-articles',
+            },
+            {
+                id: 'create-article',
+                title: 'ایجاد خبر',
+                icon: <Circle size={12} />,
+                navLink: '/create-article',
+            },
+            {
+                id: 'article-categories',
+                title: 'دسته بندی اخبار',
+                icon: <Circle size={12} />,
+                navLink: '/article-categories',
+            },
+        ],
+    },
 ]
 
 export default array

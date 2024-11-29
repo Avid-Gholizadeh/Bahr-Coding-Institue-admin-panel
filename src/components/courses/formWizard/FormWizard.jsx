@@ -1,5 +1,5 @@
 import Wizard from '@components/wizard'
-import {useEffect, useRef, useState} from 'react'
+import {useRef, useState} from 'react'
 import {CourseStatusStep1} from './CourseStatusStep1'
 import {CourseInfoStep2} from './CourseInfoStep2'
 import {CourseLinksStep3} from './CourseLinksStep3'
@@ -7,11 +7,29 @@ import {CourseImgStep4} from './CourseImgStep4'
 
 export function FormWizard({isEdit, courseData, setShow}) {
     const ref = useRef(null)
+    const step1Ref = useRef(null)
+    const step2Ref = useRef(null)
+    const step3Ref = useRef(null)
     const [stepper, setStepper] = useState(null)
     const [formData, setFormData] = useState(null)
 
     function handleFromData(data) {
         setFormData(prevS => ({...prevS, ...data}))
+    }
+
+    async function handleSubmitForm(activeStepIndex) {
+        // console.log('step : ', activeStepIndex)
+        if (activeStepIndex === 1) {
+            const isValid = await step1Ref.current.handleProgrammaticSubmit()
+            return isValid
+        } else if (activeStepIndex === 2) {
+            const isValid = await step2Ref.current.handleProgrammaticSubmit()
+            return isValid
+        } else if (activeStepIndex === 3) {
+            const isValid = await step3Ref.current.handleProgrammaticSubmit()
+            return isValid
+        }
+        return true
     }
 
     const steps = [
@@ -25,6 +43,7 @@ export function FormWizard({isEdit, courseData, setShow}) {
                     isEdit={isEdit}
                     handleFromData={handleFromData}
                     courseData={courseData}
+                    ref={step1Ref}
                 />
             ),
         },
@@ -32,13 +51,13 @@ export function FormWizard({isEdit, courseData, setShow}) {
             id: 'personal-info',
             title: 'اطلاعات دوره',
             subtitle: 'اطلاعات دوره را وارد کنید',
-
             content: (
                 <CourseInfoStep2
                     stepper={stepper}
                     isEdit={isEdit}
                     handleFromData={handleFromData}
                     courseData={courseData}
+                    ref={step2Ref}
                 />
             ),
         },
@@ -46,13 +65,13 @@ export function FormWizard({isEdit, courseData, setShow}) {
             id: 'step-address',
             title: 'لینک ها و تاریخ',
             subtitle: 'لینک ها و تاریخ را وارد کنید',
-
             content: (
                 <CourseLinksStep3
                     stepper={stepper}
                     isEdit={isEdit}
                     handleFromData={handleFromData}
                     courseData={courseData}
+                    ref={step3Ref}
                 />
             ),
         },
@@ -60,7 +79,6 @@ export function FormWizard({isEdit, courseData, setShow}) {
             id: 'social-links',
             title: 'تصویر ',
             subtitle: 'تصویر را انتخاب کنید',
-
             content: (
                 <CourseImgStep4
                     stepper={stepper}
@@ -77,6 +95,8 @@ export function FormWizard({isEdit, courseData, setShow}) {
     return (
         <div className="horizontal-wizard">
             <Wizard
+                isEdit={isEdit}
+                submitForm={handleSubmitForm}
                 instance={el => setStepper(el)}
                 ref={ref}
                 steps={steps}

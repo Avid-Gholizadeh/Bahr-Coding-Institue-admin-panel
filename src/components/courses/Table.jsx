@@ -102,7 +102,7 @@ export function Table({selectable, onSelect}) {
                         sortIcon={<ChevronDown />}
                         className="react-dataTable"
                         paginationComponent={Pagination}
-                        data={/* dataToRender() */ courses?.courseDtos}
+                        data={courses?.courseDtos}
                         selectableRows={selectable}
                         selectableRowsSingle
                         onSelectedRowsChange={handleSelectedRowsChange}
