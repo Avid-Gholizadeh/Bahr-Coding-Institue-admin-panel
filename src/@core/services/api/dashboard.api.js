@@ -8,3 +8,19 @@ export async function getLandingReport() {
         console.log(error);
     }
 }
+
+export async function getNewsReport() {
+    try {
+        const response = await api.get('/News/AdminNewsFilterList?IsActive=false')
+        return response.totalCount;
+    } catch (error) {
+    }
+}
+
+export async function getCourseReport(){
+    try {
+        const response = await api.get('/Course/CourseList')
+        return response.totalCount;
+    } catch (error) {
+    }
+}
