@@ -22,5 +22,15 @@ export async function getCourseReport(){
         const response = await api.get('/Course/CourseList')
         return response.totalCount;
     } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getDashboardReport(){
+    try {
+        const response = await api.get('/Report/DashboardReport')
+        return response;
+    } catch (error) {
+        console.log(error);
     }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import Chart from "react-apexcharts";
 import { Card, CardBody, CardFooter, CardHeader, Col, Row } from "reactstrap";
 
-const RadialBarChart = ({ activeNewsPercentage, success, header, allCount, activeCount }) => {
+const RadialBarChart = ({ activeNewsPercentage, success, header, allCount, activeCount,text }) => {
   const options = {
     chart: {
       sparkline: {
@@ -77,7 +77,7 @@ const RadialBarChart = ({ activeNewsPercentage, success, header, allCount, activ
       <CardFooter>
           <p className="h4 d-flex justify-content-evenly">
             <span>
-              فعال:
+              {text}
               {' '}
               {activeCount}
             </span>
