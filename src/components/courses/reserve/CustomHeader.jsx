@@ -27,6 +27,7 @@ export function CustomHeader({
     return (
         <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
             <Row>
+                {singleCourseId && <span className="fs-4">رزرو های دوره</span>}
                 {!singleCourseId && (
                     <Col>
                         <div
@@ -47,8 +48,6 @@ export function CustomHeader({
                 )}
 
                 <Col className="d-flex gap-4 align-items-center justify-content-end">
-                    {singleCourseId && <span className="fs-4">رزرو های دوره</span>}
-
                     {!singleCourseId && (
                         <div className="d-flex align-items-center justify-content-end ">
                             <label htmlFor="rows-per-page">تعداد</label>

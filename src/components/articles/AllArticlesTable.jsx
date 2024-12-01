@@ -4,7 +4,7 @@ import {useState} from 'react'
 import {Card, Spinner} from 'reactstrap'
 import {ChevronDown} from 'react-feather'
 import {CustomPagination} from '@Components/common/CustomPagination'
-import {getNewsListAdmin} from '@core/services/api/article'
+import {getAllArticlesForSingleCategory, getNewsListAdmin} from '@core/services/api/article'
 
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
@@ -13,15 +13,23 @@ import {CustomHeader} from '@Components/courses/CustomHeader'
 import {useNavigate} from 'react-router-dom'
 import {EditArticleModal} from './EditArticleModal'
 
-export function AllArticlesTable() {
+export function AllArticlesTable({singleCategoryId}) {
+    //
     const navigate = useNavigate()
     const [params, setParams] = useState({PageNumber: 1, RowsOfPage: 10, Query: '', IsActive: true})
     const [showEdit, setShowEdit] = useState({currentArticleId: null, show: false})
     const columns = useArticleColumn({setShowEdit})
 
     const {data: articles, isLoading} = useQuery({
+        enabled: !Boolean(singleCategoryId),
         queryKey: ['all-articles', params],
         queryFn: () => getNewsListAdmin(params),
+    })
+
+    const {data: singleCategoryArticle, isLoading: categoryArticleLoading} = useQuery({
+        enabled: Boolean(singleCategoryId),
+        queryKey: ['single-category-article', singleCategoryId],
+        queryFn: () => getAllArticlesForSingleCategory(singleCategoryId),
     })
 
     // console.log(articles)
@@ -46,7 +54,7 @@ export function AllArticlesTable() {
     function Pagination() {
         return (
             <CustomPagination
-                totalItem={articles?.totalCount}
+                totalItem={singleCategoryId ? singleCategoryArticle?.length : articles?.totalCount}
                 rowsPerPage={params.RowsOfPage}
                 currentPage={params.PageNumber}
                 handlePagination={handlePagination}
@@ -65,7 +73,7 @@ export function AllArticlesTable() {
                         pagination
                         responsive
                         paginationServer
-                        progressPending={isLoading}
+                        progressPending={isLoading || categoryArticleLoading}
                         noDataComponent={
                             <span className="my-4 fs-4 text-primary">دیتایی وجود ندارد</span>
                         }
@@ -74,10 +82,7 @@ export function AllArticlesTable() {
                         sortIcon={<ChevronDown />}
                         className="react-dataTable"
                         paginationComponent={Pagination}
-                        data={articles?.news}
-                        // selectableRows={selectable}
-                        // selectableRowsSingle
-                        // onSelectedRowsChange={handleSelectedRowsChange}
+                        data={singleCategoryId ? singleCategoryArticle : articles?.news}
                         subHeaderComponent={
                             <CustomHeader
                                 RowsOfPage={params.RowsOfPage}
@@ -89,7 +94,7 @@ export function AllArticlesTable() {
                                 onStatusChange={handleStatusChange}
                                 isArticle
                                 isActive={params.IsActive}
-                                // selectable={selectable}
+                                singleCategoryId={singleCategoryId}
                             />
                         }
                     />

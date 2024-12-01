@@ -87,7 +87,6 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
                 data.Id = showEdit.currentCategory.id
 
                 updateMutate(data)
-                console.log('ali')
             } else {
                 createMutate(data)
             }
@@ -111,7 +110,6 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
                     <h1 className="text-center mb-3">ایجاد دسته بندی جدید</h1>
 
                     <Form onSubmit={handleSubmit(onSubmit)}>
-                        {' '}
                         <Row>
                             <Col md="6" className="mb-1">
                                 <Label className="form-label fs-5" for="CategoryName">
@@ -302,8 +300,9 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
                             )}
                             <ImagePicker handleSelectImage={handleAddImgToForm} />
                         </Row>
+
                         <Row>
-                            <Col className="text-center mt-1" xs={12}>
+                            <Col className="text-center mt-4" xs={12}>
                                 <Button
                                     type="submit"
                                     className="me-1"
