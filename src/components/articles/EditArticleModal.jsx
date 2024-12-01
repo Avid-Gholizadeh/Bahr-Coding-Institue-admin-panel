@@ -4,6 +4,7 @@ import {getNewsById} from '@core/services/api/article'
 import {useQuery} from '@tanstack/react-query'
 
 export function EditArticleModal({showEdit, setShowEdit}) {
+    //
     const {data: singleArticle} = useQuery({
         enabled: Boolean(showEdit.currentArticleId),
         queryKey: ['single-article', showEdit.currentArticleId],

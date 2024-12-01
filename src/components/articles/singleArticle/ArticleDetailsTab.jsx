@@ -1,9 +1,10 @@
 import React from 'react'
-import {Card, CardBody, CardTitle, Row, Col, Badge} from 'reactstrap'
-import fMoment from 'moment-jalaali'
+import {Card, CardBody, Row, Col, Badge} from 'reactstrap'
 import {convertGrigorianDateToJalaali} from '@core/utils/formatter.utils'
+import {RichTextDecoder} from '@Components/common/RichTextDecoder'
 
-export function ArticleDetailsTab({user, singleArticle}) {
+export function ArticleDetailsTab({singleArticle}) {
+    //
     return (
         <Card className="p-2">
             <CardBody>
@@ -49,33 +50,25 @@ export function ArticleDetailsTab({user, singleArticle}) {
                             <span>{singleArticle.currentDissLikeCount}</span>
                         </li>
                     </Col>
-                    <Col>
+                    <Col className="mt-1">
                         <li className="mb-75">
-                            <p className="fw-bolder me-50"> عنوان گوگل :</p>
+                            <p className="fw-bolder fs-4 me-50"> عنوان گوگل :</p>
                             <span>{singleArticle.googleTitle}</span>
                         </li>
                         <li className="mb-75">
-                            <p className="fw-bolder me-50"> توضیحات گوگل :</p>
+                            <p className="fw-bolder fs-4 me-50"> توضیحات گوگل :</p>
                             <span>{singleArticle.googleDescribe}</span>
                         </li>
                         <li className="mb-75">
-                            <p className="fw-bolder me-50"> توضیحات کوتاه :</p>
+                            <p className="fw-bolder fs-4 me-50"> توضیحات کوتاه :</p>
                             <span>{singleArticle.miniDescribe}</span>
                         </li>
                         <li className="mb-75">
-                            <p className="fw-bolder me-50"> توضیحات اصلی :</p>
-                            <span>{singleArticle.describe}</span>
+                            <p className="fw-bolder fs-4 me-50"> توضیحات اصلی :</p>
+
+                            <RichTextDecoder content={singleArticle.describe} />
                         </li>
                     </Col>
-
-                    {/* <div>
-                        <p>درباره کاربر:</p>
-                        <p>{user.userAbout}</p>
-                    </div>
-                    <div>
-                        <p>آدرس کاربر:</p>
-                        <p>{user.homeAdderess ? user.homeAdderess : 'خالی'}</p>
-                    </div> */}
                 </Row>
             </CardBody>
         </Card>

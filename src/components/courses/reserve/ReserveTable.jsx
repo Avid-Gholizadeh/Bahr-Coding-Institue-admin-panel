@@ -26,6 +26,7 @@ export function ReserveTable({singleCourseId}) {
     const [showEdit, setShowEdit] = useState({currentCourseId: null, show: false})
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerpage] = useState(10)
+    const [searchTerm, setSearchTerm] = useState(null)
     const [sort, setSort] = useState({reserverDate: false, accept: false, direction: 'desc'})
     const columns = useReserveColumns({handleModalOpen, singleCourseId})
 
@@ -39,6 +40,13 @@ export function ReserveTable({singleCourseId}) {
     if (singleCourseId && reserves) {
         reserves = reserves.filter(
             reserve => reserve.courseId === singleCourseId && !reserve.accept
+        )
+    }
+
+    let filteredReserves = reserves ? [...reserves] : []
+    if (searchTerm && searchTerm?.trim().length !== 0) {
+        filteredReserves = reserves.filter(
+            item => item.courseName.includes(searchTerm) || item.studentName?.includes(searchTerm)
         )
     }
 
@@ -115,21 +123,6 @@ export function ReserveTable({singleCourseId}) {
         setShowEdit({currentCourseId: course, show: true})
     }
 
-    function Pagination() {
-        return (
-            <>
-                {!singleCourseId && (
-                    <CustomPagination
-                        totalItem={reserves.length}
-                        rowsPerPage={rowsPerPage}
-                        currentPage={currentPage}
-                        handlePagination={handlePagination}
-                    />
-                )}
-            </>
-        )
-    }
-
     const handleSort = (column, sortDirection) => {
         if (column.sortField === 'accept') {
             setSort({
@@ -149,7 +142,7 @@ export function ReserveTable({singleCourseId}) {
 
     function dataToRender() {
         if (reserves) {
-            const allData = [...reserves]
+            let allData = [...filteredReserves]
 
             if (sort.accept || sort.reserverDate) {
                 if (sort.accept) {
@@ -174,6 +167,26 @@ export function ReserveTable({singleCourseId}) {
                     index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
             )
         }
+    }
+
+    function handleSearch(val) {
+        setSearchTerm(val)
+        setCurrentPage(1)
+    }
+
+    function Pagination() {
+        return (
+            <>
+                {!singleCourseId && (
+                    <CustomPagination
+                        totalItem={filteredReserves.length}
+                        rowsPerPage={rowsPerPage}
+                        currentPage={currentPage}
+                        handlePagination={handlePagination}
+                    />
+                )}
+            </>
+        )
     }
 
     return (
@@ -203,6 +216,8 @@ export function ReserveTable({singleCourseId}) {
                                 RowsOfPage={rowsPerPage}
                                 handlePerPage={handlePerPage}
                                 singleCourseId={singleCourseId}
+                                onSearch={handleSearch}
+                                title="رزرو"
                             />
                         }
                     />

@@ -130,7 +130,7 @@ export function ArticleCardInfo({article, articleId}) {
 
                         <div className="d-flex align-items-start">
                             <Badge color="light-primary" className="rounded p-75">
-                                <MessageCircle className="font-medium-2" />
+                                <MessageCircle className="font-medium-2 " />
                             </Badge>
                             <div className="ms-75">
                                 <h4 className="mb-0">{article.commentsCount}</h4>

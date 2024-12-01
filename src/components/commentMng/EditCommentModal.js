@@ -1,10 +1,11 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query'
 import React, {useEffect, useState} from 'react'
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input} from 'reactstrap'
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter, Label, Input, Spinner} from 'reactstrap'
 import {updateCourseComment} from '../../@core/services/api/comments/ForAdmin'
 import toast from 'react-hot-toast'
+import {editArticleComment} from '@core/services/api/article'
 
-export function EditCommentModal({formModal, setFormModal, comment}) {
+export function EditCommentModal({formModal, setFormModal, comment, singleArticle}) {
     const [commentTitle, setCommentTitle] = useState(comment?.commentTitle || comment?.title || '')
     const [commentDescription, setCommentDescription] = useState(comment?.describe || '')
     const queryClient = useQueryClient()
@@ -16,7 +17,7 @@ export function EditCommentModal({formModal, setFormModal, comment}) {
         }
     }, [comment])
 
-    const {mutate: editCommentMutate} = useMutation({
+    const {mutate: editCommentMutate, isPending} = useMutation({
         mutationFn: updateCourseComment,
         onSuccess: response => {
             if (response.success) {
@@ -28,6 +29,30 @@ export function EditCommentModal({formModal, setFormModal, comment}) {
             }
         },
     })
+
+    const {mutate: editArticleCommentMutate, isPending: articlePending} = useMutation({
+        mutationFn: editArticleComment,
+        onSuccess: response => {
+            if (response.success) {
+                toast.success(response.message)
+                queryClient.invalidateQueries(['single-article-comment', comment.newsId])
+                setFormModal(false)
+            } else {
+                toast.error(response.message)
+            }
+        },
+    })
+
+    function handleEditArticleComment() {
+        editArticleCommentMutate({
+            id: comment.id,
+            newsId: comment.newsId,
+            title: commentTitle,
+            describe: commentDescription,
+            accept: true,
+        })
+    }
+
     const handleSave = () => {
         const formData = new FormData()
         formData.append('CommentId', comment.commentId || comment?.id)
@@ -70,9 +95,16 @@ export function EditCommentModal({formModal, setFormModal, comment}) {
                 </div>
             </ModalBody>
             <ModalFooter className="m-auto">
-                <Button color="primary" onClick={handleSave}>
+                <Button
+                    color="primary"
+                    onClick={singleArticle ? handleEditArticleComment : handleSave}
+                    disabled={isPending || articlePending}
+                >
                     ذخیره
-                </Button>{' '}
+                    {(isPending || articlePending) && (
+                        <Spinner className="ms-1" size="sm" color="light" />
+                    )}
+                </Button>
                 <Button color="secondary" onClick={() => setFormModal(false)}>
                     انصراف
                 </Button>

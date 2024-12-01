@@ -13,6 +13,7 @@ export function TableCardHeader({
     sortingCol,
     setSortingCol,
     singleCourse,
+    singleArticle,
 }) {
     const acceptOptions = [
         {value: null, label: 'همه'},
@@ -50,7 +51,7 @@ export function TableCardHeader({
                     <label htmlFor="rows-of-page">عدد</label>
                 </div>
             </Col>
-            {!singleCourse && (
+            {!singleCourse && !singleArticle && (
                 <Col
                     md="4"
                     className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1"
@@ -69,22 +70,24 @@ export function TableCardHeader({
                     </div>
                 </Col>
             )}
-            <Col
-                md="3"
-                className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1 gap-1 "
-            >
-                <label>وضعیت</label>
-                <Select
-                    isClearable={false}
-                    value={acceptOptions.find(option => option.value === isAccept)}
-                    options={acceptOptions}
-                    className="react-select"
-                    classNamePrefix="select"
-                    theme={selectThemeColors}
-                    onChange={option => setIsAccept(option.value)} // Updated to pass the value
-                />
-            </Col>
-            {!singleCourse && (
+            {!singleArticle && (
+                <Col
+                    md="3"
+                    className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1 gap-1 "
+                >
+                    <label>وضعیت</label>
+                    <Select
+                        isClearable={false}
+                        value={acceptOptions.find(option => option.value === isAccept)}
+                        options={acceptOptions}
+                        className="react-select"
+                        classNamePrefix="select"
+                        theme={selectThemeColors}
+                        onChange={option => setIsAccept(option.value)} // Updated to pass the value
+                    />
+                </Col>
+            )}
+            {!singleCourse && !singleArticle && (
                 <Col
                     md="3"
                     className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1 gap-1"

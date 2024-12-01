@@ -26,7 +26,6 @@ const TemplateTitle = '%s - Vuexy React Admin Template'
 const DefaultRoute = '/home'
 
 const Home = lazy(() => import('../../pages/Home'))
-const SecondPage = lazy(() => import('../../pages/SecondPage'))
 const Login = lazy(() => import('../../pages/Login'))
 const Register = lazy(() => import('../../pages/Register'))
 const ForgotPassword = lazy(() => import('../../pages/ForgotPassword'))
@@ -42,6 +41,8 @@ const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
 const AllArticles = lazy(() => import('../../pages/articles/AllArticles'))
 const CreateArticle = lazy(() => import('../../pages/articles/CreateArticle'))
 const ArticleDetails = lazy(() => import('../../pages/articles/ArticleDetails'))
+const ArticleCategories = lazy(() => import('../../pages/articles/ArticleCategories'))
+const CategoryDetail = lazy(() => import('../../pages/articles/CategoryDetail'))
 
 // ** Merge Routes
 const Routes = [
@@ -85,6 +86,14 @@ const Routes = [
     {
         path: '/article/:id',
         element: <ArticleDetails />,
+    },
+    {
+        path: '/article-categories',
+        element: <ArticleCategories />,
+    },
+    {
+        path: '/article-category/:id',
+        element: <CategoryDetail />,
     },
     {
         path: '/login',

@@ -1,12 +1,12 @@
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
-import {Bell, Link, ShoppingCart, Users} from 'react-feather'
+import {Bell, Link, MessageSquare, ShoppingCart, Users} from 'react-feather'
 import {ArticleDetailsTab} from './ArticleDetailsTab'
 /* import {ReserveTable} from '../reserve/ReserveTable'
 import {StudentsTable} from './StudentsTable'
-import {GroupsTable} from '../groups/GroupsTable'
-import {CourseComment} from '@Components/commentMng/CourseComment' */
+import {GroupsTable} from '../groups/GroupsTable'*/
+import {CourseComment} from '@Components/commentMng/CourseComment'
 
-export function Tabs({active, toggleTab, singleArticle, course}) {
+export function Tabs({active, toggleTab, singleArticle}) {
     return (
         <>
             <Nav pills className="mb-2">
@@ -18,11 +18,11 @@ export function Tabs({active, toggleTab, singleArticle, course}) {
                 </NavItem>
                 <NavItem>
                     <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
-                        <Users className="font-medium-3 me-50" />
-                        <span className="fw-bold">دانشجویان</span>
+                        <MessageSquare className="font-medium-3 me-50" />
+                        <span className="fw-bold">نظرات</span>
                     </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                     <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
                         <Link className="font-medium-3 me-50" />
                         <span className="fw-bold">گروه ها</span>
@@ -33,16 +33,16 @@ export function Tabs({active, toggleTab, singleArticle, course}) {
                         <Bell className="font-medium-3 me-50" />
                         <span className="fw-bold">نظرات</span>
                     </NavLink>
-                </NavItem>
+                </NavItem> */}
             </Nav>
             <TabContent activeTab={active}>
                 <TabPane tabId="1">
                     <ArticleDetailsTab singleArticle={singleArticle} />
                 </TabPane>
-                {/* <TabPane tabId="2">
-                    <StudentsTable course={course} />
+                <TabPane tabId="2">
+                    <CourseComment singleArticle={singleArticle} />
                 </TabPane>
-                <TabPane tabId="3">
+                {/* <TabPane tabId="3">
                     <GroupsTable course={course} />
                 </TabPane>
                 <TabPane tabId="4">

@@ -9,8 +9,13 @@ import {
     DropdownToggle,
     UncontrolledDropdown,
 } from 'reactstrap'
-import {convertGrigorianDateToJalaali, pirceFormatter} from '../../../@core/utils/formatter.utils'
+import {
+    convertGrigorianDateToJalaali,
+    isValidUrl,
+    pirceFormatter,
+} from '../../../@core/utils/formatter.utils'
 import CourseFallback from '../../../assets/images/courses-fallback.jpg'
+import userImageFallback from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import {deleteCourseReserve} from '@core/services/api/courses'
@@ -56,6 +61,17 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
         )
     }
 
+    const renderUserAvatar = row => {
+        return (
+            <Avatar
+                className="me-1 overflow-hidden"
+                img={userImageFallback}
+                width="32"
+                height="32"
+            />
+        )
+    }
+
     function colorSelector(status) {
         if (status === 'شروع ثبت نام') return 'light-success'
         else if (status === 'منقضی شده') return 'light-danger'
@@ -87,12 +103,12 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
         {
             name: 'دانشجو',
             sortable: false,
-            minWidth: '172px',
+            minWidth: '220px',
             sortField: 'studentName',
             selector: row => row.studentName,
             cell: row => (
                 <div className="d-flex justify-content-left align-items-center ">
-                    {renderCourseAvatar(row)}
+                    {renderUserAvatar()}
                     <div className="d-flex flex-column overflow-hidden" style={{maxWidth: 170}}>
                         <Link
                             to={`/user/view/${row.studentId}`}
@@ -105,8 +121,8 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
             ),
         },
         {
-            name: 'تاریخ رزرو',
-            minWidth: '150px',
+            name: <span className="text-success">تاریخ رزرو</span>,
+            minWidth: '100px',
             sortable: true,
             sortField: 'reserverDate',
             selector: row => row.reserverDate,
@@ -115,8 +131,8 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
             ),
         },
         {
-            name: 'وضعیت',
-            minWidth: '138px',
+            name: <span className="text-success">وضعیت </span>,
+            minWidth: '100px',
             sortable: true,
             sortField: 'accept',
             selector: row => row.accept,
@@ -128,9 +144,7 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
                             color={row.accept ? 'light-success' : 'light-warning'}
                             pill
                         >
-                            <span /* className="fs-6" */>
-                                {row.accept ? 'تایید شده' : 'در انتظار تایید'}
-                            </span>
+                            <span>{row.accept ? 'تایید شده' : 'در انتظار تایید'}</span>
                         </Badge>
                     )}
                     {singleCourseId && (
