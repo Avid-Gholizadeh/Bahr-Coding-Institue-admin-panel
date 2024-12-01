@@ -56,7 +56,7 @@ const StatsCard = ({cols = { xs: 10, sm: 4, md: 3 }, report, isLoading}) => {
           <div className="d-flex align-items-center">
             <Avatar color={item.color} icon={item.icon} className="me-2" />
             <div className="my-auto">
-                {isLoading? <Spinner color="primary" size="lg" />:
+                {isLoading? <Spinner color="primary" size="lg" type="grow" />:
                     <h4 className="fw-bolder mb-0">{item.title}</h4>
                 }
               <CardText className="font-medium-1 mb-0">{item.subtitle}</CardText>

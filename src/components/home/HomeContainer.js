@@ -23,7 +23,7 @@ const HomeContainer = () => {
             <StatsCard report={report} isLoading={isLoading} /> {/* Pass setStats to StatsCard */}
             <Row>
                 <Col>
-                    <UserStatus dashReportData={dashReportData}/>
+                    <UserStatus dashReportData={dashReportData} loadingDash={loadingDash} />
                 </Col>
                 <Col>
                     <AllPayments dashReportData={dashReportData}/>

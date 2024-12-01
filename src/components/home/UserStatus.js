@@ -6,13 +6,10 @@ import {
   CardBody,
   CardTitle,
   CardHeader,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown
+  Spinner,
 } from 'reactstrap'
 
-function UserStatus({dashReportData}) {
+function UserStatus({dashReportData, loadingDash}) {
     const [data, setData] = useState({
         listData: []
       });
@@ -48,7 +45,7 @@ function UserStatus({dashReportData}) {
     },
     legend: { show: false },
     stroke: {
-      width: 4
+      width: 2
     },
     colors: ['#28c76f', '#ffc107', '#ea5455']
   }
@@ -82,8 +79,12 @@ function UserStatus({dashReportData}) {
         <CardTitle tag='h4'>وضعیت کاربران</CardTitle>
       </CardHeader>
       <CardBody>
-        <Chart options={options} series={series} type="pie" height={250} />
-        <div className="pt-25">{renderChartInfo()}</div>
+        {loadingDash?<Spinner color="primary" size="lg" type="grow" />:
+        <>
+          <Chart options={options} series={series} type="pie" height={250} />
+          <div className="pt-25">{renderChartInfo()}</div>
+        </>
+         }
       </CardBody>
     </Card>
   )

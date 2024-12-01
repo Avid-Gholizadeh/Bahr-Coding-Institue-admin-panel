@@ -6,7 +6,7 @@ import medal from '@src/assets/images/illustration/badge.svg'
 import { Archive, DollarSign, Smile, Users } from 'react-feather'
 
 function AllPayments({dashReportData}) {
-    console.log(dashReportData);
+
   return (
     <>
     <Row>
