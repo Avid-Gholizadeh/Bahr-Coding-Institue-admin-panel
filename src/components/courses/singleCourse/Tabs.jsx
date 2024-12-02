@@ -38,7 +38,7 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                 <NavItem>
                     <NavLink active={active === '5'} onClick={() => toggleTab('5')}>
                         <DollarSign className="font-medium-3 me-50" />
-                        <span className="fw-bold">لیست وضعیت پرداخت</span>
+                        <span className="fw-bold"> وضعیت پرداخت</span>
                     </NavLink>
                 </NavItem>
                 <NavItem>
