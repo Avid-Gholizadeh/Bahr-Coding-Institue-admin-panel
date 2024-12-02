@@ -1,5 +1,5 @@
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
-import {Bell, DollarSign, Link, ShoppingCart, Users} from 'react-feather'
+import {Bell, DollarSign, Link, MessageSquare, ShoppingCart, Users} from 'react-feather'
 import {ReserveTable} from '../reserve/ReserveTable'
 import {StudentsTable} from './StudentsTable'
 import {GroupsTable} from '../groups/GroupsTable'
@@ -31,13 +31,13 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                 </NavItem>
                 <NavItem>
                     <NavLink active={active === '4'} onClick={() => toggleTab('4')}>
-                        <Bell className="font-medium-3 me-50" />
+                        <MessageSquare className="font-medium-3 me-50" />
                         <span className="fw-bold">نظرات</span>
                     </NavLink>
                 </NavItem>
                 <NavItem>
                     <NavLink active={active === '5'} onClick={() => toggleTab('5')}>
-                        <DollarSign className="font-medium-3 me-50" />
+                        <Bell className="font-medium-3 me-50" />
                         <span className="fw-bold"> وضعیت پرداخت</span>
                     </NavLink>
                 </NavItem>

@@ -41,12 +41,12 @@ export function CoursePaymentList({singleCourseId}) {
     const columns =[
         {
             name: 'مبلغ پرداختی',
-            minWidth: '150px',
+            minWidth: '120px',
             cell: row => row.paid + 'تومان'
         },
         {
             name: 'باقی مانده',
-            minWidth: '150px',
+            minWidth: '120px',
             cell: row => row.currentRemainder + 'تومان'
         },
         {
@@ -61,7 +61,7 @@ export function CoursePaymentList({singleCourseId}) {
         },
         {
             name: ' وضعیت رزرو',
-            minWidth: '120px',
+            minWidth: '100px',
             cell: row =>(
                     <Badge
                         className="text-capitalize"
@@ -102,8 +102,8 @@ export function CoursePaymentList({singleCourseId}) {
             columns={columns}
             data={coursePayment || []}
             progressPending={isLoading}
-            progressComponent={<Spinner color="primary" />}
-            noDataComponent={<div style={{padding: '20px'}}> کاریر پرداختی ای ندارد</div>}
+            progressComponent={<Spinner color="primary" size='md'/>}
+            noDataComponent={<div style={{padding: '20px'}}> دوره پرداختی ای ندارد</div>}
         />
     </div>
     </Card>
