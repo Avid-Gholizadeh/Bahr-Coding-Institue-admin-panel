@@ -18,7 +18,7 @@ export function AllArticlesTable({singleCategoryId}) {
     const navigate = useNavigate()
     const [params, setParams] = useState({PageNumber: 1, RowsOfPage: 10, Query: '', IsActive: true})
     const [showEdit, setShowEdit] = useState({currentArticleId: null, show: false})
-    const columns = useArticleColumn({setShowEdit})
+    const columns = useArticleColumn({setShowEdit, singleCategoryId})
 
     const {data: articles, isLoading} = useQuery({
         enabled: !Boolean(singleCategoryId),
@@ -100,7 +100,11 @@ export function AllArticlesTable({singleCategoryId}) {
                     />
                 </div>
             </Card>
-            <EditArticleModal showEdit={showEdit} setShowEdit={setShowEdit} />
+            <EditArticleModal
+                showEdit={showEdit}
+                setShowEdit={setShowEdit}
+                singleCategoryId={singleCategoryId}
+            />
         </>
     )
 }

@@ -3,7 +3,7 @@ import {FormWizard} from './formWizard/FormWizard'
 import {getNewsById} from '@core/services/api/article'
 import {useQuery} from '@tanstack/react-query'
 
-export function EditArticleModal({showEdit, setShowEdit}) {
+export function EditArticleModal({showEdit, setShowEdit, singleCategoryId}) {
     //
     const {data: singleArticle} = useQuery({
         enabled: Boolean(showEdit.currentArticleId),
@@ -29,6 +29,7 @@ export function EditArticleModal({showEdit, setShowEdit}) {
                         isEdit={Boolean(singleArticle)}
                         articleData={singleArticle?.detailsNewsDto}
                         setShow={() => setShowEdit({currentArticleId: null, show: false})}
+                        singleCategoryId={singleCategoryId}
                     />
                 </ModalBody>
             </Modal>
