@@ -14,7 +14,7 @@ const PortalDropdownMenu = ({children}) => {
     return createPortal(children, document.getElementById('portal-root'))
 }
 
-export function useArticleColumn({selectable, setShowEdit}) {
+export function useArticleColumn({selectable, setShowEdit, singleCategoryId}) {
     //
     const queryClient = useQueryClient()
 
@@ -28,7 +28,11 @@ export function useArticleColumn({selectable, setShowEdit}) {
         onSuccess: data => {
             if (data.success) {
                 toast.success('خبر با موفقیت فعال شد')
-                queryClient.invalidateQueries(['all-articles'])
+                if (!singleCategoryId) {
+                    queryClient.invalidateQueries(['all-articles'])
+                } else {
+                    queryClient.invalidateQueries(['single-category-article', singleCategoryId])
+                }
             } else {
                 toast.error(data.message)
             }

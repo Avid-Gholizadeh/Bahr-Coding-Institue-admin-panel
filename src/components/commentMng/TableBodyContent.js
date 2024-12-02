@@ -4,10 +4,10 @@ import {TableRow} from './TableRow'
 import {EditCommentModal} from './EditCommentModal'
 import {ReplyCommentModal} from './ReplyCommentModal'
 
-export function TableBodyContent({List, singleCourse}) {
+export function TableBodyContent({List, singleCourse, singleArticle}) {
     const {acceptComment, rejectComment, deleteComment} = useCommentActions()
-    const [isEditModalOpen, setEditModalOpen] = useState(false);
-    const [isReplyModalOpen, setReplyModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false)
+    const [isReplyModalOpen, setReplyModalOpen] = useState(false)
     const [editingComment, setEditingComment] = useState(null)
     const [replyComment, setReplyComment] = useState(null)
 
@@ -34,6 +34,7 @@ export function TableBodyContent({List, singleCourse}) {
                         onEdit={handleEditClick}
                         onReply={handleReplyClick}
                         onDelete={deleteComment.mutate}
+                        singleArticle={singleArticle}
                     />
                 ))}
             </tbody>
@@ -42,6 +43,7 @@ export function TableBodyContent({List, singleCourse}) {
                     formModal={isEditModalOpen}
                     setFormModal={setEditModalOpen}
                     comment={editingComment}
+                    singleArticle={singleArticle}
                 />
             )}
             {replyComment && (
@@ -49,6 +51,7 @@ export function TableBodyContent({List, singleCourse}) {
                     formModal={isReplyModalOpen}
                     setFormModal={setReplyModalOpen}
                     comment={replyComment}
+                    singleArticle={singleArticle}
                 />
             )}
         </>

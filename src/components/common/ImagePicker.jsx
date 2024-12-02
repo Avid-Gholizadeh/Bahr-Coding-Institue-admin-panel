@@ -95,7 +95,7 @@ export const ImagePicker = ({handleSelectImage}) => {
                     <input {...getInputProps()} />
                     <div className="d-flex align-items-center justify-content-center flex-column">
                         <DownloadCloud size={64} />
-                        <h4>برای آپلود یک فایل را دراپ و یا کلیک کنید</h4>
+                        <h4 className="mt-2">برای آپلود یک فایل را دراپ و یا کلیک کنید</h4>
                     </div>
                 </div>
                 {files.length ? <ListGroup className="my-2">{fileList}</ListGroup> : null}

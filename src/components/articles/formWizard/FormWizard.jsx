@@ -4,7 +4,7 @@ import {ArticleStep1} from './ArticleStep1'
 import {ArticleStep2} from './ArticleStep2'
 import {ArticleStep3} from './ArticleStep3'
 
-export function FormWizard({isEdit, articleData, setShow}) {
+export function FormWizard({isEdit, articleData, setShow, singleCategoryId}) {
     const ref = useRef(null)
     const [stepper, setStepper] = useState(null)
     const [formData, setFormData] = useState(null)
@@ -52,6 +52,7 @@ export function FormWizard({isEdit, articleData, setShow}) {
                     articleData={articleData}
                     formData={formData}
                     setShow={setShow}
+                    singleCategoryId={singleCategoryId}
                 />
             ),
         },

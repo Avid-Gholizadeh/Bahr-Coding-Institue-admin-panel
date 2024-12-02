@@ -7,7 +7,15 @@ import {addCourseTechStep3, CreateCourseStep2, updateCourse} from '@core/service
 import {createArticle, updateArticle} from '@core/services/api/article'
 import {useNavigate} from 'react-router-dom'
 
-export function ArticleStep3({stepper, handleFromData, formData, isEdit, articleData, setShow}) {
+export function ArticleStep3({
+    stepper,
+    handleFromData,
+    formData,
+    isEdit,
+    articleData,
+    setShow,
+    singleCategoryId,
+}) {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
 
@@ -32,7 +40,13 @@ export function ArticleStep3({stepper, handleFromData, formData, isEdit, article
         onSuccess: data => {
             if (data.success) {
                 toast.success('خبر با موفقیت به روز رسانی شد')
-                queryClient.invalidateQueries(['single-course', articleData.id])
+                if (!singleCategoryId) {
+                    queryClient.invalidateQueries(['all-articles'])
+                    queryClient.invalidateQueries(['single-article', articleData.id])
+                } else {
+                    queryClient.invalidateQueries(['single-category-article', singleCategoryId])
+                }
+
                 if (setShow) setShow()
             } else {
                 toast.error(data.message)

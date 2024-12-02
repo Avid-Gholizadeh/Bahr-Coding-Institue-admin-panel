@@ -1,39 +1,10 @@
-import {
-    BarChart2,
-    Check,
-    Eye,
-    MessageCircle,
-    PlusCircle,
-    ShoppingCart,
-    Star,
-    Users,
-} from 'react-feather'
-import {
-    Badge,
-    Button,
-    Card,
-    CardBody,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    Modal,
-    ModalBody,
-    ModalHeader,
-    Spinner,
-    UncontrolledButtonDropdown,
-} from 'reactstrap'
-import {
-    convertGrigorianDateToJalaali,
-    isValidUrl,
-    pirceFormatter,
-} from '../../../@core/utils/formatter.utils'
-import CourseFallback from '../../../assets/images/courses-fallback.jpg'
+import {Eye, MessageCircle, Star} from 'react-feather'
+import {Badge, Button, Card, CardBody, Modal, ModalBody, ModalHeader, Spinner} from 'reactstrap'
+import {isValidUrl} from '../../../@core/utils/formatter.utils'
 import {useState} from 'react'
 import {FormWizard} from '../formWizard/FormWizard'
-import {useMutation, useQueryClient} from '@tanstack/react-query'
-import {activeAndDeactive, changeCourseStatus, deleteCourse} from '@core/services/api/courses'
+import {useMutation} from '@tanstack/react-query'
 import toast from 'react-hot-toast'
-import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import ArticleFallback from '../../../assets/images/article-fallback.jpg'
 import {Link, useNavigate} from 'react-router-dom'
 import {EditArticleModal} from '../EditArticleModal'
@@ -97,6 +68,8 @@ export function ArticleCardInfo({article, articleId}) {
                                 <div className="user-info">
                                     <h2 className="mb-1">{article.title}</h2>
                                     <Badge
+                                        tag={Link}
+                                        to={'/article-category/' + article.newsCatregoryId}
                                         color="light-success"
                                         className="rounded cursor-pointer fs-6 p-75"
                                     >
@@ -130,7 +103,7 @@ export function ArticleCardInfo({article, articleId}) {
 
                         <div className="d-flex align-items-start">
                             <Badge color="light-primary" className="rounded p-75">
-                                <MessageCircle className="font-medium-2" />
+                                <MessageCircle className="font-medium-2 " />
                             </Badge>
                             <div className="ms-75">
                                 <h4 className="mb-0">{article.commentsCount}</h4>

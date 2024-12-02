@@ -8,8 +8,9 @@ import {getCommentsForAddmin} from '../../@core/services/api/comments/ForAdmin'
 import {getCourseComment} from '@core/services/api/courses'
 import {useParams} from 'react-router-dom'
 import {SingleCourse} from '@Components/courses/singleCourse/SingleCourse'
+import {getSingleNewsComment} from '@core/services/api/article'
 
-export function CourseComment({singleCourse}) {
+export function CourseComment({singleCourse, singleArticle}) {
     const {id} = useParams()
     const [sortingCol, setSortingCol] = useState('')
     const [sortType, setSortType] = useState('InsertDate')
@@ -24,7 +25,7 @@ export function CourseComment({singleCourse}) {
         isError,
         refetch,
     } = useQuery({
-        enabled: !Boolean(singleCourse),
+        enabled: !Boolean(singleCourse || singleArticle),
         queryKey: ['comments'],
         queryFn: () =>
             getCommentsForAddmin(pageNumber, rowsOfPage, sortingCol, sortType, query, isAccept),
@@ -32,11 +33,18 @@ export function CourseComment({singleCourse}) {
 
     const {data: singleCourseComments, refetch: singleCourseRefetch} = useQuery({
         enabled: Boolean(singleCourse),
-        queryKey: ['single-course-comment'],
+        queryKey: ['single-course-comment', id],
         queryFn: () => getCourseComment(id),
     })
 
-    // console.log(singleCourseComments)
+    const {data: singleArticleComments, refetch: singleArticleRefetch} = useQuery({
+        enabled: Boolean(singleArticle),
+        queryKey: ['single-article-comment', id],
+        queryFn: () => getSingleNewsComment({NewsId: id}),
+    })
+
+    // console.log(singleArticleComments)
+    // 7360bbfd-7639-ef11-b6ca-c84ec5106ca4
 
     const totalCount = commentsList?.totalCount || 1
 
@@ -49,20 +57,33 @@ export function CourseComment({singleCourse}) {
         }
     }, [pageNumber, rowsOfPage, sortingCol, sortType, query, isAccept, refetch])
 
-    let filteredData = singleCourseComments ? [...singleCourseComments] : []
+    let filteredData = []
+    if (singleCourseComments) {
+        filteredData = [...singleCourseComments]
+    } else if (singleArticleComments) {
+        filteredData = [...singleArticleComments]
+    }
+
     if (isAccept !== null && singleCourse) {
         filteredData = singleCourseComments.filter(comment => comment.accept === isAccept)
     }
 
     function dataToRender() {
-        if (singleCourseComments) {
+        if (singleCourseComments || singleArticleComments) {
             const allData = [...filteredData]
 
             return allData?.filter(
                 (_, index) =>
                     index >= (pageNumber - 1) * rowsOfPage && index < pageNumber * rowsOfPage
             )
+        } else {
+            return commentsList?.comments
         }
+    }
+
+    function handleRowOfpage(value) {
+        setRowsOfPage(value)
+        setPageNumber(1)
     }
 
     return (
@@ -71,7 +92,7 @@ export function CourseComment({singleCourse}) {
                 <CardHeader>
                     <TableCardHeader
                         rowsOfPage={rowsOfPage}
-                        setRowsOfPage={setRowsOfPage}
+                        setRowsOfPage={handleRowOfpage}
                         query={query}
                         setQuery={setQuery}
                         isAccept={isAccept}
@@ -79,6 +100,7 @@ export function CourseComment({singleCourse}) {
                         sortingCol={sortingCol}
                         setSortingCol={setSortingCol}
                         singleCourse={singleCourse}
+                        singleArticle={singleArticle}
                     />
                 </CardHeader>
                 {isLoading ? (
@@ -87,14 +109,16 @@ export function CourseComment({singleCourse}) {
                     </div>
                 ) : (
                     <TableHover
-                        data={!singleCourse ? commentsList.comments : dataToRender()}
+                        data={dataToRender()}
                         singleCourse={singleCourse}
+                        singleArticle={singleArticle}
                     />
                 )}
                 {isError && <p className="text-danger m-auto">مشکلی پیش آمد</p>}
+
                 <Pagination
                     pageCount={
-                        singleCourse
+                        singleCourse || singleArticle
                             ? Math.ceil(filteredData?.length / rowsOfPage)
                             : Math.ceil(totalCount / rowsOfPage)
                     }

@@ -25,6 +25,7 @@ import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {activeAndDeactive, changeCourseStatus, deleteCourse} from '@core/services/api/courses'
 import toast from 'react-hot-toast'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
+import {RichTextDecoder} from '@Components/common/RichTextDecoder'
 
 export function CourseInfoCard({course}) {
     const queryClient = useQueryClient()
@@ -260,7 +261,8 @@ export function CourseInfoCard({course}) {
                             </li>
                             <li className="mb-75">
                                 <span className="fw-bolder me-25"> توضیحات:</span>
-                                <span>{course.describe}</span>
+
+                                <RichTextDecoder content={course.describe} />
                             </li>
                             <li className="mb-75">
                                 <span className="fw-bolder me-25"> نام کلاس:</span>
