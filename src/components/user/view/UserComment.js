@@ -56,7 +56,7 @@ export function UserComment({userId}) {
                     data={data?.comments || []}
                     progressPending={isLoading}
                     progressComponent={<Spinner color="primary" />}
-                    noDataComponent={<div style={{padding: '20px'}}>دوره ای موجود نمی باشد</div>}
+                    noDataComponent={<div style={{padding: '20px'}}>کامنتی موجود نمی باشد</div>}
                 />
             </div>
         </Card>

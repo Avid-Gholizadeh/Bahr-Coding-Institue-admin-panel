@@ -8,7 +8,6 @@ const NavbarUser = () => {
     queryKey: ['profile'],
     queryFn: getProfile
   })
-  console.log(myProfile);
   return (
     <ul className="nav navbar-nav align-items-center ms-auto">
       <UserDropdown profileData={myProfile} profileLoading={profileLoading}  />

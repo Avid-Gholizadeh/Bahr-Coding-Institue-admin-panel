@@ -12,6 +12,7 @@ export function SingleCourse() {
     const [active, setActive] = useState('1')
 
     function toggleTab(tab) {
+        console.log('tab',tab);
         if (active !== tab) {
             setActive(tab)
         }

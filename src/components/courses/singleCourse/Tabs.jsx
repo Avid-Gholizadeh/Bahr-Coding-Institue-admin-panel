@@ -1,9 +1,11 @@
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
-import {Bell, Link, ShoppingCart, Users} from 'react-feather'
+import {Bell, DollarSign, Link, ShoppingCart, Users} from 'react-feather'
 import {ReserveTable} from '../reserve/ReserveTable'
 import {StudentsTable} from './StudentsTable'
 import {GroupsTable} from '../groups/GroupsTable'
-import {CourseComment} from '@Components/commentMng/CourseComment'
+import {CourseComment} from '../../commentMng/CourseComment'
+import { CoursePaymentStatus } from './CoursePaymentStatus'
+import { CoursePaymentList } from './CoursePaymentList'
 
 export function Tabs({active, toggleTab, singleCourseId, course}) {
     return (
@@ -33,6 +35,18 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                         <span className="fw-bold">نظرات</span>
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink active={active === '5'} onClick={() => toggleTab('5')}>
+                        <DollarSign className="font-medium-3 me-50" />
+                        <span className="fw-bold">لیست وضعیت پرداخت</span>
+                    </NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink active={active === '6'} onClick={() => toggleTab('6')}>
+                        <DollarSign className="font-medium-3 me-50" />
+                        <span className="fw-bold">لیست پرداخت</span>
+                    </NavLink>
+                </NavItem>
             </Nav>
             <TabContent activeTab={active}>
                 <TabPane tabId="1">
@@ -46,6 +60,12 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                 </TabPane>
                 <TabPane tabId="4">
                     <CourseComment singleCourse />
+                </TabPane>
+                <TabPane tabId="5">
+                    <CoursePaymentStatus singleCourseId={singleCourseId}/>
+                </TabPane>
+                <TabPane tabId="6">
+                    <CoursePaymentList singleCourseId={singleCourseId}/>
                 </TabPane>
             </TabContent>
         </>

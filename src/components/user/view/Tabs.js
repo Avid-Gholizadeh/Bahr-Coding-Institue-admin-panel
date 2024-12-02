@@ -5,7 +5,7 @@ import {Fragment} from 'react'
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
 
 // ** Icons Imports
-import {User, Lock, Bookmark, Link, Target, Book, FileText} from 'react-feather'
+import {User, Lock, Bookmark, Link, Target, Book, FileText, DollarSign, MessageSquare} from 'react-feather'
 
 // ** User Components
 
@@ -14,6 +14,7 @@ import UserProjectsList from './UserProjectsList'
 import {MoreDetail} from './MoreDetail'
 import {UserCourseReserve} from './UserCourseReserve'
 import {UserComment} from './UserComment'
+import { UserPayments } from './UserPayments'
 
 const UserTabs = ({active, toggleTab, user}) => {
     return (
@@ -34,7 +35,7 @@ const UserTabs = ({active, toggleTab, user}) => {
                 <NavItem>
                     <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
                         <Target className="font-medium-3 me-50" />
-                        <span className="fw-bold"> نقش ها</span>
+                        <span className="fw-bold"> نقش </span>
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -45,8 +46,14 @@ const UserTabs = ({active, toggleTab, user}) => {
                 </NavItem>
                 <NavItem>
                     <NavLink active={active === '5'} onClick={() => toggleTab('5')}>
-                        <FileText className="font-medium-3 me-50" />
-                        <span className="fw-bold"> کامنت های کاربر </span>
+                        <MessageSquare className="font-medium-3 me-50" />
+                        <span className="fw-bold"> کامنت کاربر </span>
+                    </NavLink>
+                </NavItem>
+                <NavItem>
+                    <NavLink active={active === '6'} onClick={() => toggleTab('6')}>
+                        <DollarSign className="font-medium-3 me-50" />
+                        <span className="fw-bold"> پرداخت کاربر </span>
                     </NavLink>
                 </NavItem>
             </Nav>
@@ -65,6 +72,9 @@ const UserTabs = ({active, toggleTab, user}) => {
                 </TabPane>
                 <TabPane tabId="5">
                     <UserComment userId={user.id} />
+                </TabPane>
+                <TabPane tabId="6">
+                    <UserPayments userId={user.id} />
                 </TabPane>
             </TabContent>
         </Fragment>
