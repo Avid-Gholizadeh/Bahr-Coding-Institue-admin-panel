@@ -43,6 +43,7 @@ const CreateArticle = lazy(() => import('../../pages/articles/CreateArticle'))
 const ArticleDetails = lazy(() => import('../../pages/articles/ArticleDetails'))
 const ArticleCategories = lazy(() => import('../../pages/articles/ArticleCategories'))
 const CategoryDetail = lazy(() => import('../../pages/articles/CategoryDetail'))
+const Buildings = lazy(() => import('../../pages/Buildings'))
 
 // ** Merge Routes
 const Routes = [
@@ -94,6 +95,10 @@ const Routes = [
     {
         path: '/article-category/:id',
         element: <CategoryDetail />,
+    },
+    {
+        path: '/buildings',
+        element: <Buildings />,
     },
     {
         path: '/login',

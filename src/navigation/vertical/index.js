@@ -1,4 +1,4 @@
-import {Home, Circle, User, Table, Book} from 'react-feather'
+import {Home, Circle, User, Table, Book, Codesandbox} from 'react-feather'
 
 const array = [
     {
@@ -82,6 +82,12 @@ const array = [
                 navLink: '/article-categories',
             },
         ],
+    },
+    {
+        id: 'Buildings',
+        title: ' مدیریت ساختمان ها',
+        icon: <Codesandbox size={12} />,
+        navLink: '/buildings',
     },
 ]
 

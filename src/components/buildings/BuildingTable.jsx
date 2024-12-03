@@ -1,68 +1,52 @@
 import DataTable from 'react-data-table-component'
-import {Card, Spinner} from 'reactstrap'
-import {ChevronDown} from 'react-feather'
-import {useQuery} from '@tanstack/react-query'
-
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
-import {CustomPagination} from '@Components/common/CustomPagination'
-import {useRef, useState} from 'react'
-
-import {getNewsCategoryList} from '@core/services/api/article'
-import {useCategoriesColumn} from './useCategoriesColumn'
+import {ChevronDown} from 'react-feather'
+import {Card, CardBody, Spinner} from 'reactstrap'
 import {CustomHeader} from '@Components/courses/reserve/CustomHeader'
-import {CreateCategoryModal} from './CreateCategoryModal'
+import {useState} from 'react'
+import {useBuildingColumns} from './useBuildingColumns'
+import {CustomPagination} from '@Components/common/CustomPagination'
+import {useQuery} from '@tanstack/react-query'
+import {getAllBuildings} from '@core/services/api/buildings'
+import {CreateBuildingModal} from './CreateBuildingModal'
 
-export function CategoriesTable() {
+export function BuildingTable() {
     //
-    const [showEdit, setShowEdit] = useState({currentCategory: null, show: false, isEdit: false})
     const [currentPage, setCurrentPage] = useState(1)
+    const [showEdit, setShowEdit] = useState({currentBuilding: null, show: false, isEdit: false})
     const [rowsPerPage, setRowsPerpage] = useState(10)
     const [searchTerm, setSearchTerm] = useState(null)
-    const [sort, setSort] = useState({insertDate: false, direction: 'desc'})
-    const columns = useCategoriesColumn({handleModalOpen})
+    const [sort, setSort] = useState({workDate: false, active: false, direction: 'desc'})
+    const columns = useBuildingColumns({handleModalOpen})
 
-    function handleModalOpen(category) {
-        setShowEdit({
-            currentCategory: category,
-            show: true,
-            isEdit: category.iconAddress ? true : false,
-        })
-    }
-
-    let {data: articleCategories, isLoading} = useQuery({
-        queryKey: ['news-category-list'],
-        queryFn: getNewsCategoryList,
+    const {data: buildings, isLoading} = useQuery({
+        queryKey: ['all-buildings-list'],
+        queryFn: getAllBuildings,
     })
 
-    let filteredReserves = articleCategories ? [...articleCategories] : []
+    let filteredReserves = buildings ? [...buildings] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
-        filteredReserves = articleCategories.filter(
-            item =>
-                item.categoryName?.includes(searchTerm) ||
-                item.googleTitle?.includes(searchTerm) ||
-                item.googleDescribe?.includes(searchTerm)
-        )
-    }
-
-    const handlePagination = page => {
-        setCurrentPage(page.selected + 1)
-    }
-
-    function handlePerPage(e) {
-        const value = parseInt(e.currentTarget.value)
-        setRowsPerpage(value)
+        filteredReserves = buildings.filter(item => item.buildingName?.includes(searchTerm))
     }
 
     function dataToRender() {
-        if (articleCategories) {
+        if (buildings) {
             const allData = [...filteredReserves]
 
-            if (sort.insertDate) {
-                if (sort.direction === 'desc') {
-                    allData.sort((a, b) => new Date(a.insertDate) - new Date(b.insertDate))
+            if (sort.workDate || sort.active) {
+                if (sort.workDate) {
+                    if (sort.direction === 'desc') {
+                        allData.sort((a, b) => new Date(a.workDate) - new Date(b.workDate))
+                    } else {
+                        allData.sort((a, b) => new Date(b.workDate) - new Date(a.workDate))
+                    }
                 } else {
-                    allData.sort((a, b) => new Date(b.insertDate) - new Date(a.insertDate))
+                    if (sort.direction === 'desc') {
+                        allData.sort((a, b) => Number(a.active) - Number(b.active))
+                    } else {
+                        allData.sort((a, b) => Number(b.active) - Number(a.active))
+                    }
                 }
             }
 
@@ -73,15 +57,33 @@ export function CategoriesTable() {
         }
     }
 
+    function handleModalOpen(building) {
+        setShowEdit({
+            currentBuilding: building,
+            show: true,
+            isEdit: building.buildingName ? true : false,
+        })
+    }
+
+    function handleSort(column, sortDirection) {
+        if (column.sortField === 'workDate') {
+            setSort({workDate: true, active: false, direction: sortDirection})
+        } else {
+            setSort({workDate: false, active: true, direction: sortDirection})
+        }
+    }
+
+    const handlePagination = page => {
+        setCurrentPage(page.selected + 1)
+    }
+    function handlePerPage(e) {
+        const value = parseInt(e.currentTarget.value)
+        setRowsPerpage(value)
+    }
     function handleSearch(val) {
         setSearchTerm(val)
         setCurrentPage(1)
     }
-
-    function handleSort(_, sortDirection) {
-        setSort({insertDate: true, direction: sortDirection})
-    }
-
     function Pagination() {
         return (
             <>
@@ -94,9 +96,13 @@ export function CategoriesTable() {
             </>
         )
     }
-
     return (
         <>
+            <Card>
+                <CardBody>
+                    <h1 className="text-primary"> ساختمان ها</h1>
+                </CardBody>
+            </Card>
             <Card className="overflow-hidden">
                 <div className="react-dataTable app-user-list">
                     <DataTable
@@ -122,17 +128,16 @@ export function CategoriesTable() {
                                 RowsOfPage={rowsPerPage}
                                 handlePerPage={handlePerPage}
                                 onSearch={handleSearch}
-                                title="دسته‌بندی"
+                                title="ساختمان"
                                 handleToggleModal={handleModalOpen}
-                                buttonText="ایجاد دسته‌ بندی"
-                                isArticleCategory
+                                buttonText="ایجاد ساختمان جدید"
                             />
                         }
                     />
                 </div>
             </Card>
 
-            <CreateCategoryModal
+            <CreateBuildingModal
                 key={showEdit.isEdit}
                 showEdit={showEdit}
                 setShowEdit={setShowEdit}

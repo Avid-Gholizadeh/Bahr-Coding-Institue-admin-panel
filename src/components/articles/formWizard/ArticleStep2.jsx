@@ -1,11 +1,8 @@
-import {getNewsCategoryList} from '@core/services/api/article'
-import {useQuery} from '@tanstack/react-query'
 import {Controller, useForm} from 'react-hook-form'
 import {Button, Col, Form, Label, Row, Input, Spinner} from 'reactstrap'
 import Select from 'react-select'
 import {selectThemeColors} from '@utils'
 import {ArrowLeft, ArrowRight} from 'react-feather'
-import {useMemo} from 'react'
 
 export function ArticleStep2({stepper, handleFromData, isEdit, articleData}) {
     //

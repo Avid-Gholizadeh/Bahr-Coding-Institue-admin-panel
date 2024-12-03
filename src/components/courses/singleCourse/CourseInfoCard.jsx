@@ -26,6 +26,7 @@ import {activeAndDeactive, changeCourseStatus, deleteCourse} from '@core/service
 import toast from 'react-hot-toast'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import {RichTextDecoder} from '@Components/common/RichTextDecoder'
+import {Link} from 'react-router-dom'
 
 export function CourseInfoCard({course}) {
     const queryClient = useQueryClient()
@@ -35,6 +36,8 @@ export function CourseInfoCard({course}) {
     const {mutate: deleteMutate, isPending: deletePending} = useMutation({
         mutationFn: deleteCourse,
     })
+
+    console.log(course)
 
     const {handleDeleteAlert} = useSweetDelAlert({
         actionFn: courseId => handleDeleteCourse(courseId),
@@ -237,7 +240,14 @@ export function CourseInfoCard({course}) {
                             </li>
                             <li className="mb-75">
                                 <span className="fw-bolder me-25">نام مدرس:</span>
-                                <span className="text-capitalize">{course.teacherName}</span>
+                                <Link
+                                    to={`/user/view/${course.teacherId}`}
+                                    className="user_name text-body"
+                                >
+                                    <span className="fw-bolder text-info">
+                                        {course.teacherName}
+                                    </span>
+                                </Link>
                             </li>
                             <li className="mb-75">
                                 <span className="fw-bolder me-25">تاریخ شروع:</span>
