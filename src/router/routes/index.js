@@ -44,6 +44,7 @@ const ArticleDetails = lazy(() => import('../../pages/articles/ArticleDetails'))
 const ArticleCategories = lazy(() => import('../../pages/articles/ArticleCategories'))
 const CategoryDetail = lazy(() => import('../../pages/articles/CategoryDetail'))
 const PaymentsPage = lazy(() => import('../../pages/Payments'))
+const Buildings = lazy(() => import('../../pages/Buildings'))
 
 // ** Merge Routes
 const Routes = [
@@ -113,6 +114,10 @@ const Routes = [
         path: '/payments',
     },
     {
+        path: '/buildings',
+        element: <Buildings />,
+    },
+    {
         path: '/login',
         element: <Login />,
         meta: {
@@ -147,7 +152,6 @@ const Routes = [
             layout: 'blank',
         },
     },
-
 ]
 
 const getRouteMeta = route => {

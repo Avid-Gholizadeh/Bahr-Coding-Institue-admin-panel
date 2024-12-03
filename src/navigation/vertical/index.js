@@ -1,5 +1,4 @@
-import { title } from 'process'
-import {Home, Circle, User, Table, Book, DollarSign} from 'react-feather'
+import {Home, Circle, User, Table, Book, Codesandbox, DollarSign} from 'react-feather'
 
 const array = [
     {
@@ -86,10 +85,16 @@ const array = [
     },
     {
         id: 'payments',
-        title:'پرداخت ها',
-        icon: <DollarSign size={12}/>,
+        title: 'پرداخت ها',
+        icon: <DollarSign size={12} />,
         navLink: '/payments',
-    }
+    },
+    {
+        id: 'Buildings',
+        title: ' مدیریت ساختمان ها',
+        icon: <Codesandbox size={12} />,
+        navLink: '/buildings',
+    },
 ]
 
 export default array

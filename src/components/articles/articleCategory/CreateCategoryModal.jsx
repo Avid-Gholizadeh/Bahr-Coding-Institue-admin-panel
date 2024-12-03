@@ -49,7 +49,7 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
             if (data.success) {
                 queryClient.invalidateQueries(['news-category-list'])
                 toast.success('دسته بندی با موفقیت ساخته شد')
-                setShowEdit({currentCourseId: null, show: false, isEdit: false})
+                setShowEdit({currentCategory: null, show: false, isEdit: false})
             } else {
                 toast.error(data.message)
             }
@@ -66,7 +66,7 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
             if (data.success) {
                 queryClient.invalidateQueries(['news-category-list'])
                 toast.success('دسته بندی با موفقیت ویرایش شد')
-                setShowEdit({currentCourseId: null, show: false, isEdit: false})
+                setShowEdit({currentCategory: null, show: false, isEdit: false})
             } else {
                 toast.error(data.message)
             }
@@ -98,16 +98,18 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
         <>
             <Modal
                 isOpen={showEdit.show}
-                toggle={() => setShowEdit({currentCourseId: null, show: false, isEdit: false})}
+                toggle={() => setShowEdit({currentCategory: null, show: false, isEdit: false})}
                 backdrop="static"
                 className="modal-dialog-centered modal-xl"
             >
                 <ModalHeader
                     className="bg-transparent"
-                    toggle={() => setShowEdit({currentCourseId: null, show: false, isEdit: false})}
+                    toggle={() => setShowEdit({currentCategory: null, show: false, isEdit: false})}
                 ></ModalHeader>
                 <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
-                    <h1 className="text-center mb-3">ایجاد دسته بندی جدید</h1>
+                    <h1 className="text-center mb-3">
+                        {showEdit.isEdit ? 'ویرایش دسته بندی' : 'ایجاد دسته بندی جدید'}
+                    </h1>
 
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Row>
@@ -319,7 +321,7 @@ export function CreateCategoryModal({showEdit, setShowEdit}) {
                                     outline
                                     onClick={() =>
                                         setShowEdit({
-                                            currentCourseId: null,
+                                            currentCategory: null,
                                             show: false,
                                             isEdit: false,
                                         })
