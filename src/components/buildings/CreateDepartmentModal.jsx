@@ -26,6 +26,18 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
         queryFn: getAllBuildings,
     })
 
+    const defaultValues = showEdit.isEdit
+        ? {
+              id: showEdit.currentDepartment.id,
+              depName: showEdit.currentDepartment.depName,
+              buildingId: {
+                  value: showEdit.currentDepartment.buildingId,
+                  label: buildings?.find(item => item.id === showEdit.currentDepartment.buildingId)
+                      .buildingName,
+              },
+          }
+        : null
+
     const {mutate: createMutate, isPending: createPending} = useMutation({
         mutationFn: createDepartment,
         onSuccess: data => {
@@ -65,7 +77,7 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
         handleSubmit,
         formState: {errors},
     } = useForm({
-        /*  defaultValues, */
+        defaultValues,
     })
 
     const options = buildings?.map(item => ({value: item.id, label: item.buildingName}))
@@ -74,7 +86,8 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
         data = {...data, buildingId: data.buildingId.value}
 
         if (showEdit.isEdit) {
-            // updateMutate(data)
+            console.log(data)
+            updateMutate(data)
         } else {
             createMutate(data)
         }
