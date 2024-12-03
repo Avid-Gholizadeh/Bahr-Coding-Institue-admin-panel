@@ -1,5 +1,5 @@
 import { title } from 'process'
-import {Home, Circle, User, Table, Book, DollarSign} from 'react-feather'
+import {Home, Circle, User, Table, Book, DollarSign, Grid} from 'react-feather'
 
 const array = [
     {
@@ -27,6 +27,13 @@ const array = [
         icon: <Book size={20} />,
         // navLink: '/courses',
         children: [
+
+            {
+                id: 'general',
+                title: 'اطلاعات کلی',
+                icon: <Circle className="ms-1" size={20} />,
+                navLink: '/courses-general',
+            },
             {
                 id: 'courses',
                 title: 'لیست دوره ها',
@@ -89,7 +96,8 @@ const array = [
         title:'پرداخت ها',
         icon: <DollarSign size={12}/>,
         navLink: '/payments',
-    }
+    },
+
 ]
 
 export default array
