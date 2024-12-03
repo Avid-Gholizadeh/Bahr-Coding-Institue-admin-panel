@@ -92,8 +92,8 @@ function AllPayments() {
     }
 
   return (
-    <Card>
-    <div className="react-dataTable">
+    <Card className="overflow-hidden">
+    <div className="react-dataTable app-user-list" >
         <DataTable
             noHeader
             subHeader

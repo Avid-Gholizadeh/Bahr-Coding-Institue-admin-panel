@@ -3,23 +3,20 @@ import {
     CardImg,
     CardTitle,
     CardImgOverlay,
-    CardText,
     Button,
-    CardFooter,
-    CardBody,
+
 } from 'reactstrap'
 import courseLevelPic from '@src/assets/images/courseLevelPic.webp'
-import {convertGrigorianDateToJalaali} from '@core/utils/formatter.utils'
-import {Edit, Edit2, Edit3} from 'react-feather'
+import { Edit3} from 'react-feather'
 
-export function LevelsCard({Levels, handleModalOpen}) {
+export function LevelsCard({Level, handleOpenModal}) {
     return (
         <>
             <Card className="text-white border-0 cursor-pointer hover-scale">
                 <CardImg top src={courseLevelPic} alt="card-overlay" className="card-img" />
 
                 <CardImgOverlay className="bg-overlay">
-                    <CardTitle className="fs-2 mb-2">{Levels.levelName}</CardTitle>
+                    <CardTitle className="fs-2 mb-2">{Level.levelName}</CardTitle>
 
                     <hr className="text-white w-75" />
 
@@ -27,7 +24,7 @@ export function LevelsCard({Levels, handleModalOpen}) {
                         <Button.Ripple
                             className="btn-icon"
                             color="primary"
-                            onClick={() => handleModalOpen(Levels)}
+                            onClick={() => handleOpenModal(Level)}
                         >
                             <Edit3 size={20} />
                         </Button.Ripple>
