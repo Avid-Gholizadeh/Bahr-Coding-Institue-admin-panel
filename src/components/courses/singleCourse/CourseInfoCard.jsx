@@ -37,7 +37,7 @@ export function CourseInfoCard({course}) {
         mutationFn: deleteCourse,
     })
 
-    console.log(course)
+    // console.log(course)
 
     const {handleDeleteAlert} = useSweetDelAlert({
         actionFn: courseId => handleDeleteCourse(courseId),
