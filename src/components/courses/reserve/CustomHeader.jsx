@@ -66,7 +66,7 @@ export function CustomHeader({
                             <label htmlFor="rows-per-page">{title} در صفحه</label>
                         </div>
                     )}
-                    {isArticleCategory && (
+                    {buttonText && (
                         <Button
                             className="add-new-user ms-1"
                             color="primary"

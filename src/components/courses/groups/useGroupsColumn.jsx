@@ -1,6 +1,6 @@
 import Avatar from '@components/avatar'
 import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
-import {Badge, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
+import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
 import CourseFallback from '../../../assets/images/courses-fallback.jpg'
 import {Link} from 'react-router-dom'
 import {useMutation, useQueryClient} from '@tanstack/react-query'

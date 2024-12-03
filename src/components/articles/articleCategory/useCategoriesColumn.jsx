@@ -1,17 +1,9 @@
 import Avatar from '@components/avatar'
-import {Archive, CheckCircle, FileText, MoreVertical, Trash2, XCircle} from 'react-feather'
+import {Archive, FileText, MoreVertical, Trash2} from 'react-feather'
 import {Link} from 'react-router-dom'
-import {
-    Badge,
-    Button,
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-    UncontrolledDropdown,
-} from 'reactstrap'
+import {DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown} from 'reactstrap'
 import {convertGrigorianDateToJalaali, isValidUrl} from '../../../@core/utils/formatter.utils'
 import CategoriesFallback from '../../../assets/images/categories-fallback.jpeg'
-import {useMutation, useQueryClient} from '@tanstack/react-query'
 import {createPortal} from 'react-dom'
 
 const PortalDropdownMenu = ({children}) => {
@@ -20,7 +12,6 @@ const PortalDropdownMenu = ({children}) => {
 
 export function useCategoriesColumn({handleModalOpen}) {
     //
-    const queryClient = useQueryClient()
 
     const renderCourseAvatar = row => {
         return (
