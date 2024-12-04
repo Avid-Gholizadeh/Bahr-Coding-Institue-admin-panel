@@ -64,3 +64,30 @@ export async function updateDepartment(data) {
         throw new Error(error)
     }
 }
+export async function getAllClassRooms() {
+    try {
+        const response = await api.get('/ClassRoom')
+
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+export async function createClassRoom(data) {
+    try {
+        const response = await api.post('/ClassRoom', data)
+
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+export async function updateClassRoom(data) {
+    try {
+        const response = await api.put('/ClassRoom', data)
+
+        return response
+    } catch (error) {
+        throw new Error(error)
+    }
+}

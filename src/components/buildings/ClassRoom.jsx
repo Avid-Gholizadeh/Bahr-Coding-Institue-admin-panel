@@ -1,42 +1,42 @@
-import {getAllDepartments} from '@core/services/api/buildings'
 import {useQuery} from '@tanstack/react-query'
 import {Col, Container, Row} from 'reactstrap'
-import {DepartmentCard} from './DepartmentCard'
 import {CreateDepartmentModal} from './CreateDepartmentModal'
 import {useState} from 'react'
 import {CustomPagination} from '@Components/common/CustomPagination'
 import {CardViewHeader} from '@Components/common/CardViewHeader'
+import {getAllClassRooms} from '@core/services/api/buildings'
+import {ClassRoomCard} from './ClassRoomCard'
+import {CreateClassRoomModal} from './CreateClassRoomModal'
 
-export function Department() {
-    //
-    const [showEdit, setShowEdit] = useState({currentDepartment: null, show: false, isEdit: false})
+export function ClassRoom() {
+    const [showEdit, setShowEdit] = useState({currentClassRoom: null, show: false, isEdit: false})
     const [searchTerm, setSearchTerm] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerpage] = useState(6)
 
-    const {data: departments, isLoading} = useQuery({
-        queryKey: ['all-departments-list'],
-        queryFn: getAllDepartments,
+    const {data: classRooms, isLoading} = useQuery({
+        queryKey: ['all-classRoom-list'],
+        queryFn: getAllClassRooms,
     })
 
-    let filteredDepartments = departments ? [...departments] : []
+    let filteredClassRooms = classRooms ? [...classRooms] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
-        filteredDepartments = departments.filter(
+        filteredClassRooms = classRooms.filter(
             item => item.depName?.includes(searchTerm) || item.buildingName?.includes(searchTerm)
         )
     }
 
-    function handleModalOpen(department) {
+    function handleModalOpen(classRoom) {
         setShowEdit({
-            currentDepartment: department,
+            currentClassRoom: classRoom,
             show: true,
-            isEdit: department.depName ? true : false,
+            isEdit: classRoom.classRoomName ? true : false,
         })
     }
 
     function dataToRender() {
-        if (departments) {
-            const allData = [...filteredDepartments]
+        if (classRooms) {
+            const allData = [...filteredClassRooms]
 
             return allData?.filter(
                 (_, index) =>
@@ -63,27 +63,27 @@ export function Department() {
                 rowsPerPage={rowsPerPage}
                 handlePerPage={handlePerPage}
                 handleModalOpen={handleModalOpen}
-                title={'دپارتمان'}
+                title={'کلاس'}
             />
 
             <Container fluid>
                 <Row>
                     {dataToRender()?.map(item => (
                         <Col xs="12" sm="12" md="6" xl="4">
-                            <DepartmentCard department={item} handleModalOpen={handleModalOpen} />
+                            <ClassRoomCard classRoom={item} handleModalOpen={handleModalOpen} />
                         </Col>
                     ))}
                 </Row>
             </Container>
 
             <CustomPagination
-                totalItem={filteredDepartments.length}
+                totalItem={filteredClassRooms.length}
                 rowsPerPage={rowsPerPage}
                 currentPage={currentPage}
                 handlePagination={handlePagination}
             />
 
-            <CreateDepartmentModal
+            <CreateClassRoomModal
                 key={showEdit.isEdit}
                 showEdit={showEdit}
                 setShowEdit={setShowEdit}

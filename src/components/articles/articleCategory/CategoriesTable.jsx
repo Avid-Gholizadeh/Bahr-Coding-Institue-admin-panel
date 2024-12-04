@@ -35,9 +35,9 @@ export function CategoriesTable() {
         queryFn: getNewsCategoryList,
     })
 
-    let filteredReserves = articleCategories ? [...articleCategories] : []
+    let filteredCategories = articleCategories ? [...articleCategories] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
-        filteredReserves = articleCategories.filter(
+        filteredCategories = articleCategories.filter(
             item =>
                 item.categoryName?.includes(searchTerm) ||
                 item.googleTitle?.includes(searchTerm) ||
@@ -56,7 +56,7 @@ export function CategoriesTable() {
 
     function dataToRender() {
         if (articleCategories) {
-            const allData = [...filteredReserves]
+            const allData = [...filteredCategories]
 
             if (sort.insertDate) {
                 if (sort.direction === 'desc') {
@@ -86,7 +86,7 @@ export function CategoriesTable() {
         return (
             <>
                 <CustomPagination
-                    totalItem={filteredReserves.length}
+                    totalItem={filteredCategories.length}
                     rowsPerPage={rowsPerPage}
                     currentPage={currentPage}
                     handlePagination={handlePagination}

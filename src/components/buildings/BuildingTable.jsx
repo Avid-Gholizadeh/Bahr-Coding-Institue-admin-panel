@@ -25,14 +25,14 @@ export function BuildingTable() {
         queryFn: getAllBuildings,
     })
 
-    let filteredReserves = buildings ? [...buildings] : []
+    let filteredBuildings = buildings ? [...buildings] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
-        filteredReserves = buildings.filter(item => item.buildingName?.includes(searchTerm))
+        filteredBuildings = buildings.filter(item => item.buildingName?.includes(searchTerm))
     }
 
     function dataToRender() {
         if (buildings) {
-            const allData = [...filteredReserves]
+            const allData = [...filteredBuildings]
 
             if (sort.workDate || sort.active) {
                 if (sort.workDate) {
@@ -88,7 +88,7 @@ export function BuildingTable() {
         return (
             <>
                 <CustomPagination
-                    totalItem={filteredReserves.length}
+                    totalItem={filteredBuildings.length}
                     rowsPerPage={rowsPerPage}
                     currentPage={currentPage}
                     handlePagination={handlePagination}

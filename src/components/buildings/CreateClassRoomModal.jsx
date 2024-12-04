@@ -13,11 +13,17 @@ import {
 } from 'reactstrap'
 import Select from 'react-select'
 import {selectThemeColors} from '@utils'
-import {createDepartment, getAllBuildings, updateDepartment} from '@core/services/api/buildings'
+import {
+    createClassRoom,
+    createDepartment,
+    getAllBuildings,
+    updateClassRoom,
+    updateDepartment,
+} from '@core/services/api/buildings'
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-export function CreateDepartmentModal({showEdit, setShowEdit}) {
+export function CreateClassRoomModal({showEdit, setShowEdit}) {
     //
     const queryClient = useQueryClient()
 
@@ -28,23 +34,24 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
 
     const defaultValues = showEdit.isEdit
         ? {
-              id: showEdit.currentDepartment.id,
-              depName: showEdit.currentDepartment.depName,
+              id: showEdit.currentClassRoom.id,
+              classRoomName: showEdit.currentClassRoom.classRoomName,
               buildingId: {
-                  value: showEdit.currentDepartment.buildingId,
-                  label: buildings?.find(item => item.id === showEdit.currentDepartment.buildingId)
+                  value: showEdit.currentClassRoom.buildingId,
+                  label: buildings?.find(item => item.id === showEdit.currentClassRoom.buildingId)
                       .buildingName,
               },
+              capacity: showEdit.currentClassRoom.capacity,
           }
         : null
 
     const {mutate: createMutate, isPending: createPending} = useMutation({
-        mutationFn: createDepartment,
+        mutationFn: createClassRoom,
         onSuccess: data => {
             if (data.success) {
-                queryClient.invalidateQueries(['all-departments-list'])
-                toast.success('دپارتمان با موفقیت ساخته شد')
-                setShowEdit({currentDepartment: null, show: false, isEdit: false})
+                queryClient.invalidateQueries(['all-classRoom-list'])
+                toast.success('کلاس با موفقیت ساخته شد')
+                setShowEdit({currentClassRoom: null, show: false, isEdit: false})
             } else {
                 toast.error(data.message)
             }
@@ -56,12 +63,12 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
     })
 
     const {mutate: updateMutate, isPending: updatePending} = useMutation({
-        mutationFn: updateDepartment,
+        mutationFn: updateClassRoom,
         onSuccess: data => {
             if (data.success) {
-                queryClient.invalidateQueries(['all-departments-list'])
-                toast.success('دپارتمان با موفقیت ویرایش شد')
-                setShowEdit({currentDepartment: null, show: false, isEdit: false})
+                queryClient.invalidateQueries(['all-classRoom-list'])
+                toast.success('کلاس با موفقیت ویرایش شد')
+                setShowEdit({currentClassRoom: null, show: false, isEdit: false})
             } else {
                 toast.error(data.message)
             }
@@ -86,7 +93,6 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
         data = {...data, buildingId: data.buildingId.value}
 
         if (showEdit.isEdit) {
-            console.log(data)
             updateMutate(data)
         } else {
             createMutate(data)
@@ -96,30 +102,28 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
         <>
             <Modal
                 isOpen={showEdit.show}
-                toggle={() => setShowEdit({currentDepartment: null, show: false, isEdit: false})}
+                toggle={() => setShowEdit({currentClassRoom: null, show: false, isEdit: false})}
                 backdrop="static"
                 className="modal-dialog-centered modal-lg"
             >
                 <ModalHeader
                     className="bg-transparent"
-                    toggle={() =>
-                        setShowEdit({currentDepartment: null, show: false, isEdit: false})
-                    }
+                    toggle={() => setShowEdit({currentClassRoom: null, show: false, isEdit: false})}
                 ></ModalHeader>
                 <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 30}}>
                     <h1 className="text-center mb-3">
-                        {showEdit.isEdit ? 'ویرایش دپارتمان' : 'ایجاد دپارتمان جدید'}
+                        {showEdit.isEdit ? 'ویرایش کلاس' : 'ایجاد کلاس جدید'}
                     </h1>
 
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Row>
                             <Col md="6" className="mb-1">
-                                <Label className="form-label fs-5" for="depName">
-                                    نام دپارتمان
+                                <Label className="form-label fs-5" for="classRoomName">
+                                    نام کلاس
                                 </Label>
                                 <Controller
-                                    id="depName"
-                                    name="depName"
+                                    id="classRoomName"
+                                    name="classRoomName"
                                     control={control}
                                     rules={{
                                         required: 'نمی‌تواند خالی باشد',
@@ -133,16 +137,16 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
                                         <Input
                                             {...field}
                                             className="text-right"
-                                            invalid={errors.depName && true}
+                                            invalid={errors.classRoomName && true}
                                         />
                                     )}
                                 />
-                                {errors.depName && (
+                                {errors.classRoomName && (
                                     <p
                                         className="text-danger"
                                         style={{fontSize: '12px', marginTop: '4px'}}
                                     >
-                                        {errors.depName.message}
+                                        {errors.classRoomName.message}
                                     </p>
                                 )}
                             </Col>
@@ -209,6 +213,38 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
                                     </p>
                                 )}
                             </Col>
+                            <Col md="6" className="mb-1">
+                                <Label className="form-label fs-5" for="capacity">
+                                    ظرفیت
+                                </Label>
+                                <Controller
+                                    id="capacity"
+                                    name="capacity"
+                                    control={control}
+                                    rules={{
+                                        required: 'نمی‌تواند خالی باشد',
+                                        pattern: {
+                                            value: /^[0-9]+$/,
+                                            message: 'فقط عدد لاتین قابل قبول است',
+                                        },
+                                    }}
+                                    render={({field}) => (
+                                        <Input
+                                            {...field}
+                                            className="text-right"
+                                            invalid={errors.capacity && true}
+                                        />
+                                    )}
+                                />
+                                {errors.capacity && (
+                                    <p
+                                        className="text-danger"
+                                        style={{fontSize: '12px', marginTop: '4px'}}
+                                    >
+                                        {errors.capacity.message}
+                                    </p>
+                                )}
+                            </Col>
                         </Row>
 
                         <Row>
@@ -229,7 +265,7 @@ export function CreateDepartmentModal({showEdit, setShowEdit}) {
                                     outline
                                     onClick={() =>
                                         setShowEdit({
-                                            currentDepartment: null,
+                                            currentClassRoom: null,
                                             show: false,
                                             isEdit: false,
                                         })

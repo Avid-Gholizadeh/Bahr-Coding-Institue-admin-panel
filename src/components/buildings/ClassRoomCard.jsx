@@ -1,23 +1,30 @@
 import {Card, CardImg, CardTitle, CardImgOverlay, CardText, Button} from 'reactstrap'
-import departmentBg from '@src/assets/images/department-bg.webp'
+import classRoogBg from '@src/assets/images/classRoom-bg.jpg'
 import {convertGrigorianDateToJalaali} from '@core/utils/formatter.utils'
 import {Edit3} from 'react-feather'
 
-export function DepartmentCard({department, handleModalOpen}) {
+export function ClassRoomCard({classRoom, handleModalOpen}) {
     return (
         <>
             <Card className="text-white border-0 cursor-pointer hover-scale">
-                <CardImg top src={departmentBg} alt="card-overlay" className="card-img" />
+                <CardImg
+                    top
+                    src={classRoogBg}
+                    alt="card-overlay"
+                    className="card-img"
+                    height={250}
+                    style={{filter: 'brightness(0.7)'}}
+                />
 
                 <CardImgOverlay className="bg-overlay">
-                    <CardTitle className="fs-2 mb-2">{department.depName}</CardTitle>
-                    <CardText className="fs-5">
+                    <CardTitle className="fs-2 mb-2">{classRoom.classRoomName}</CardTitle>
+
+                    <CardText className="fs-5 d-flex flex-column gap-1">
+                        <span>ساختمان : {classRoom.buildingName}</span>
+                        <span>ظرفیت : {classRoom.capacity}</span>
                         <span>
-                            تاریخ ساخت : {convertGrigorianDateToJalaali(department.insertDate)}
+                            تاریخ ساخت : {convertGrigorianDateToJalaali(classRoom.insertDate)}
                         </span>
-                    </CardText>
-                    <CardText className="fs-5 mt-1">
-                        <span>ساختمان : {department.buildingName}</span>
                     </CardText>
 
                     <hr className="text-white w-75" />
@@ -26,7 +33,7 @@ export function DepartmentCard({department, handleModalOpen}) {
                         <Button.Ripple
                             className="btn-icon"
                             color="primary"
-                            onClick={() => handleModalOpen(department)}
+                            onClick={() => handleModalOpen(classRoom)}
                         >
                             <Edit3 size={16} />
                         </Button.Ripple>

@@ -2,8 +2,8 @@ import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
 import {Codepen, Codesandbox, Database} from 'react-feather'
 import {useState} from 'react'
 import {BuildingTable} from '@Components/buildings/BuildingTable'
-
 import {Department} from './Department'
+import {ClassRoom} from './ClassRoom'
 
 export function Tabs() {
     //
@@ -45,8 +45,9 @@ export function Tabs() {
                 <TabPane tabId="2">
                     <Department />
                 </TabPane>
-                <TabPane tabId="3">{/* <GroupsTable course={course} /> */}</TabPane>
-                <TabPane tabId="4">{/* <CourseComment singleCourse /> */}</TabPane>
+                <TabPane tabId="3">
+                    <ClassRoom />
+                </TabPane>
             </TabContent>
         </>
     )

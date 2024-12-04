@@ -1,6 +1,6 @@
+import {DataCountDropDown} from '@Components/common/DataCountDropDown'
 import {SearchInput} from '@Components/common/SearchInput'
-import {useRef} from 'react'
-import {Button, Col, Input, Row} from 'reactstrap'
+import {Button, Col, Row} from 'reactstrap'
 
 export function CustomHeader({
     handlePerPage,
@@ -23,23 +23,14 @@ export function CustomHeader({
 
                 <Col className="d-flex gap-4 align-items-center justify-content-end">
                     {!singleCourseId && (
-                        <div className="d-flex align-items-center justify-content-end ">
-                            <label htmlFor="rows-per-page">تعداد</label>
-                            <Input
-                                className="mx-50"
-                                type="select"
-                                id="rows-per-page"
-                                value={RowsOfPage}
-                                onChange={handlePerPage}
-                                style={{width: '5rem'}}
-                            >
-                                <option value="10">10</option>
-                                <option value="25">25</option>
-                                <option value="50">50</option>
-                            </Input>
-                            <label htmlFor="rows-per-page">{title} در صفحه</label>
-                        </div>
+                        <DataCountDropDown
+                            RowsOfPage={RowsOfPage}
+                            handlePerPage={handlePerPage}
+                            title={title}
+                            counts={[10, 25, 50]}
+                        />
                     )}
+
                     {buttonText && (
                         <Button
                             className="add-new-user ms-1"
