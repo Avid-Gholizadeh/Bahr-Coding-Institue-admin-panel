@@ -1,11 +1,12 @@
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
-import {Bell, DollarSign, Link, MessageSquare, ShoppingCart, Users} from 'react-feather'
+import {AtSign, Bell, DollarSign, Link, MessageSquare, ShoppingCart, Users} from 'react-feather'
 import {ReserveTable} from '../reserve/ReserveTable'
 import {StudentsTable} from './StudentsTable'
 import {GroupsTable} from '../groups/GroupsTable'
-import {CourseComment} from '../../commentMng/CourseComment'
-import { CoursePaymentStatus } from './CoursePaymentStatus'
-import { CoursePaymentList } from './CoursePaymentList'
+import {CoursePaymentStatus} from './CoursePaymentStatus'
+import {CoursePaymentList} from './CoursePaymentList'
+import {CourseComment} from '@Components/commentMng/CourseComment'
+import {SocialGroups} from './SocialGroups'
 
 export function Tabs({active, toggleTab, singleCourseId, course}) {
     return (
@@ -47,6 +48,12 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                         <span className="fw-bold">لیست پرداخت</span>
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink active={active === '7'} onClick={() => toggleTab('7')}>
+                        <AtSign className="font-medium-3 me-50" />
+                        <span className="fw-bold">فضای مجازی</span>
+                    </NavLink>
+                </NavItem>
             </Nav>
             <TabContent activeTab={active}>
                 <TabPane tabId="1">
@@ -62,10 +69,13 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                     <CourseComment singleCourse />
                 </TabPane>
                 <TabPane tabId="5">
-                    <CoursePaymentStatus singleCourseId={singleCourseId}/>
+                    <CoursePaymentStatus singleCourseId={singleCourseId} />
                 </TabPane>
                 <TabPane tabId="6">
-                    <CoursePaymentList singleCourseId={singleCourseId}/>
+                    <CoursePaymentList singleCourseId={singleCourseId} />
+                </TabPane>
+                <TabPane tabId="7">
+                    <SocialGroups />
                 </TabPane>
             </TabContent>
         </>
