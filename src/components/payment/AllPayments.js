@@ -8,6 +8,8 @@ import { Badge, Button, Card, Spinner } from 'reactstrap';
 import { CustomHeader } from '@Components/courses/reserve/CustomHeader';
 import { ModalPayment } from './ModalPayment';
 import moment from 'jalali-moment';
+import '@styles/react/libs/tables/react-dataTable-component.scss'
+import '@styles/react/libs/react-select/_react-select.scss'
 
 function AllPayments() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -148,7 +150,7 @@ function AllPayments() {
       ),
     },
     {
-      name: 'نام گروه',
+      name: 'دانشجو',
       minWidth: '100px',
       cell: (row) => (
         <span className="d-inline-block text-truncate">{row.studentName}</span>
