@@ -3,6 +3,7 @@ import {Codepen, Codesandbox, Database} from 'react-feather'
 import {useState} from 'react'
 import Levels from './Levels'
 import Technology from './technology/Technology'
+import Status from './statuse/Status'
 
 
 export default function Tabs() {
@@ -33,7 +34,7 @@ export default function Tabs() {
                 <NavItem>
                     <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
                         <Database className="font-medium-3 me-50" />
-                        <span className="fw-bold">وضعیت </span>
+                        <span className="fw-bold">استاتوس </span>
                     </NavLink>
                 </NavItem>
             </Nav>
@@ -45,7 +46,9 @@ export default function Tabs() {
                 <TabPane tabId="2">
                     <Technology/>
                 </TabPane>
-                <TabPane tabId="3">{/* <GroupsTable course={course} /> */}</TabPane>
+                <TabPane tabId="3">
+                    <Status/>
+                </TabPane>
                 <TabPane tabId="4">{/* <CourseComment singleCourse /> */}</TabPane>
             </TabContent>
         </>

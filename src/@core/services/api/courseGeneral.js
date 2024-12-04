@@ -74,3 +74,30 @@ export async function updateTech(dataObj){
         console.log(error);
     }
 }
+
+export async function getStatus(){
+    try {
+        const response = await api.get('/Status')
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function createStatus(dataObj){
+    try {
+        const response = await api.post('/Status', dataObj);
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
+export async function updateStatus(dataObj){
+    try {
+        const response = await api.put('/Status', dataObj);
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
+

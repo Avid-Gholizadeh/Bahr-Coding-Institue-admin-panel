@@ -53,7 +53,6 @@ export default function TechModal({show, setShow, selectedTech}) {
       saveTech(payload);
     }
   }
-  console.log(selectedTech?.id);
   return (
     <Modal
       isOpen={show}

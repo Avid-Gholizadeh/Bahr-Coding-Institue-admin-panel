@@ -12,7 +12,6 @@ export default function Levels() {
         queryKey:['levels'],
         queryFn: getCourseslevels
     })
-    // console.log(allLevels);
     function handleOpenModal(level = null) {
         setSelectedLevel(level); // Set the selected level (null for create)
         setShow(true);
@@ -30,7 +29,7 @@ export default function Levels() {
     <Container fluid>
         <Row>
             {allLevels?.map(item => (
-                <Col xs="12" sm="12" md="6" xl="3" className="">
+                <Col xs="12" sm="12" md="6" xl="4" className="">
                     <LevelsCard Level={item} handleOpenModal={handleOpenModal} />
                 </Col>
             ))}

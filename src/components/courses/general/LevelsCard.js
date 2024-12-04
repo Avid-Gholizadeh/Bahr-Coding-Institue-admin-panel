@@ -16,7 +16,7 @@ export function LevelsCard({Level, handleOpenModal}) {
                 <CardImg top src={courseLevelPic} alt="card-overlay" className="card-img" />
 
                 <CardImgOverlay className="bg-overlay">
-                    <CardTitle className="fs-2 mb-2">{Level.levelName}</CardTitle>
+                    <CardTitle className="fs-2 mb-2">{Level?.levelName}</CardTitle>
 
                     <hr className="text-white w-75" />
 
