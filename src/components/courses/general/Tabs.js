@@ -33,7 +33,7 @@ export default function Tabs() {
                 <NavItem>
                     <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
                         <Database className="font-medium-3 me-50" />
-                        <span className="fw-bold">کلاس </span>
+                        <span className="fw-bold">وضعیت </span>
                     </NavLink>
                 </NavItem>
             </Nav>
