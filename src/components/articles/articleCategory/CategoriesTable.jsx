@@ -113,7 +113,7 @@ export function CategoriesTable() {
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
                         columns={columns}
                         onSort={handleSort}
-                        sortIcon={<ChevronDown className="text-danger" />}
+                        sortIcon={<ChevronDown className="text-success" />}
                         className="react-dataTable"
                         paginationComponent={Pagination}
                         data={dataToRender()}
