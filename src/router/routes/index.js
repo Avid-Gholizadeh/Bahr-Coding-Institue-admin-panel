@@ -35,6 +35,7 @@ const CourseDetail = lazy(() => import('../../pages/course/CourseDetail'))
 const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
 const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
 const AllGroups = lazy(() => import('../../pages/course/AllGroups'))
+const CourseGeneral = lazy(() => import('../../pages/course/General.js'))
 const UserList = lazy(() => import('../../pages/UserList'))
 const UserView = lazy(() => import('../../pages/UserDetail'))
 const ManageComments = lazy(() => import('../../pages/AdminCommentMng'))
@@ -64,6 +65,10 @@ const Routes = [
     {
         path: '/create-course',
         element: <CreateCourse />,
+    },
+    {
+        path: '/courses-general',
+        element: <CourseGeneral />,
     },
     {
         path: '/all-reserves',

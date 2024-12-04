@@ -26,6 +26,13 @@ const array = [
         icon: <Book size={20} />,
         // navLink: '/courses',
         children: [
+
+            {
+                id: 'general',
+                title: 'اطلاعات کلی',
+                icon: <Circle className="ms-1" size={20} />,
+                navLink: '/courses-general',
+            },
             {
                 id: 'courses',
                 title: 'لیست دوره ها',
