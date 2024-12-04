@@ -17,8 +17,8 @@ import {
     convertGrigorianDateToJalaali,
     isValidUrl,
     pirceFormatter,
-} from '../../../@core/utils/formatter.utils'
-import CourseFallback from '../../../assets/images/courses-fallback.jpg'
+} from '@src/@core/utils/formatter.utils'
+import CourseFallback from '@src/assets/images/courses-fallback.jpg'
 import {useState} from 'react'
 import {FormWizard} from '../formWizard/FormWizard'
 import {useMutation, useQueryClient} from '@tanstack/react-query'
@@ -32,6 +32,11 @@ export function CourseInfoCard({course}) {
     const queryClient = useQueryClient()
     const [show, setShow] = useState(false)
     const [courseStatus, setCourseStatus] = useState(course.courseStatusName)
+
+    /*  const { data:allStatus, isLoading:loadingStatus}= useQuery({
+        queryKey:['statuseCards'],
+        queryFn:getStatus
+    }) */
 
     const {mutate: deleteMutate, isPending: deletePending} = useMutation({
         mutationFn: deleteCourse,
@@ -99,6 +104,7 @@ export function CourseInfoCard({course}) {
         if (status === 'شروع ثبت نام') return 'success'
         else if (status === 'منقضی شده') return 'danger'
         else if (status === 'درحال برگزاری') return 'warning'
+        else return 'info'
     }
 
     function handleActiveState() {

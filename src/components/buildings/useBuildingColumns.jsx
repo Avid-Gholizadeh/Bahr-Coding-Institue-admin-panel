@@ -56,14 +56,6 @@ export function useBuildingColumns({handleModalOpen}) {
 
     function handleActiveDeactive(row) {
         mutate({active: !row.active, id: row.id})
-        // toast.promise(
-        //     new Promise((resolve, reject) =>
-        //         mutate({active: !row.active, id: row.id}, {onSuccess: resolve, onError: reject})
-        //     ),
-        //     {
-        //         loading: 'در حال ذخیره...',
-        //     }
-        // )
     }
 
     return [
@@ -93,7 +85,7 @@ export function useBuildingColumns({handleModalOpen}) {
         },
         {
             name: <span className="text-success">تاریخ کار</span>,
-            پهدWidth: '1۰0px',
+            Width: '100px',
             sortable: true,
             sortField: 'workDate',
             selector: row => row.workDate,

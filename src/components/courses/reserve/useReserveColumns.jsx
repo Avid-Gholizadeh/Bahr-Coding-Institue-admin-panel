@@ -131,9 +131,9 @@ export function useReserveColumns({handleModalOpen, singleCourseId}) {
             ),
         },
         {
-            name: <span className="text-success">وضعیت </span>,
+            name: <span className={`${singleCourseId ? '' : 'text-success'}`}>وضعیت </span>,
             minWidth: '100px',
-            sortable: true,
+            sortable: singleCourseId ? false : true,
             sortField: 'accept',
             selector: row => row.accept,
             cell: row => (
