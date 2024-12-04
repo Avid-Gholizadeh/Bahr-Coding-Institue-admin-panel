@@ -2,9 +2,10 @@ import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
 import {Codepen, Codesandbox, Database} from 'react-feather'
 import {useState} from 'react'
 import Levels from './Levels'
+import Technology from './technology/Technology'
 
 
-export function Tabs() {
+export default function Tabs() {
     //
     const [active, setActive] = useState('1')
 
@@ -26,7 +27,7 @@ export function Tabs() {
                 <NavItem>
                     <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
                         <Codepen className="font-medium-3 me-50" />
-                        <span className="fw-bold">ترم ها</span>
+                        <span className="fw-bold">فناوری ها</span>
                     </NavLink>
                 </NavItem>
                 <NavItem>
@@ -42,6 +43,7 @@ export function Tabs() {
                     <Levels />
                 </TabPane>
                 <TabPane tabId="2">
+                    <Technology/>
                 </TabPane>
                 <TabPane tabId="3">{/* <GroupsTable course={course} /> */}</TabPane>
                 <TabPane tabId="4">{/* <CourseComment singleCourse /> */}</TabPane>

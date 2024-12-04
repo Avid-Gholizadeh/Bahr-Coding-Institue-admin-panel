@@ -49,3 +49,28 @@ export async function createTerm(dataObj){
     }
 }
 
+export async function getTechs(){
+    try {
+        const response = await api.get('/Technology')
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
+export async function createTech(dataObj){
+    try {
+        const response = await api.post('/Technology', dataObj);
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function updateTech(dataObj){
+    try {
+        const response = await api.put('/Technology', dataObj);
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
