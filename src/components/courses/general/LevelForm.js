@@ -48,10 +48,6 @@ export default function LevelForm({ control, errors, handleSubmit, onSubmit }) {
             control={control}
             rules={{
               required: 'نمی‌تواند خالی باشد',
-              pattern: {
-                value: /^[a-zA-Z\s]+$/,
-                message: 'فقط حروف لاتین و فاصله قابل قبول است',
-              },
             }}
             render={({ field }) => (
               <Input
@@ -71,9 +67,11 @@ export default function LevelForm({ control, errors, handleSubmit, onSubmit }) {
           )}
         </Col>
       </Row>
-      <Button type="submit" className="me-1" color="primary">
-        ایجاد
-      </Button>
+        <div className="d-flex justify-content-center mt-2">
+              <Button type="submit" color="primary" className="fs-3 w-50">
+              تایید
+              </Button>
+        </div>
     </Form>
   );
 }

@@ -1,10 +1,12 @@
-import { acceptCoursePayment, getUserPayList } from '@core/services/api/payment'
+import { acceptCoursePayment, deleteCoursePayment, getUserPayList } from '@core/services/api/payment'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import React from 'react'
 import DataTable from 'react-data-table-component';
-import { Badge, Button, Card, Spinner } from 'reactstrap';
+import { Badge, Card, DropdownItem, DropdownMenu, DropdownToggle, Spinner, UncontrolledDropdown } from 'reactstrap';
 import jMoment from 'jalali-moment'
 import toast from 'react-hot-toast';
+import { Check, MoreVertical, Trash } from 'react-feather';
+import { createPortal } from 'react-dom';
 
 
 export function UserPayments({userId}) {
@@ -28,19 +30,39 @@ export function UserPayments({userId}) {
         }
 
     })
+    const {mutate:deleteMutate} = useMutation({
+        mutationFn: deleteCoursePayment,
+        onSuccess: (response) => {
+          if (response.success) {
+            toast.success('حذف شد');
+          } else {
+            toast.error('حذف ناموفق');
+          }
+        },
+        onError: (err) => {
+          console.log('response', err);
+          toast.error('حذف ناموفق');
+        },
+      })
 
     function handleAccept(paymentId) {
         const formData = new FormData();
         formData.append('PaymentId', paymentId)
-
         mutate(formData)
-        console.log(paymentId);
     }
+    function handleDelete(paymentId) {
+        const formData = new FormData()
+        formData.append('PaymentId', paymentId)
 
+        deleteMutate(formData)
+    }
+    const PortalDropdownMenu = ({ children }) => {
+        return createPortal(children, document.getElementById('portal-root'));
+      };
     const columns =[
         {
             name: 'مبلغ پرداختی',
-            minWidth: '200px',
+            minWidth: '100px',
             selector: row => row.paid + 'تومان'
         },
         {
@@ -54,7 +76,7 @@ export function UserPayments({userId}) {
             ),
         },
         {
-            name: ' وضعیت رزرو',
+            name: ' وضعیت پرداخت',
             minWidth: '120px',
             cell: row =>(
                     <Badge
@@ -74,16 +96,45 @@ export function UserPayments({userId}) {
         {
             minWidth:'180px',
             cell: row => row.accept? 
-            <Button color='primary' 
-            className='w-100' 
-            onClick={() => handleAccept(row.paymentId)}
-            >
-                پذیرفتن
-            </Button>
-         : 
-         <Button color='danger' disabled className='w-100'>
-         رزرو تایید نشده
-         </Button>
+            <Badge color="light-success" className="">
+            پذیرفته
+            </Badge>
+            : 
+            <UncontrolledDropdown>
+                <DropdownToggle
+                    className="icon-btn hide-arrow"
+                    color="transparent"
+                    size="sm"
+                    caret>
+                    <MoreVertical size={15} />
+                </DropdownToggle>
+                <PortalDropdownMenu>
+                    <DropdownMenu>
+                    <DropdownItem
+                        className="text-primary"
+                        href="#"
+                        onClick={(e) => {
+                        e.preventDefault();
+                        handleAccept(row.id);
+                        }}
+                    >
+                        <Check className="me-50" size={15} />{' '}
+                        <span className="align-middle"> تایید </span>
+                    </DropdownItem>
+                    <DropdownItem
+                        className="text-danger"
+                        href="#"
+                        onClick={(e) => {
+                        e.preventDefault();
+                        handleDelete(row.id);
+                        }}
+                    >
+                        <Trash className="me-50" size={15} />{' '}
+                        <span className="align-middle">رد کردن</span>
+                    </DropdownItem>
+                    </DropdownMenu>
+                </PortalDropdownMenu>
+            </UncontrolledDropdown>
         }
 
     ]

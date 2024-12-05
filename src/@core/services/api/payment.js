@@ -26,6 +26,14 @@ export async function acceptCoursePayment(paymentId){
         console.log(error);
     }
 }
+export async function deleteCoursePayment(paymentId){
+    try {
+        const response = await api.put('/CoursePayment', paymentId);
+        return response
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 export async function getCoursesPayments(){
     try {

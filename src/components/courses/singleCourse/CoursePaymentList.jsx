@@ -1,10 +1,12 @@
-import {acceptCoursePayment, getCoursesPayments} from '@core/services/api/payment'
+import {acceptCoursePayment, deleteCoursePayment, getCoursesPayments} from '@core/services/api/payment'
 import {useMutation, useQuery} from '@tanstack/react-query'
 import moment from 'jalali-moment'
 import React from 'react'
 import DataTable from 'react-data-table-component'
+import { createPortal } from 'react-dom'
+import { Check, MoreVertical, Trash } from 'react-feather'
 import toast from 'react-hot-toast'
-import {Badge, Button, Card, Spinner} from 'reactstrap'
+import {Badge, Button, Card, DropdownItem, DropdownMenu, DropdownToggle, Spinner, UncontrolledDropdown} from 'reactstrap'
 
 export function CoursePaymentList({singleCourseId}) {
     const {data, isLoading, isError} = useQuery({
@@ -32,14 +34,36 @@ export function CoursePaymentList({singleCourseId}) {
             toast.error(' پذیرش ناموفق ')
         },
     })
+    const {mutate:deleteMutate} = useMutation({
+        mutationFn: deleteCoursePayment,
+        onSuccess: (response) => {
+          if (response.success) {
+            toast.success('حذف شد');
+          } else {
+            toast.error('حذف ناموفق');
+          }
+        },
+        onError: (err) => {
+          console.log('response', err);
+          toast.error('حذف ناموفق');
+        },
+      })
 
     function handleAccept(paymentId) {
         const formData = new FormData()
         formData.append('PaymentId', paymentId)
 
         mutate(formData)
-        console.log(paymentId)
     }
+    function handleDelete(paymentId) {
+        const formData = new FormData()
+        formData.append('PaymentId', paymentId)
+
+        deleteMutate(formData)
+    }
+    const PortalDropdownMenu = ({ children }) => {
+        return createPortal(children, document.getElementById('portal-root'));
+      };
 
     const columns = [
         {
@@ -63,7 +87,7 @@ export function CoursePaymentList({singleCourseId}) {
             ),
         },
         {
-            name: ' وضعیت رزرو',
+            name: ' وضعیت پرداخت',
             minWidth: '100px',
             cell: row => (
                 <Badge
@@ -84,13 +108,45 @@ export function CoursePaymentList({singleCourseId}) {
             minWidth: '180px',
             cell: row =>
                 row.accept ? (
-                    <Button color="primary" className="w-100" onClick={() => handleAccept(row.id)}>
-                        پذیرفتن
-                    </Button>
+                    <Badge color="light-success" className="">
+                    پذیرفته
+                  </Badge>
                 ) : (
-                    <Button color="danger" disabled className="w-100">
-                        رزرو تایید نشده
-                    </Button>
+                  <UncontrolledDropdown>
+                    <DropdownToggle
+                      className="icon-btn hide-arrow"
+                      color="transparent"
+                      size="sm"
+                      caret>
+                      <MoreVertical size={15} />
+                    </DropdownToggle>
+                    <PortalDropdownMenu>
+                      <DropdownMenu>
+                        <DropdownItem
+                          className="text-primary"
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAccept(row.id);
+                          }}
+                        >
+                          <Check className="me-50" size={15} />{' '}
+                          <span className="align-middle"> تایید </span>
+                        </DropdownItem>
+                        <DropdownItem
+                          className="text-danger"
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDelete(row.id);
+                          }}
+                        >
+                          <Trash className="me-50" size={15} />{' '}
+                          <span className="align-middle">رد کردن</span>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </PortalDropdownMenu>
+                  </UncontrolledDropdown>
                 ),
         },
     ]

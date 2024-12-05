@@ -1,9 +1,10 @@
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
-import {Codepen, Codesandbox, Database} from 'react-feather'
+import {Cast, Codepen, Codesandbox, Database} from 'react-feather'
 import {useState} from 'react'
 import Levels from './Levels'
 import Technology from './technology/Technology'
 import Status from './statuse/Status'
+import Term from './term/Term'
 
 
 export default function Tabs() {
@@ -37,6 +38,12 @@ export default function Tabs() {
                         <span className="fw-bold">استاتوس </span>
                     </NavLink>
                 </NavItem>
+                <NavItem>
+                    <NavLink active={active === '4'} onClick={() => toggleTab('4')}>
+                        <Cast className="font-medium-3 me-50" />
+                        <span className="fw-bold">ترم </span>
+                    </NavLink>
+                </NavItem>
             </Nav>
 
             <TabContent activeTab={active}>
@@ -49,7 +56,9 @@ export default function Tabs() {
                 <TabPane tabId="3">
                     <Status/>
                 </TabPane>
-                <TabPane tabId="4">{/* <CourseComment singleCourse /> */}</TabPane>
+                <TabPane tabId="4">
+                    <Term/>
+                </TabPane>
             </TabContent>
         </>
     )
