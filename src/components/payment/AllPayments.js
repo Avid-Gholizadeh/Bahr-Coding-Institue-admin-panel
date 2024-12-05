@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { CustomPagination } from '@Components/common/CustomPagination';
-import { acceptCoursePayment, getCoursesPayments } from '@core/services/api/payment';
+import { acceptCoursePayment, deleteCoursePayment, getCoursesPayments } from '@core/services/api/payment';
 import DataTable from 'react-data-table-component';
 import toast from 'react-hot-toast';
-import { Badge, Button, Card, Spinner } from 'reactstrap';
+import { Card, Spinner} from 'reactstrap';
 import { CustomHeader } from '@Components/courses/reserve/CustomHeader';
 import { ModalPayment } from './ModalPayment';
-import moment from 'jalali-moment';
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
+import { usePaymentColumns } from './usePaymentColumns';
+
 
 function AllPayments() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +43,21 @@ function AllPayments() {
       toast.error('پذیرش ناموفق');
     },
   });
+
+  const {mutate:deleteMutate} = useMutation({
+    mutationFn: deleteCoursePayment,
+    onSuccess: (response) => {
+      if (response.success) {
+        toast.success('حذف شد');
+      } else {
+        toast.error('حذف ناموفق');
+      }
+    },
+    onError: (err) => {
+      console.log('response', err);
+      toast.error('حذف ناموفق');
+    },
+  })
 
   let filteredReserves = coursesPayment ? [...coursesPayment] : [];
   if (searchTerm && searchTerm?.trim().length !== 0) {
@@ -77,17 +93,6 @@ function AllPayments() {
     setCurrentPage(1);
   }
 
-  function handleAccept(paymentId) {
-    if (!paymentId) {
-        console.error('No paymentId provided!');
-        return;
-      }
-    const formData = new FormData();
-    formData.append('PaymentId', paymentId);
-    console.log('formData', formData);
-    mutate(formData);
-  }
-
   function Pagination() {
     return (
       <>
@@ -101,79 +106,12 @@ function AllPayments() {
     );
   }
 
-  const columns = [
-    {
-      name: 'مبلغ پرداختی',
-      minWidth: '120px',
-      selector: (row) => row.paid,
-      cell: (row) => (
-        <span
-          className="cursor-pointer fw-bolder text-primary"
-          onClick={() => handleOpenModal(row)}
-        >
-          {row.paid} تومان
-        </span>
-      ),
-    },
-    {
-      name: 'باقی مانده',
-      minWidth: '120px',
-      cell: (row) => `${row.currentRemainder} تومان`,
-    },
-    {
-      name: 'تاریخ ثبت پرداخت',
-      minWidth: '150px',
-      cell: (row) => (
-        <span className="text-capitalize">
-          {moment(row.insertDate).locale('fa').format('jD jMMMM jYYYY')}
-        </span>
-      ),
-    },
-    {
-      name: 'وضعیت رزرو',
-      minWidth: '100px',
-      cell: (row) => (
-        <Badge
-          className="text-capitalize"
-          color={row.accept ? 'light-success' : 'light-warning'}
-          pill
-        >
-          {row.accept ? 'پذیرفته' : 'در انتظار'}
-        </Badge>
-      ),
-    },
-    {
-      name: 'نام دوره',
-      minWidth: '150px',
-      cell: (row) => (
-        <span className="d-inline-block text-truncate">{row.title}</span>
-      ),
-    },
-    {
-      name: 'دانشجو',
-      minWidth: '100px',
-      cell: (row) => (
-        <span className="d-inline-block text-truncate">{row.studentName}</span>
-      ),
-    },
-    {
-      minWidth: '180px',
-      cell: (row) =>
-        row.accept ? (
-          <Button color="danger" disabled className="w-100">
-            پذیرفته
-          </Button>
-        ) : (
-          <Button
-            color="primary"
-            className="w-100"
-            onClick={()=>handleAccept(row.id)}
-          >
-            پذیرفتن
-          </Button>
-        ),
-    },
-  ];
+
+const columns = usePaymentColumns({
+  handleOpenModal,
+  handleAccept: (paymentId) => mutate(new FormData().append('PaymentId', paymentId)),
+  handleDelete: (paymentId) => deleteMutate(new FormData().append('PaymentId', paymentId)),
+});
 
 
   return (

@@ -14,8 +14,10 @@ export default function Technology() {
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerpage] = useState(10)
     const [searchTerm, setSearchTerm] = useState(null)
-    const [show , setShow] = useState(false)
+    const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+    const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [selectedTech, setSelectedTech] = useState(null);
+    
 
     const {data:techList, isLoading:techesLoading} = useQuery({
         queryKey:['techList'],
@@ -23,18 +25,18 @@ export default function Technology() {
     })
     const columns = [
         {
-            name:'',
+            name:'فناوری',
             minWidth: '100px',
             selector: row => row.techName,
             cell: row => row.techName
         },
         {
-            name:'',
+            name:'توضیحات',
             minWidth:'250px',
             cell: row => row.describe
         },
         {
-            name:'',
+            name:'آیدی',
             minWidth:'50px',
             cell: row => row.id
         },
@@ -46,7 +48,7 @@ export default function Technology() {
                     color="primary"
                     onClick={() => {
                     setSelectedTech(row); // Set the selected tech item
-                    setShow(true); // Open the modal
+                    setEditModalOpen(true); // Open the modal
                     }}
                 >
                     ویرایش
@@ -101,7 +103,7 @@ export default function Technology() {
     <Card>
         <CardBody className="d-flex justify-content-between">
             <h1 className="text-primary"> فناوری ها </h1>
-            <Button className="add-new-user ms-1" color="primary" onClick={()=>setShow(true)}>
+            <Button className="add-new-user ms-1" color="primary" onClick={()=>setCreateModalOpen(true)}>
             فناوری جدید
             </Button>
         </CardBody>
@@ -134,10 +136,17 @@ export default function Technology() {
         </div>
     </Card>
     <TechModal
-    show={show}
-    setShow={setShow}
-    selectedTech={selectedTech}
-    />
+        show={isCreateModalOpen}
+        setShow={setCreateModalOpen}
+        selectedTech={null} // Pass null for creating a new tech
+      />
+      {/* Edit Modal */}
+      <TechModal
+        show={isEditModalOpen}
+        setShow={setEditModalOpen}
+        selectedTech={selectedTech} // Pass the selected tech for editing
+      />
+
     </>
   )
 }

@@ -48,10 +48,6 @@ export default function LevelForm({ control, errors, handleSubmit, onSubmit }) {
             control={control}
             rules={{
               required: 'نمی‌تواند خالی باشد',
-              pattern: {
-                value: /^[a-zA-Z\s]+$/,
-                message: 'فقط حروف لاتین و فاصله قابل قبول است',
-              },
             }}
             render={({ field }) => (
               <Input

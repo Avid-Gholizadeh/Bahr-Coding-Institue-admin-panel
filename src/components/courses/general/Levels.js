@@ -1,45 +1,100 @@
-import { useQuery } from '@tanstack/react-query'
-import React, { useState } from 'react'
-import { getCourseslevels } from '../../../@core/services/api/courseGeneral'
+import { useQuery } from '@tanstack/react-query';
+import React, { useState } from 'react';
+import { getCourseslevels } from '../../../@core/services/api/courseGeneral';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import { LevelsCard } from './LevelsCard';
 import LevelModal from './LevelModal';
+import { CardViewHeader } from './CardViewHeader';
+import {CustomPagination} from '@Components/common/CustomPagination'
 
 export default function Levels() {
-    const [show, setShow] = useState(false)
-    const [selectedLevel, setSelectedLevel] = useState(null);
-    const { data:allLevels, isLoading, isError} = useQuery({
-        queryKey:['levels'],
-        queryFn: getCourseslevels
-    })
-    function handleOpenModal(level = null) {
-        setSelectedLevel(level); // Set the selected level (null for create)
-        setShow(true);
-      }
+  // Separate states for modals
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [rowsPerPage, setRowsPerpage] = useState(6)
+
+  const { data: allLevels, isLoading, isError } = useQuery({
+    queryKey: ['levels'],
+    queryFn: getCourseslevels,
+  });
+
+  // Handlers for opening modals
+  function openCreateModal() {
+    setSelectedLevel(null); // No selected level for create
+    setCreateModalOpen(true);
+  }
+
+  function openEditModal(level) {
+    setSelectedLevel(level); // Set the selected level for edit
+    setEditModalOpen(true);
+  }
+  let filteredLevels = allLevels ? [...allLevels] : []
+  if (searchTerm && searchTerm?.trim().length !== 0) {
+    filteredLevels = allLevels.filter(
+          item => item.levelName?.includes(searchTerm) || item.buildingName?.includes(searchTerm)
+      )
+  }
+  function dataToRender() {
+    if (allLevels) {
+        const allData = [...filteredLevels]
+
+        return allData?.filter(
+            (_, index) =>
+                index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
+        )
+    }
+    }
+
+    function handleSearch(val) {
+        setSearchTerm(val)
+    }
+    function handlePagination(page) {
+        setCurrentPage(page.selected + 1)
+    }
+    function handlePerPage(e) {
+        const value = parseInt(e.currentTarget.value)
+        setRowsPerpage(value)
+    }
+
   return (
     <>
-    <Card>
-        <CardBody className="d-flex justify-content-between">
-            <h1 className="text-primary"> سطوح </h1>
-            <Button className="add-new-user ms-1" color="primary" onClick={() => handleOpenModal()}>
-                سطح جدید
-            </Button>
-        </CardBody>
-    </Card>
-    <Container fluid>
+        <CardViewHeader
+        handleSearch={handleSearch}
+        rowsPerPage={rowsPerPage}
+        handlePerPage={handlePerPage}
+        handleModalOpen={openCreateModal}
+        title={'سطح'}
+        />
+      <Container fluid>
         <Row>
-            {allLevels?.map(item => (
-                <Col xs="12" sm="12" md="6" xl="4" className="">
-                    <LevelsCard Level={item} handleOpenModal={handleOpenModal} />
-                </Col>
+            {dataToRender()?.map(item => (
+            <Col xs="12" sm="12" md="6" xl="4" key={item.id}>
+                <LevelsCard Level={item} handleOpenModal={openEditModal} />
+            </Col>
             ))}
         </Row>
-    </Container>
+      </Container>
+      <CustomPagination
+        totalItem={filteredLevels.length}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        handlePagination={handlePagination}
+        />
+      {/* Create Modal */}
       <LevelModal
-        show={show}
-        setShow={setShow}
-        selectedLevel={selectedLevel}
+        show={isCreateModalOpen}
+        setShow={setCreateModalOpen}
+        selectedLevel={null} // No level is passed for creating
+      />
+      {/* Edit Modal */}
+      <LevelModal
+        show={isEditModalOpen}
+        setShow={setEditModalOpen}
+        selectedLevel={selectedLevel} // Selected level is passed for editing
       />
     </>
-  )
+  );
 }

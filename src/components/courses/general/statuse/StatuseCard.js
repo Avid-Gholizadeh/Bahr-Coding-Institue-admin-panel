@@ -8,7 +8,7 @@ export default function StatuseCard({status, handleOpenModal}) {
   return (
     <>
     <Card className="text-white border-0 cursor-pointer hover-scale">
-        <CardImg top src={statusCardBg} alt="card-overlay" className="card-img" />
+        <CardImg top src={statusCardBg} alt="card-overlay" className="card-img" style={{height:'200px'}}/>
 
         <CardImgOverlay className="bg-overlay">
             <CardTitle className="fs-2 mb-2">{status.statusName}</CardTitle>
