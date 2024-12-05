@@ -54,6 +54,7 @@ export function Department() {
     function handlePerPage(e) {
         const value = parseInt(e.currentTarget.value)
         setRowsPerpage(value)
+        setCurrentPage(1)
     }
 
     return (

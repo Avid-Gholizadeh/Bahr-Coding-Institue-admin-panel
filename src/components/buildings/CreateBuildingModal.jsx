@@ -82,7 +82,7 @@ export function CreateBuildingModal({showEdit, setShowEdit}) {
             if (data.success) {
                 queryClient.invalidateQueries(['all-buildings-list'])
                 toast.success('ساختمان با موفقیت ویرایش شد')
-                setShowEdit({currentCategory: null, show: false, isEdit: false})
+                setShowEdit({currentBuilding: null, show: false, isEdit: false})
             } else {
                 toast.error(data.message)
             }

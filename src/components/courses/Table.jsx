@@ -2,8 +2,8 @@ import DataTable from 'react-data-table-component'
 import {useQuery} from '@tanstack/react-query'
 import {getAllCourses, getCourseByIdAdmin} from '../../@core/services/api/courses'
 import {useState} from 'react'
-import {Card, Modal, ModalBody, ModalHeader, Row, Spinner} from 'reactstrap'
-import {ChevronDown} from 'react-feather'
+import {Button, Card, Modal, ModalBody, ModalHeader, Spinner, UncontrolledTooltip} from 'reactstrap'
+import {ChevronDown, Maximize} from 'react-feather'
 import {FormWizard} from './formWizard/formWizard'
 import {useTableColumns} from './TableColumns'
 import {CustomPagination} from '@Components/common/CustomPagination'
@@ -11,6 +11,7 @@ import {CustomPagination} from '@Components/common/CustomPagination'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
 import {CustomHeader} from './CustomHeader'
+import {Link} from 'react-router-dom'
 
 export function Table({selectable, onSelect}) {
     const [params, setParams] = useState({PageNumber: 1, RowsOfPage: 10, Query: ''})
@@ -63,7 +64,7 @@ export function Table({selectable, onSelect}) {
 
     const handlePerPage = e => {
         const value = parseInt(e.currentTarget.value)
-        setParams(prevState => ({...prevState, RowsOfPage: value}))
+        setParams(prevState => ({...prevState, RowsOfPage: value, PageNumber: 1}))
     }
 
     const handlePagination = page => {
@@ -127,8 +128,22 @@ export function Table({selectable, onSelect}) {
                 backdrop="static"
                 className="modal-dialog-centered modal-xl "
             >
-                <ModalHeader className="bg-transparent" toggle={handleToggleModal}></ModalHeader>
-                <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 100}}>
+                <ModalHeader className="bg-transparent" toggle={handleToggleModal}>
+                    <Button.Ripple
+                        tag={Link}
+                        to="/create-course"
+                        className="btn-icon"
+                        outline
+                        color="primary"
+                        id="fullScreen"
+                    >
+                        <Maximize size={14} />
+                    </Button.Ripple>
+                    <UncontrolledTooltip placement="top" target="fullScreen">
+                        تمام صفحه
+                    </UncontrolledTooltip>
+                </ModalHeader>
+                <ModalBody className="px-sm-5 mx-50" style={{paddingBottom: 20}}>
                     <FormWizard setShow={handleToggleModal} />
                 </ModalBody>
             </Modal>

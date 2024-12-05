@@ -79,6 +79,7 @@ export function BuildingTable() {
     function handlePerPage(e) {
         const value = parseInt(e.currentTarget.value)
         setRowsPerpage(value)
+        setCurrentPage(1)
     }
     function handleSearch(val) {
         setSearchTerm(val)

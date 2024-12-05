@@ -87,7 +87,7 @@ export function GroupsTable({course}) {
 
     const handlePerPage = e => {
         const value = parseInt(e.currentTarget.value)
-        setParams(prevState => ({...prevState, RowsOfPage: value}))
+        setParams(prevState => ({...prevState, RowsOfPage: value, PageNumber: 1}))
     }
 
     return (

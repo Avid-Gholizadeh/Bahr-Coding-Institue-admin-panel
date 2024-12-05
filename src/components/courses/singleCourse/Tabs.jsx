@@ -6,7 +6,7 @@ import {GroupsTable} from '../groups/GroupsTable'
 import {CoursePaymentStatus} from './CoursePaymentStatus'
 import {CoursePaymentList} from './CoursePaymentList'
 import {CourseComment} from '@Components/commentMng/CourseComment'
-import {SocialGroups} from './SocialGroups'
+import {SocialGroups} from './social-groups/SocialGroups'
 
 export function Tabs({active, toggleTab, singleCourseId, course}) {
     return (

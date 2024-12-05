@@ -6,23 +6,28 @@ import {Button, Card, CardBody, Col, Row, Spinner} from 'reactstrap'
 import {useState} from 'react'
 import {CustomPagination} from '@Components/common/CustomPagination'
 import {useQuery} from '@tanstack/react-query'
-import {useSocialGroupColumns} from './useSocialGroupColumns'
+
 import {getAllSocialGroups} from '@core/services/api/social-groups.api'
 import {SearchInput} from '@Components/common/SearchInput'
+import {useParams} from 'react-router-dom'
+import {useSocialGroupColumns} from '../useSocialGroupColumns'
+import {CreateGroupModal} from './CreateGroupModal'
 
 export function SocialGroups() {
+    const {id} = useParams()
     //
     const [currentPage, setCurrentPage] = useState(1)
-    const [showEdit, setShowEdit] = useState({currentBuilding: null, show: false, isEdit: false})
+    const [showEdit, setShowEdit] = useState({currentSocialGroup: null, show: false, isEdit: false})
     const [rowsPerPage, setRowsPerpage] = useState(10)
     const [searchTerm, setSearchTerm] = useState(null)
-    const [sort, setSort] = useState({workDate: false, active: false, direction: 'desc'})
     const columns = useSocialGroupColumns({handleModalOpen})
 
-    const {data: socialGroups, isLoading} = useQuery({
+    let {data: socialGroups, isLoading} = useQuery({
         queryKey: ['all-socialGroups-list'],
         queryFn: getAllSocialGroups,
     })
+
+    socialGroups = socialGroups ? socialGroups.filter(item => item.courseId === id) : []
 
     let filteredSocialGroups = socialGroups ? [...socialGroups] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
@@ -33,22 +38,6 @@ export function SocialGroups() {
         if (socialGroups) {
             const allData = [...filteredSocialGroups]
 
-            if (sort.workDate || sort.active) {
-                if (sort.workDate) {
-                    if (sort.direction === 'desc') {
-                        allData.sort((a, b) => new Date(a.workDate) - new Date(b.workDate))
-                    } else {
-                        allData.sort((a, b) => new Date(b.workDate) - new Date(a.workDate))
-                    }
-                } else {
-                    if (sort.direction === 'desc') {
-                        allData.sort((a, b) => Number(a.active) - Number(b.active))
-                    } else {
-                        allData.sort((a, b) => Number(b.active) - Number(a.active))
-                    }
-                }
-            }
-
             return allData?.filter(
                 (_, index) =>
                     index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
@@ -56,20 +45,12 @@ export function SocialGroups() {
         }
     }
 
-    function handleModalOpen(building) {
+    function handleModalOpen(socialGroup) {
         setShowEdit({
-            currentBuilding: building,
+            currentSocialGroup: socialGroup,
             show: true,
-            isEdit: building.buildingName ? true : false,
+            isEdit: socialGroup.groupLink ? true : false,
         })
-    }
-
-    function handleSort(column, sortDirection) {
-        if (column.sortField === 'workDate') {
-            setSort({workDate: true, active: false, direction: sortDirection})
-        } else {
-            setSort({workDate: false, active: true, direction: sortDirection})
-        }
     }
 
     const handlePagination = page => {
@@ -78,6 +59,7 @@ export function SocialGroups() {
     function handlePerPage(e) {
         const value = parseInt(e.currentTarget.value)
         setRowsPerpage(value)
+        setCurrentPage(1)
     }
     function handleSearch(val) {
         setSearchTerm(val)
@@ -96,40 +78,28 @@ export function SocialGroups() {
         )
     }
 
-    function CustomHeader({
-        handlePerPage,
-        RowsOfPage,
-        singleCourseId,
-        onSearch,
-        title,
-        handleToggleModal,
-        buttonText,
-    }) {
+    function CustomHeader() {
         return (
             <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
                 <Row>
-                    {singleCourseId && <span className="fs-4">رزرو های دوره</span>}
-                    {!singleCourseId && (
-                        <Col>
-                            <SearchInput onSearch={onSearch} />
-                        </Col>
-                    )}
+                    <Col>
+                        <SearchInput onSearch={handleSearch} />
+                    </Col>
 
                     <Col className="d-flex gap-4 align-items-center justify-content-end">
-                        {buttonText && (
-                            <Button
-                                className="add-new-user ms-1"
-                                color="primary"
-                                onClick={handleToggleModal}
-                            >
-                                {buttonText}
-                            </Button>
-                        )}
+                        <Button
+                            className="add-new-user ms-1"
+                            color="primary"
+                            onClick={handleModalOpen}
+                        >
+                            ایجاد گروه مجازی
+                        </Button>
                     </Col>
                 </Row>
             </div>
         )
     }
+
     return (
         <>
             <Card className="overflow-hidden">
@@ -147,7 +117,6 @@ export function SocialGroups() {
                         }
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
                         columns={columns}
-                        onSort={handleSort}
                         sortIcon={<ChevronDown className="text-danger" />}
                         className="react-dataTable"
                         paginationComponent={Pagination}
@@ -166,11 +135,7 @@ export function SocialGroups() {
                 </div>
             </Card>
 
-            {/*  <CreateBuildingModal
-                key={showEdit.isEdit}
-                showEdit={showEdit}
-                setShowEdit={setShowEdit}
-            /> */}
+            <CreateGroupModal key={showEdit.isEdit} showEdit={showEdit} setShowEdit={setShowEdit} />
         </>
     )
 }

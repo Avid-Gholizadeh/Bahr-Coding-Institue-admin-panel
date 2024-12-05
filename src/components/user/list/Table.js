@@ -78,7 +78,10 @@ const UsersListTable = ({selectable, onSelect}) => {
     ])
 
     // Handlers
-    const handlePerPage = useCallback(val => setRowsPerPage(val), [])
+    const handlePerPage = useCallback(val => {
+        setRowsPerPage(val)
+        setPageNumber(1)
+    }, [])
     const handleQuery = useCallback(val => {
         setQuery(val)
         setPageNumber(1)

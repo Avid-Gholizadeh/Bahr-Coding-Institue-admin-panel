@@ -20,23 +20,24 @@ import {
 } from '@src/@core/utils/formatter.utils'
 import CourseFallback from '@src/assets/images/courses-fallback.jpg'
 import {useState} from 'react'
-import {FormWizard} from '../formWizard/FormWizard'
-import {useMutation, useQueryClient} from '@tanstack/react-query'
+import {FormWizard} from '../../formWizard/FormWizard'
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import {activeAndDeactive, changeCourseStatus, deleteCourse} from '@core/services/api/courses'
 import toast from 'react-hot-toast'
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 import {RichTextDecoder} from '@Components/common/RichTextDecoder'
 import {Link} from 'react-router-dom'
+import {getStatus} from '@core/services/api/courseGeneral'
 
 export function CourseInfoCard({course}) {
     const queryClient = useQueryClient()
     const [show, setShow] = useState(false)
     const [courseStatus, setCourseStatus] = useState(course.courseStatusName)
 
-    /*  const { data:allStatus, isLoading:loadingStatus}= useQuery({
-        queryKey:['statuseCards'],
-        queryFn:getStatus
-    }) */
+    const {data: allStatus, isLoading: loadingStatus} = useQuery({
+        queryKey: ['statuseCards'],
+        queryFn: getStatus,
+    })
 
     const {mutate: deleteMutate, isPending: deletePending} = useMutation({
         mutationFn: deleteCourse,
@@ -156,25 +157,22 @@ export function CourseInfoCard({course}) {
                                             )}
                                             {courseStatus}
                                         </DropdownToggle>
-                                        <DropdownMenu>
-                                            <DropdownItem
-                                                onClick={() => handleStatusSelect(1)}
-                                                className="w-100"
-                                            >
-                                                شروع ثبت نام
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                onClick={() => handleStatusSelect(3)}
-                                                className="w-100"
-                                            >
-                                                در حال برگزاری
-                                            </DropdownItem>
-                                            <DropdownItem
-                                                onClick={() => handleStatusSelect(2)}
-                                                className="w-100"
-                                            >
-                                                منقضی شده
-                                            </DropdownItem>
+                                        <DropdownMenu
+                                            style={{
+                                                maxHeight: 250,
+                                                overflowY: 'auto',
+                                                scrollbarWidth: 'thin',
+                                            }}
+                                        >
+                                            {allStatus?.map(status => (
+                                                <DropdownItem
+                                                    key={status.id}
+                                                    onClick={() => handleStatusSelect(status.id)}
+                                                    className="w-100"
+                                                >
+                                                    {status.statusName}
+                                                </DropdownItem>
+                                            ))}
                                         </DropdownMenu>
                                     </UncontrolledButtonDropdown>
                                 </div>

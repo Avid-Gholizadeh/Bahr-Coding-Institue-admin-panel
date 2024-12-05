@@ -93,7 +93,7 @@ export function StudentsTable({course, singleGroup, onSetCount}) {
 
     const handlePerPage = e => {
         const value = parseInt(e.currentTarget.value)
-        setParams(prevState => ({...prevState, RowsOfPage: value}))
+        setParams(prevState => ({...prevState, RowsOfPage: value, PageNumber: 1}))
     }
 
     const handlePagination = page => {

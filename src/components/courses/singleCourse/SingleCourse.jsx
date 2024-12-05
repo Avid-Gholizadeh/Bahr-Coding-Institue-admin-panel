@@ -3,7 +3,7 @@ import {useParams} from 'react-router-dom'
 import {getCourseByIdAdmin} from '../../../@core/services/api/courses'
 import {Alert, Col, Row, Spinner} from 'reactstrap'
 import {Link} from 'react-feather'
-import {CourseInfoCard} from './CourseInfoCard'
+import {CourseInfoCard} from './social-groups/CourseInfoCard'
 import {useState} from 'react'
 import {Tabs} from './Tabs'
 
