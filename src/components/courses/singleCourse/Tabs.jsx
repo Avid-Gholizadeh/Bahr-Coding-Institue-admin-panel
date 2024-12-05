@@ -5,7 +5,7 @@ import {StudentsTable} from './StudentsTable'
 import {GroupsTable} from '../groups/GroupsTable'
 import {CoursePaymentStatus} from './CoursePaymentStatus'
 import {CoursePaymentList} from './CoursePaymentList'
-import {CourseComment} from '@Components/commentMng/CourseComment'
+import {CourseComment} from '../../commentMng/CourseComment'
 import {SocialGroups} from './social-groups/SocialGroups'
 
 export function Tabs({active, toggleTab, singleCourseId, course}) {
@@ -36,12 +36,12 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                         <span className="fw-bold">نظرات</span>
                     </NavLink>
                 </NavItem>
-                <NavItem>
+                {/* <NavItem>
                     <NavLink active={active === '5'} onClick={() => toggleTab('5')}>
                         <Bell className="font-medium-3 me-50" />
                         <span className="fw-bold"> وضعیت پرداخت</span>
                     </NavLink>
-                </NavItem>
+                </NavItem> */}
                 <NavItem>
                     <NavLink active={active === '6'} onClick={() => toggleTab('6')}>
                         <DollarSign className="font-medium-3 me-50" />
