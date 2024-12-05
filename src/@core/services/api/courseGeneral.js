@@ -101,3 +101,19 @@ export async function updateStatus(dataObj){
     }
 }
 
+export async function addClose(dataObj){
+    try {
+        const response = await api.post('/Term/AddTermCloseDate', dataObj);
+        return response
+    } catch (error) {
+        throw Error
+    }
+}
+export async function updateClose(dataObj){
+    try {
+        const response = await api.put('/Term/UpdateTermCloseDate', dataObj);
+        return response
+    } catch (error) {
+        throw Error
+    }
+}

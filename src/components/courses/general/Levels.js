@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { getCourseslevels } from '../../../@core/services/api/courseGeneral';
-import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
+import { Col, Container, Row } from 'reactstrap';
 import { LevelsCard } from './LevelsCard';
 import LevelModal from './LevelModal';
 import { CardViewHeader } from './CardViewHeader';

@@ -67,9 +67,11 @@ export default function LevelForm({ control, errors, handleSubmit, onSubmit }) {
           )}
         </Col>
       </Row>
-      <Button type="submit" className="me-1" color="primary">
-        ایجاد
-      </Button>
+        <div className="d-flex justify-content-center mt-2">
+              <Button type="submit" color="primary" className="fs-3 w-50">
+              تایید
+              </Button>
+        </div>
     </Form>
   );
 }

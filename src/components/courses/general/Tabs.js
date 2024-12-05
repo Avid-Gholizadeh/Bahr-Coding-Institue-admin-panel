@@ -4,6 +4,7 @@ import {useState} from 'react'
 import Levels from './Levels'
 import Technology from './technology/Technology'
 import Status from './statuse/Status'
+import Term from './term/Term'
 
 
 export default function Tabs() {
@@ -55,7 +56,9 @@ export default function Tabs() {
                 <TabPane tabId="3">
                     <Status/>
                 </TabPane>
-                <TabPane tabId="4">{/* <CourseComment singleCourse /> */}</TabPane>
+                <TabPane tabId="4">
+                    <Term/>
+                </TabPane>
             </TabContent>
         </>
     )

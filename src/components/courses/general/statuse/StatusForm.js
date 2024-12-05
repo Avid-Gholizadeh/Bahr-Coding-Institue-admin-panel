@@ -92,9 +92,11 @@ export default function StatusForm({control, handleSubmit, onSubmit, errors}) {
           
       </div>
           
-      <Button type="submit" className="me-1 mt-1 w-100" color="primary">
-        ایجاد
-      </Button>
+      <div className="d-flex justify-content-center mt-2">
+          <Button type="submit" color="primary" className="fs-3 w-50">
+          تایید
+          </Button>
+      </div>
     </Form>
   )
 }
