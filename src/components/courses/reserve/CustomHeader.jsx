@@ -10,18 +10,30 @@ export function CustomHeader({
     title,
     handleToggleModal,
     buttonText,
+    selectable,
+    assistanceUserId,
+    isCurrentUserAssistance,
 }) {
+    const isAssistance = assistanceUserId
+        ? isCurrentUserAssistance.length > 0
+            ? true
+            : false
+        : true
+
     return (
         <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
-            <Row>
+            <Row className="gap-3 gap-xl-0">
                 {singleCourseId && <span className="fs-4">رزرو های دوره</span>}
                 {!singleCourseId && (
-                    <Col>
+                    <Col xl="5">
                         <SearchInput onSearch={onSearch} />
                     </Col>
                 )}
 
-                <Col className="d-flex gap-4 align-items-center justify-content-end">
+                <Col
+                    xl="7"
+                    className="d-flex gap-4 align-items-center justify-content-start justify-content-xl-end"
+                >
                     {!singleCourseId && (
                         <DataCountDropDown
                             RowsOfPage={RowsOfPage}
@@ -31,7 +43,7 @@ export function CustomHeader({
                         />
                     )}
 
-                    {buttonText && (
+                    {buttonText && !selectable && isAssistance && (
                         <Button
                             className="add-new-user ms-1"
                             color="primary"

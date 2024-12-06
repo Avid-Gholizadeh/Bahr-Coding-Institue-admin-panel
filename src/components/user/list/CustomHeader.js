@@ -10,9 +10,27 @@ export const CustomHeader = ({
     selectable,
 }) => (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
-        <Row>
-            <Col xl="6" className="d-flex align-items-center p-0">
-                <div className="d-flex align-items-center w-100">
+        <Row className="gap-3 gap-xl-0">
+            <Col
+                xl="6"
+                className="d-flex align-items-sm-center flex-xl-nowrap flex-wrap flex-sm-row flex-column mt-xl-0 mt-1 "
+            >
+                <div className="d-flex align-items-center mb-sm-0 mb-1 me-1">
+                    <label className="mb-0" htmlFor="search-invoice">
+                        جستجو:
+                    </label>
+                    <Input
+                        id="search-invoice"
+                        className="ms-50 w-100"
+                        type="text"
+                        value={searchTerm}
+                        onChange={e => handleQuery(e.target.value)}
+                    />
+                </div>
+            </Col>
+
+            <Col xl="6" className="d-flex align-items-center gap-3 p-0 justify-content-xl-end">
+                <div className="d-flex align-items-center ">
                     <label htmlFor="rows-per-page">نمایش</label>
                     <Input
                         className="mx-50"
@@ -29,23 +47,6 @@ export const CustomHeader = ({
                         ))}
                     </Input>
                     <label htmlFor="rows-per-page">عدد</label>
-                </div>
-            </Col>
-            <Col
-                xl="6"
-                className="d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1"
-            >
-                <div className="d-flex align-items-center mb-sm-0 mb-1 me-1">
-                    <label className="mb-0" htmlFor="search-invoice">
-                        جستجو:
-                    </label>
-                    <Input
-                        id="search-invoice"
-                        className="ms-50 w-100"
-                        type="text"
-                        value={searchTerm}
-                        onChange={e => handleQuery(e.target.value)}
-                    />
                 </div>
 
                 {!selectable && (

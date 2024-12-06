@@ -1,50 +1,51 @@
-// ** React Imports
-import { useEffect, useState } from "react";
+import {useEffect, useState} from 'react'
+import PropTypes from 'prop-types'
 
-// ** Third Party Components
-import Proptypes from "prop-types";
+const ScrollTop = ({
+    showOffset = 100, // Default value for showOffset
+    scrollBehaviour = 'smooth', // Default value for scrollBehaviour
+    children,
+    ...rest
+}) => {
+    // ** State
+    const [visible, setVisible] = useState(false)
 
-const ScrollTop = (props) => {
-  // ** Props
-  const { showOffset, scrollBehaviour, children, ...rest } = props;
+    useEffect(() => {
+        if (window) {
+            const handleScroll = () => {
+                if (window.pageYOffset >= showOffset) {
+                    setVisible(true)
+                } else {
+                    setVisible(false)
+                }
+            }
 
-  // ** State
-  const [visible, setVisible] = useState(false);
+            window.addEventListener('scroll', handleScroll)
 
-  useEffect(() => {
-    if (window) {
-      window.addEventListener("scroll", () => {
-        if (window.pageYOffset >= showOffset) {
-          setVisible(true);
-        } else {
-          setVisible(false);
+            return () => {
+                window.removeEventListener('scroll', handleScroll)
+            }
         }
-      });
+    }, [showOffset]) // Add `showOffset` to dependencies
+
+    const handleScrollToTop = () => {
+        window.scroll({top: 0, behavior: scrollBehaviour})
     }
-  }, []);
 
-  const handleScrollToTop = () => {
-    window.scroll({ top: 0, behavior: scrollBehaviour });
-  };
-
-  return (
-    visible && (
-      <div className="scroll-to-top" onClick={handleScrollToTop} {...rest}>
-        {children}
-      </div>
+    return (
+        visible && (
+            <div className="scroll-to-top" onClick={handleScrollToTop} {...rest}>
+                {children}
+            </div>
+        )
     )
-  );
-};
+}
 
-export default ScrollTop;
+export default ScrollTop
 
 // ** PropTypes
 ScrollTop.propTypes = {
-  showOffset: Proptypes.number,
-  children: Proptypes.any.isRequired,
-  scrollBehaviour: Proptypes.oneOf(["smooth", "instant", "auto"]),
-};
-
-ScrollTop.defaultProps = {
-  scrollBehaviour: "smooth",
-};
+    showOffset: PropTypes.number,
+    children: PropTypes.any.isRequired,
+    scrollBehaviour: PropTypes.oneOf(['smooth', 'instant', 'auto']),
+}

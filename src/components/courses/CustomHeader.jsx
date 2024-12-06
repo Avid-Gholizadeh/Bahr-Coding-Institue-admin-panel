@@ -37,13 +37,13 @@ export function CustomHeader({
                     <>
                         <Row>
                             <Col
-                                xl="6"
-                                className="d-flex align-items-sm-center justify-content-xl-start justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1 "
+                                xl="5"
+                                className="d-flex align-items-sm-center justify-content-xl-start justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1  mt-xl-0 mt-1 "
                             >
                                 {!course && (
                                     <div className="d-flex align-items-center mb-sm-0 mb-1 me-1">
                                         <label className="mb-0" htmlFor="search-invoice">
-                                            جستوجو:
+                                            جستجو:
                                         </label>
                                         <Input
                                             id="search-invoice"
@@ -74,11 +74,11 @@ export function CustomHeader({
                             </Col>
 
                             <Col
-                                xl="6"
-                                className="d-flex gap-5 align-items-center justify-content-start justify-content-xl-end p-0 mt-2 mt-xl-0 "
+                                xl="7"
+                                className="d-flex gap-2 align-items-center justify-content-start justify-content-xl-end p-0 mt-2 mt-xl-0 "
                             >
                                 {!course && !singleGroup && (
-                                    <div className="d-flex align-items-center  ">
+                                    <div className="d-flex align-items-center ">
                                         <label htmlFor="rows-per-page">تعداد</label>
                                         <Input
                                             className="mx-50"

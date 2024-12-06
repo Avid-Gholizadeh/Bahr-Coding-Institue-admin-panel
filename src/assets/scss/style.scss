@@ -28,3 +28,8 @@ body {
 .hover-scale:hover {
     transform: scale(1.05);
 }
+.no-hover:hover {
+    background-color: transparent !important;
+    // color: inherit !important;
+    // border-color: inherit !important;
+}
