@@ -152,13 +152,6 @@ export function StudentsTable({course, singleGroup, onSetCount}) {
                 </div>
             </Card>
 
-            {/* {course && (
-                <AddStudentModal
-                    show={show}
-                    handleToggleModal={handleToggleModal}
-                    course={course}
-                />
-            )} */}
             <AddStudentModal
                 show={show}
                 handleToggleModal={handleToggleModal}

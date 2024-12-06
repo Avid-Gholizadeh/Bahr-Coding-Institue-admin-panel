@@ -48,13 +48,8 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                         <span className="fw-bold">لیست پرداخت</span>
                     </NavLink>
                 </NavItem>
-                <NavItem>
-                    <NavLink active={active === '7'} onClick={() => toggleTab('7')}>
-                        <AtSign className="font-medium-3 me-50" />
-                        <span className="fw-bold">فضای مجازی</span>
-                    </NavLink>
-                </NavItem>
             </Nav>
+
             <TabContent activeTab={active}>
                 <TabPane tabId="1">
                     <ReserveTable singleCourseId={singleCourseId} />
@@ -73,9 +68,6 @@ export function Tabs({active, toggleTab, singleCourseId, course}) {
                 </TabPane>
                 <TabPane tabId="6">
                     <CoursePaymentList singleCourseId={singleCourseId} />
-                </TabPane>
-                <TabPane tabId="7">
-                    <SocialGroups />
                 </TabPane>
             </TabContent>
         </>

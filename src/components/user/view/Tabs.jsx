@@ -5,7 +5,17 @@ import {Fragment} from 'react'
 import {Nav, NavItem, NavLink, TabContent, TabPane} from 'reactstrap'
 
 // ** Icons Imports
-import {User, Lock, Bookmark, Link, Target, Book, FileText, DollarSign, MessageSquare} from 'react-feather'
+import {
+    User,
+    Lock,
+    Bookmark,
+    Link,
+    Target,
+    Book,
+    FileText,
+    DollarSign,
+    MessageSquare,
+} from 'react-feather'
 
 // ** User Components
 
@@ -14,7 +24,7 @@ import UserProjectsList from './UserProjectsList'
 import {MoreDetail} from './MoreDetail'
 import {UserCourseReserve} from './UserCourseReserve'
 import {UserComment} from './UserComment'
-import { UserPayments } from './UserPayments'
+import {UserPayments} from './UserPayments'
 
 const UserTabs = ({active, toggleTab, user}) => {
     return (

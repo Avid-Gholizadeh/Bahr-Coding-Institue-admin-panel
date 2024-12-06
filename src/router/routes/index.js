@@ -35,6 +35,8 @@ const CourseDetail = lazy(() => import('../../pages/course/CourseDetail'))
 const CreateCourse = lazy(() => import('../../pages/course/CreateCourse'))
 const AllReserves = lazy(() => import('../../pages/course/AllReserves'))
 const AllGroups = lazy(() => import('../../pages/course/AllGroups'))
+const Assistance = lazy(() => import('../../pages/course/Assistance'))
+const AssistanceWork = lazy(() => import('../../pages/course/AssistanceWork'))
 const CourseGeneral = lazy(() => import('../../pages/course/General.js'))
 const UserList = lazy(() => import('../../pages/UserList'))
 const UserView = lazy(() => import('../../pages/UserDetail'))
@@ -82,6 +84,15 @@ const Routes = [
         path: '/courses/:id',
         element: <CourseDetail />,
     },
+    {
+        path: '/assistance',
+        element: <Assistance />,
+    },
+    {
+        path: '/assistance-work',
+        element: <AssistanceWork />,
+    },
+
     {
         path: '/all-articles',
         element: <AllArticles />,

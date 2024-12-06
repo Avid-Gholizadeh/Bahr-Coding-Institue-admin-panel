@@ -23,7 +23,7 @@ export function useSocialGroupColumns({handleModalOpen}) {
         },
         {
             name: 'لینک گروه',
-            minWidthWidth: '200px',
+            minWidth: '200px',
             sortable: true,
             sortField: 'groupLink',
             selector: row => row.groupLink,
