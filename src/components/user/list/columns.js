@@ -12,7 +12,6 @@ import {
     FileText,
     Trash2,
     Edit,
-    Feather,
     Edit3,
     Briefcase,
 } from 'react-feather'
@@ -124,7 +123,6 @@ export function useUserColumns({selectable}) {
             )
         })
 
-        // Return the mapped roles wrapped in a container
         return <div className="d-flex flex-wrap">{renderedRoles}</div>
     }
 
@@ -133,13 +131,11 @@ export function useUserColumns({selectable}) {
         inactive: 'light-warning',
     }
 
+
     return [
         {
             name: 'نام کاربری',
-            sortable: true,
             width: '300px',
-            sortField: 'fullName',
-            // selector: row => row.fname,
             cell: row => (
                 <div className="d-flex justify-content-left align-items-center">
                     {renderClient(row)}
@@ -161,18 +157,12 @@ export function useUserColumns({selectable}) {
         {
             name: 'نقش',
             width: '250px',
-            sortable: true,
-            sortField: 'role',
-            // selector: row => row.userRoles,
             cell: row => renderRole(row),
         },
         {
             omit: selectable,
             name: 'تاریخ عضویت',
             width: '180px',
-            sortable: true,
-            sortField: 'insertDate',
-            // selector: row => row.insertDate,
             cell: row => (
                 <span className="text-capitalize">
                     {' '}
@@ -183,9 +173,6 @@ export function useUserColumns({selectable}) {
         {
             name: 'وضعیت',
             width: selectable ? '230px' : '120px',
-            sortable: true,
-            sortField: 'status',
-            // selector: row => row.active,
             cell: row => {
                 const isActive = row.active === 'True' // Convert string to boolean
                 return (
@@ -230,9 +217,12 @@ export function useUserColumns({selectable}) {
                                     >
                                         <Modal
                                             isOpen={centeredModal}
-                                            toggle={() => setCenteredModal(!centeredModal)}
+                                            toggle={() => setCenteredModal(false)}
                                             className="modal-dialog-centered"
                                         >
+                                            <ModalHeader toggle={() => setCenteredModal(false)}>
+                                            تایید حذف کاربر
+                                            </ModalHeader>
                                             <ModalBody>
                                                 از حذف کاربر به شناسه {row.id} مطمئنید؟
                                             </ModalBody>
@@ -265,9 +255,6 @@ export function useUserColumns({selectable}) {
         {
             name: 'جنیست',
             width: '120px',
-            sortable: true,
-            sortField: 'billing',
-            selector: row => row.gender,
             cell: row => <span className="text-capitalize">{row.gender ? 'مرد' : 'زن'}</span>,
         },
     ]

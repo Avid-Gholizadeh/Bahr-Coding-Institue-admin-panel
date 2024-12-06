@@ -92,7 +92,7 @@ export function TableRow({
                             {!singleArticle && (
                                 <DropdownItem
                                     className="text-danger"
-                                    href=""
+                                    href="#"
                                     onClick={e => {
                                         e.preventDefault()
                                         onDelete(comment?.commentId || comment?.id)

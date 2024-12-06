@@ -16,6 +16,7 @@ export const useCommentActions = () => {
         onSuccess: data => {
             toast.success(data.message)
             queryClient.invalidateQueries({queryKey: ['comments']})
+            queryClient.invalidateQueries({queryKey: ['userComment']})
             queryClient.invalidateQueries({queryKey: ['single-course-comment']})
         },
         onError: () => {
@@ -28,6 +29,7 @@ export const useCommentActions = () => {
         onSuccess: data => {
             toast.success(data.message)
             queryClient.invalidateQueries({queryKey: ['comments']})
+            queryClient.invalidateQueries({queryKey: ['userComment']})
             queryClient.invalidateQueries({queryKey: ['single-course-comment']})
         },
         onError: () => {
@@ -40,6 +42,7 @@ export const useCommentActions = () => {
         onSuccess: data => {
             toast.success(data.message)
             queryClient.invalidateQueries({queryKey: ['comments']})
+            queryClient.invalidateQueries({queryKey: ['userComment']})
             queryClient.invalidateQueries({queryKey: ['single-course-comment']})
         },
         onError: error => {
@@ -52,6 +55,7 @@ export const useCommentActions = () => {
         onSuccess: () => {
             toast.success('پاسخ ارسال شد')
             queryClient.invalidateQueries({queryKey: ['comments']})
+            queryClient.invalidateQueries({queryKey: ['userComment']})
             queryClient.invalidateQueries({queryKey: ['single-course-comment']})
         },
         onError: error => {

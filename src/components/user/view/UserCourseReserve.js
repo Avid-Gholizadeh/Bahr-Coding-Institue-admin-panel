@@ -1,22 +1,51 @@
 import React from 'react';
-import { Card, CardHeader, Badge, Spinner } from 'reactstrap';
+import { Card, CardHeader, Badge, Spinner, Button } from 'reactstrap';
 import DataTable from 'react-data-table-component';
-import { ChevronDown } from 'react-feather';
+import { CheckCircle, ChevronDown, XCircle } from 'react-feather';
 import { useParams } from 'react-router-dom';
 import { useUserDetails } from './hooks/useUserDetails';
 import Avatar from '@core/components/avatar';
 import fMoment from 'moment-jalaali';
 import courseFalbackImg from '@src/assets/images/courses-fallback.jpg';
-
+import { deleteCourseReserve } from '@core/services/api/courses';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
 
 fMoment.loadPersian();
 
 export const UserCourseReserve = ({user}) => {
+  const queryClient = useQueryClient()
+  const {mutate: deleteMutate, isPending} = useMutation({
+      mutationFn: deleteCourseReserve,
+  })
+
+  const {handleDeleteAlert} = useSweetDelAlert({
+      actionFn: reserveId => handleDeleteCourseReserve(reserveId),
+  })
+
+  function handleDeleteCourseReserve(reserveId) {
+      return new Promise((resolve, reject) => {
+          deleteMutate(
+              {id: reserveId},
+              {
+                  onSuccess: data => {
+                      if (data.success) {
+                          queryClient.setQueryData(['all-course-reserve'], oldReserves =>
+                              oldReserves.filter(reserve => reserve.reserveId !== reserveId)
+                          )
+                          return resolve(data)
+                      }
+                  },
+                  onError: err => reject(err),
+              }
+          )
+      })
+  }
+
 
   const columnsReserve = [
     {
-      sortable: true,
-      minWidth: '300px',
+      minWidth: '150px',
       name: 'نام دوره',
       selector: row => row.title,
       cell: row => (
@@ -32,18 +61,37 @@ export const UserCourseReserve = ({user}) => {
       selector: row => fMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY'),
     },
     {
-      name: 'وضعیت دوره',
-      selector: row => row,
-      cell: row => (
-        <Badge color={row.accept ? 'light-success' : 'light-warning'}>
-          {row.accept ? 'تایید شده' : 'در انتظار تایید'}
-        </Badge>
-      ),
-    },
-    {
       name: 'تاریخ رزرو',
       selector: row => fMoment(row.reserverDate).locale('fa').format('jD jMMMM jYYYY'),
     },
+    {
+      name: 'وضعیت رزرو',
+      selector: row => row,
+      cell: row => row.accept? (
+        <Badge color='light-success' >
+          پذیرفته
+        </Badge>
+      ) :
+        (
+          <div className="d-flex">
+          <Button.Ripple
+              className="btn-icon"
+              color="flat-info"
+              // onClick={() => handleModalOpen(row)}
+          >
+              <CheckCircle size={20} />
+          </Button.Ripple>
+          <Button.Ripple
+              className="btn-icon"
+              color="flat-danger"
+              onClick={() => handleDeleteAlert(row.reserveId)}
+          >
+              <XCircle size={20} />
+          </Button.Ripple>
+      </div>
+      ),
+    },
+
   ];
 
   return (

@@ -3,7 +3,7 @@ import Table from './Table'
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 
-const UsersList = ({selectable, onSelect}) => {
+const UsersList = () => {
     return (
         <div className="app-user-list">
             <Table hover />

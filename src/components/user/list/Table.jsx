@@ -7,7 +7,7 @@ import Sidebar from './Sidebar'
 import DataTable from 'react-data-table-component'
 import {ChevronDown} from 'react-feather'
 import {useQuery} from '@tanstack/react-query'
-import {getUserList} from '../../../@core/services/api/User'
+import {getUserList} from '@core/services/api/User'
 import {CustomPagination} from './CustomPagination'
 import {roleOptions, statusOptions, sortOptions} from './filterOptions'
 
@@ -35,9 +35,9 @@ const UsersListTable = ({selectable, onSelect}) => {
     const [currentSort, setCurrentSort] = useState({value: '', type: '', label: 'انتخاب کنید'})
     const columns = useUserColumns({selectable})
 
-    function handleSelectedRowsChange({selectedRows}) {
-        onSelect(selectedRows[0])
-    }
+    // function handleSelectedRowsChange({selectedRows}) {
+    //     onSelect(selectedRows[0])
+    // }
 
     // Fetch user data with React Query
     const {
@@ -137,12 +137,12 @@ const UsersListTable = ({selectable, onSelect}) => {
                     <DataTable
                         noHeader
                         subHeader
-                        sortServer
+                        // sortServer
                         pagination
                         responsive
                         paginationServer
                         columns={columns}
-                        sortIcon={<ChevronDown />}
+                        // sortIcon={<ChevronDown />}
                         paginationComponent={() => (
                             <CustomPagination
                                 pageCount={Math.ceil(userList?.totalCount / rowsPerPage) || 1}
@@ -152,7 +152,7 @@ const UsersListTable = ({selectable, onSelect}) => {
                         )}
                         selectableRows={selectable}
                         selectableRowsSingle
-                        onSelectedRowsChange={handleSelectedRowsChange}
+                        // onSelectedRowsChange={handleSelectedRowsChange}
                         data={dataToRender()}
                         noDataComponent={
                             isLoading || isFetching ? (

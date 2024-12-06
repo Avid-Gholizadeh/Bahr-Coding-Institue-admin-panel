@@ -60,7 +60,7 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     setData(data);
     if (checkIsValid(data)) {
       toggleSidebar(false);

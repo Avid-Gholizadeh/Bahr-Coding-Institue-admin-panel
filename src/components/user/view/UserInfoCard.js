@@ -94,6 +94,15 @@ const UserInfoCard = ({ selectedUser }) => {
       customClass: {
         confirmButton: 'btn btn-danger custom-swal-button',
         cancelButton: 'btn btn-secondary custom-swal-button'
+      },
+      didOpen: () => {
+        // Target the buttons wrapper and apply inline styles
+        const actionsWrapper = document.querySelector('.swal2-actions');
+        if (actionsWrapper) {
+          actionsWrapper.style.display = 'flex';
+          actionsWrapper.style.justifyContent = 'center';
+          actionsWrapper.style.gap = '16px'; // Adds space between buttons
+        }
       }
     }).then((result) => {
       if (result.isConfirmed) {

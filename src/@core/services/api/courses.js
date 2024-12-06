@@ -125,7 +125,8 @@ export async function deleteCourseReserve(data) {
         const response = await api.delete('/CourseReserve', {data})
         return response
     } catch (error) {
-        throw new Error(error)
+        // throw new Error(error)
+        console.log(error);
     }
 }
 

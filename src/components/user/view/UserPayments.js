@@ -14,7 +14,6 @@ export function UserPayments({userId}) {
         queryKey:['userPayment'],
         queryFn: ()=>getUserPayList(userId),
     })
-    console.log(paymentData||{});
     const{mutate ,isPending, isError:mutateError} = useMutation({
         mutationFn: acceptCoursePayment,
         onSuccess: (response) =>{
