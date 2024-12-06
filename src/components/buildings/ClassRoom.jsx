@@ -70,7 +70,7 @@ export function ClassRoom() {
             <Container fluid>
                 <Row>
                     {dataToRender()?.map(item => (
-                        <Col xs="12" sm="12" md="6" xl="4">
+                        <Col key={item.id} xs="12" sm="12" md="6" xl="4">
                             <ClassRoomCard classRoom={item} handleModalOpen={handleModalOpen} />
                         </Col>
                     ))}

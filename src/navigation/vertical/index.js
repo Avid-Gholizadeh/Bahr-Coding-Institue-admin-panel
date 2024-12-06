@@ -24,9 +24,7 @@ const array = [
         id: 'courses',
         title: 'دوره ها',
         icon: <Book size={20} />,
-        // navLink: '/courses',
         children: [
-
             {
                 id: 'general',
                 title: 'اطلاعات کلی',
@@ -46,16 +44,28 @@ const array = [
                 navLink: '/create-course',
             },
             {
-                id: '/all-reserves',
+                id: 'all-reserves',
                 title: 'رزرو ها',
                 icon: <Circle className="ms-1" size={20} />,
                 navLink: '/all-reserves',
             },
             {
-                id: '/all-groups',
+                id: 'all-groups',
                 title: 'گروه ها',
                 icon: <Circle className="ms-1" size={20} />,
                 navLink: '/all-groups',
+            },
+            {
+                id: 'assistance',
+                title: 'دستیاران',
+                icon: <Circle className="ms-1" size={20} />,
+                navLink: '/assistance',
+            },
+            {
+                id: 'assistance-work',
+                title: 'وظایف دستیاران',
+                icon: <Circle className="ms-1" size={20} />,
+                navLink: '/assistance-work',
             },
         ],
     },

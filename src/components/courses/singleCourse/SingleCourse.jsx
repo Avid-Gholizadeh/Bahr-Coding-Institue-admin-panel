@@ -6,14 +6,21 @@ import {Link} from 'react-feather'
 import {CourseInfoCard} from './social-groups/CourseInfoCard'
 import {useState} from 'react'
 import {Tabs} from './Tabs'
+import {Tabs2} from './Tabs2'
 
 export function SingleCourse() {
     const {id} = useParams()
     const [active, setActive] = useState('1')
+    const [secondActive, setSecondActive] = useState('1')
 
     function toggleTab(tab) {
         if (active !== tab) {
             setActive(tab)
+        }
+    }
+    function toggleSecondTab(tab) {
+        if (secondActive !== tab) {
+            setSecondActive(tab)
         }
     }
 
@@ -42,6 +49,15 @@ export function SingleCourse() {
                     <Tabs
                         active={active}
                         toggleTab={toggleTab}
+                        singleCourseId={id}
+                        course={course}
+                    />
+
+                    <hr className="my-3" />
+
+                    <Tabs2
+                        active={secondActive}
+                        toggleTab={toggleSecondTab}
                         singleCourseId={id}
                         course={course}
                     />

@@ -20,9 +20,7 @@ const UserDropdown = ({profileData, profileLoading}) => {
     const user = useSelector(state => state.token.user)
     const {roleTranslations} = useRoleTranslations()
 
-    const translatedRoles = user?.roles?.map(
-        role => roleTranslations[role] || role // Fallback to the original role if no translation is found
-    )
+    const translatedRoles = user?.roles?.map(role => roleTranslations[role] || role)
     const dispatch = useDispatch()
 
     const handleLogout = () => {
@@ -31,7 +29,7 @@ const UserDropdown = ({profileData, profileLoading}) => {
     return (
         <UncontrolledDropdown tag="li" className="dropdown-user nav-item">
             {profileLoading ? (
-                <Spinner type="grow" size="md" color="primary" />
+                <Spinner type="grow" size="sm" color="primary" />
             ) : (
                 <>
                     <DropdownToggle

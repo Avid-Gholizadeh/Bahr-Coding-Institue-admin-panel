@@ -19,6 +19,8 @@ export function Department() {
         queryFn: getAllDepartments,
     })
 
+    // console.log(departments)
+
     let filteredDepartments = departments ? [...departments] : []
     if (searchTerm && searchTerm?.trim().length !== 0) {
         filteredDepartments = departments.filter(
@@ -70,7 +72,7 @@ export function Department() {
             <Container fluid>
                 <Row>
                     {dataToRender()?.map(item => (
-                        <Col xs="12" sm="12" md="6" xl="4">
+                        <Col key={item.id} xs="12" sm="12" md="6" xl="4">
                             <DepartmentCard department={item} handleModalOpen={handleModalOpen} />
                         </Col>
                     ))}
