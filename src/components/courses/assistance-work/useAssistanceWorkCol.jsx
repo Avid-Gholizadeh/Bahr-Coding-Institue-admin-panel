@@ -6,7 +6,7 @@ import {Button} from 'reactstrap'
 import userImageFallback from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 import CourseFallback from '@src/assets/images/courses-fallback.jpg'
 
-export function useAssistanceWorkCol({handleModalOpen, singleUser}) {
+export function useAssistanceWorkCol({handleModalOpen, singleUser, singleCourse}) {
     //
 
     const renderCourseAvatar = row => {
@@ -70,6 +70,7 @@ export function useAssistanceWorkCol({handleModalOpen, singleUser}) {
             ),
         },
         {
+            omit: singleCourse,
             name: 'نام دوره',
             minWidth: '230px',
             sortField: 'courseName',

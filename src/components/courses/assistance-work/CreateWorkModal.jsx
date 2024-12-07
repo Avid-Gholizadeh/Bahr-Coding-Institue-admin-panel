@@ -254,23 +254,25 @@ export function CreateWorkModal({showEdit, setShowEdit, singleUserId}) {
                             </Col>
                         </Row>
 
-                        <Row className="mt-1 p-0">
-                            <Col>
-                                <Label className="mb-1 fs-5">
-                                    یک دستیار را انتخاب کنید :{' '}
-                                    <span className="text-success">
-                                        {selectedAssistance?.assistanceName ||
-                                            showEdit?.currentAssistanceWork?.assistanceName ||
-                                            ''}
-                                    </span>
-                                </Label>
-                                <AssistanceTable
-                                    selectable
-                                    onSelect={assistance => setSelectedAssistance(assistance)}
-                                    singleUserId={singleUserId}
-                                />
-                            </Col>
-                        </Row>
+                        {!(singleUserId && showEdit.isEdit) && (
+                            <Row className="mt-1 p-0">
+                                <Col>
+                                    <Label className="mb-1 fs-5">
+                                        یک دستیار را انتخاب کنید :{' '}
+                                        <span className="text-success">
+                                            {selectedAssistance?.assistanceName ||
+                                                showEdit?.currentAssistanceWork?.assistanceName ||
+                                                ''}
+                                        </span>
+                                    </Label>
+                                    <AssistanceTable
+                                        selectable
+                                        onSelect={assistance => setSelectedAssistance(assistance)}
+                                        singleUserId={singleUserId}
+                                    />
+                                </Col>
+                            </Row>
+                        )}
 
                         <Row>
                             <Col className="text-center mt-4" xs={12}>

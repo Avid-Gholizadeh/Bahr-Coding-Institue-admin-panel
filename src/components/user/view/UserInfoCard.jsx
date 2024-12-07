@@ -230,8 +230,10 @@ const UserInfoCard = ({selectedUser, isCurrentUserAssistance}) => {
 
                         {isCurrentUserAssistance.length > 0 && (
                             <UncontrolledButtonDropdown>
-                                <DropdownToggle color={''} className="no-hover p-0">
-                                    <Button color="warning">ویرایش دستیار</Button>
+                                <DropdownToggle color={''} className="no-hover p-0 ">
+                                    <Button tag="span" color="warning" className="h-100">
+                                        ویرایش دستیار
+                                    </Button>
                                 </DropdownToggle>
                                 <DropdownMenu
                                     style={{

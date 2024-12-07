@@ -9,28 +9,22 @@ import {useState} from 'react'
 import {CustomPagination} from '@Components/common/CustomPagination'
 import {useQuery} from '@tanstack/react-query'
 
-import {getAllAssistance, getAllAssistanceWorks} from '@core/services/api/assistance'
+import {getAllAssistanceWorks} from '@core/services/api/assistance'
 import {useAssistanceWorkCol} from './useAssistanceWorkCol'
 import {CreateWorkModal} from './CreateWorkModal'
 
-export function AssistanceWorkTable({user, isCurrentUserAssistance}) {
+export function AssistanceWorkTable({user, isCurrentUserAssistance, singleCourse}) {
     //
     const [currentPage, setCurrentPage] = useState(1)
     const [rowsPerPage, setRowsPerpage] = useState(10)
     const [searchTerm, setSearchTerm] = useState(null)
     //const [sort, setSort] = useState({inserDate: false, direction: 'desc'})
-    const columns = useAssistanceWorkCol({handleModalOpen, singleUser: user?.id})
+    const columns = useAssistanceWorkCol({handleModalOpen, singleUser: user?.id, singleCourse})
     const [showEdit, setShowEdit] = useState({
         currentAssistanceWork: null,
         show: false,
         isEdit: false,
     })
-
-    /*     let {data: assistance} = useQuery({
-        enabled: Boolean(user?.id),
-        queryKey: ['all-assistance-list'],
-        queryFn: getAllAssistance,
-    }) */
 
     let {data: assistanceWorks, isLoading} = useQuery({
         queryKey: ['all-assistanceWork-list'],
@@ -39,6 +33,9 @@ export function AssistanceWorkTable({user, isCurrentUserAssistance}) {
 
     if (user?.id) {
         assistanceWorks = assistanceWorks?.filter(work => work.userId === user.id)
+    }
+    if (singleCourse) {
+        assistanceWorks = assistanceWorks?.filter(item => item.courseId === singleCourse)
     }
 
     assistanceWorks = assistanceWorks
@@ -63,14 +60,6 @@ export function AssistanceWorkTable({user, isCurrentUserAssistance}) {
         if (assistanceWorks) {
             const allData = [...filteredAssistanceWorks]
 
-            /* if (sort.inserDate) {
-                if (sort.direction === 'desc') {
-                    allData.sort((a, b) => new Date(a.inserDate) - new Date(b.inserDate))
-                } else {
-                    allData.sort((a, b) => new Date(b.inserDate) - new Date(a.inserDate))
-                }
-            } */
-
             return allData?.filter(
                 (_, index) =>
                     index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
@@ -85,10 +74,6 @@ export function AssistanceWorkTable({user, isCurrentUserAssistance}) {
             isEdit: assistanceWork.assistanceId ? true : false,
         })
     }
-
-    /* function handleSort(_, sortDirection) {
-        setSort({inserDate: true, direction: sortDirection})
-    } */
 
     const handlePagination = page => {
         setCurrentPage(page.selected + 1)
@@ -131,7 +116,6 @@ export function AssistanceWorkTable({user, isCurrentUserAssistance}) {
                         }
                         progressComponent={<Spinner className="mb-5 mt-4" color="primary" />}
                         columns={columns}
-                        // onSort={handleSort}
                         sortIcon={<ChevronDown />}
                         className="react-dataTable"
                         paginationComponent={Pagination}
