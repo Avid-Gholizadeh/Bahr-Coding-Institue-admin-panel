@@ -26,7 +26,8 @@ export function CourseAssistaceAccardion({course}) {
     const [open, setOpen] = useState('')
 
     const toggle = id => {
-        open === id ? setOpen() : setOpen(id)
+        console.log(id)
+        open === id ? setOpen('') : setOpen(id)
     }
 
     let {data: assistance} = useQuery({
