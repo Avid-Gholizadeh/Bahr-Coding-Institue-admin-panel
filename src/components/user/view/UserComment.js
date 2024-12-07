@@ -128,7 +128,7 @@ export function UserComment({ userId }) {
                             handleEditClick(row)}}>
                             <Edit size={15} /> ویرایش
                         </DropdownItem>
-                        {row.replyCommentId !== null && (
+                        {row.replyCommentId ? null : (
                             <DropdownItem href='#'
                             onClick={(e) => {
                                 e.preventDefault();
