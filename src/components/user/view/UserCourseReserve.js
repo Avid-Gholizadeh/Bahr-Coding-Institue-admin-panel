@@ -10,6 +10,7 @@ import courseFalbackImg from '@src/assets/images/courses-fallback.jpg';
 import { deleteCourseReserve } from '@core/services/api/courses';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {useSweetDelAlert} from '@Components/common/useSweetDelAlert'
+import useColumnsReserve from './hooks/useColumnsReserve';
 
 fMoment.loadPersian();
 
@@ -30,9 +31,8 @@ export const UserCourseReserve = ({user}) => {
               {
                   onSuccess: data => {
                       if (data.success) {
-                          queryClient.setQueryData(['all-course-reserve'], oldReserves =>
-                              oldReserves.filter(reserve => reserve.reserveId !== reserveId)
-                          )
+                          queryClient.setQueryData(['getDetailUser'])
+                          queryClient.invalidateQueries(['getDetailUser'])
                           return resolve(data)
                       }
                   },
@@ -43,56 +43,7 @@ export const UserCourseReserve = ({user}) => {
   }
 
 
-  const columnsReserve = [
-    {
-      minWidth: '150px',
-      name: 'نام دوره',
-      selector: row => row.title,
-      cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          <div className='d-flex flex-column'>
-            <span className='text-truncate fw-bolder'>{row.courseName}</span>
-          </div>
-        </div>
-      ),
-    },
-    {
-      name: 'تاریخ دوره',
-      selector: row => fMoment(row.lastUpdate).locale('fa').format('jD jMMMM jYYYY'),
-    },
-    {
-      name: 'تاریخ رزرو',
-      selector: row => fMoment(row.reserverDate).locale('fa').format('jD jMMMM jYYYY'),
-    },
-    {
-      name: 'وضعیت رزرو',
-      selector: row => row,
-      cell: row => row.accept? (
-        <Badge color='light-success' >
-          پذیرفته
-        </Badge>
-      ) :
-        (
-          <div className="d-flex">
-          <Button.Ripple
-              className="btn-icon"
-              color="flat-info"
-              // onClick={() => handleModalOpen(row)}
-          >
-              <CheckCircle size={20} />
-          </Button.Ripple>
-          <Button.Ripple
-              className="btn-icon"
-              color="flat-danger"
-              onClick={() => handleDeleteAlert(row.reserveId)}
-          >
-              <XCircle size={20} />
-          </Button.Ripple>
-      </div>
-      ),
-    },
-
-  ];
+  const columnsReserve = useColumnsReserve(handleDeleteAlert);
 
   return (
     <Card>
