@@ -14,10 +14,14 @@ export const useCommentActions = () => {
     const acceptComment = useMutation({
         mutationFn: acceptCourseComment,
         onSuccess: data => {
-            toast.success(data.message)
-            queryClient.invalidateQueries({queryKey: ['comments']})
-            queryClient.invalidateQueries({queryKey: ['userComment']})
-            queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            if(data.success){
+                toast.success(data.message)
+                queryClient.invalidateQueries({queryKey: ['comments']})
+                queryClient.invalidateQueries({queryKey: ['userComment']})
+                queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            }else (
+                toast.error('مشکلی پیش آمد')
+            )
         },
         onError: () => {
             toast.error('Failed to accept comment. Please try again.')
@@ -27,10 +31,15 @@ export const useCommentActions = () => {
     const rejectComment = useMutation({
         mutationFn: rejectCourseComment,
         onSuccess: data => {
-            toast.success(data.message)
-            queryClient.invalidateQueries({queryKey: ['comments']})
-            queryClient.invalidateQueries({queryKey: ['userComment']})
-            queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            if(data.success){
+
+                toast.success(data.message)
+                queryClient.invalidateQueries({queryKey: ['comments']})
+                queryClient.invalidateQueries({queryKey: ['userComment']})
+                queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            } else (
+                toast.error('مشکلی پیش آمد')
+            )
         },
         onError: () => {
             toast.error('Failed to reject comment. Please try again.')
@@ -40,26 +49,36 @@ export const useCommentActions = () => {
     const deleteComment = useMutation({
         mutationFn: deleteCourseComment,
         onSuccess: data => {
-            toast.success(data.message)
-            queryClient.invalidateQueries({queryKey: ['comments']})
-            queryClient.invalidateQueries({queryKey: ['userComment']})
-            queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            if(data.success){
+
+                toast.success(data.message)
+                queryClient.invalidateQueries({queryKey: ['comments']})
+                queryClient.invalidateQueries({queryKey: ['userComment']})
+                queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            }else (
+                toast.error('مشکلی پیش آمد')
+            )
         },
         onError: error => {
-            toast.error(error.message)
+            toast.error('مشکلی پیش آمد')
         },
     })
 
     const addReply = useMutation({
         mutationFn: replyCourseComment,
-        onSuccess: () => {
-            toast.success('پاسخ ارسال شد')
-            queryClient.invalidateQueries({queryKey: ['comments']})
-            queryClient.invalidateQueries({queryKey: ['userComment']})
-            queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+        onSuccess: (data) => {
+            if(data.success){
+
+                toast.success('پاسخ ارسال شد')
+                queryClient.invalidateQueries({queryKey: ['comments']})
+                queryClient.invalidateQueries({queryKey: ['userComment']})
+                queryClient.invalidateQueries({queryKey: ['single-course-comment']})
+            }else (
+                toast.error('مشکلی پیش آمد')
+            )
         },
         onError: error => {
-            toast.error(error.message)
+            toast.error('مشکلی پیش آمد')
         },
     })
 
