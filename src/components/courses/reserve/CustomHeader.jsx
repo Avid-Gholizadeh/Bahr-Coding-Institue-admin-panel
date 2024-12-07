@@ -15,10 +15,12 @@ export function CustomHeader({
     isCurrentUserAssistance,
 }) {
     const isAssistance = assistanceUserId
-        ? isCurrentUserAssistance.length > 0
+        ? isCurrentUserAssistance?.length > 0
             ? true
             : false
         : true
+
+    // console.log(isAssistance)
 
     return (
         <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
@@ -34,7 +36,7 @@ export function CustomHeader({
                     xl="7"
                     className="d-flex gap-4 align-items-center justify-content-start justify-content-xl-end"
                 >
-                    {!singleCourseId && (
+                    {!singleCourseId && !assistanceUserId && (
                         <DataCountDropDown
                             RowsOfPage={RowsOfPage}
                             handlePerPage={handlePerPage}

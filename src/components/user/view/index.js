@@ -57,7 +57,7 @@ function UserView() {
 
     const isCurrentUserAssistance = assistance?.filter(item => item.userId === user?.id) || []
 
-    console.log(isCurrentUserAssistance)
+    // console.log(isCurrentUserAssistance)
 
     if (isLoading) {
         return (
