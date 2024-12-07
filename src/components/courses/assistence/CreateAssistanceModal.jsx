@@ -19,13 +19,12 @@ import {useSelector} from 'react-redux'
 import {SelectAssistaneTabs} from './SelectAssistaneTabs'
 import {createAssistance, updateAssistance} from '@core/services/api/assistance'
 
-export function CreateAssistanceModal({showEdit, setShowEdit, singleUser}) {
+export function CreateAssistanceModal({showEdit, setShowEdit, singleUser, singleCourse}) {
     //
     const queryClient = useQueryClient()
     const {skin} = useSelector(state => state.layout)
     const [selectedCourse, setSelectedCourse] = useState(null)
     const [selectedUser, setSelectedUser] = useState(null)
-    // console.log(selectedUser)
 
     const defaultValues = showEdit.isEdit
         ? {
@@ -85,17 +84,23 @@ export function CreateAssistanceModal({showEdit, setShowEdit, singleUser}) {
 
     useEffect(() => {
         if (singleUser && showEdit.show) {
+            console.log(singleUser)
             handleSelecteUser(singleUser)
+        }
+        if (singleCourse && showEdit) {
+            handleSelecteCourse(singleCourse)
         }
     }, [singleUser, showEdit.show])
 
     function handleSelecteUser(user) {
-        // console.log(user)
+        console.log('object')
         setSelectedUser(user)
-        const selectedUserValue =
+        let selectedUserValue =
             user?.fname || user?.fName
                 ? `${user.fname || user.fName} ${user.lname || user.lName}`
                 : 'نام نا مشخص'
+        selectedUserValue = user?.assistanceName ? user?.assistanceName : selectedUserValue
+
         setValue('userId', selectedUserValue)
     }
     function handleSelecteCourse(course) {
@@ -132,12 +137,6 @@ export function CreateAssistanceModal({showEdit, setShowEdit, singleUser}) {
                     <h1 className="text-center mb-3">
                         {showEdit.isEdit ? 'ویرایش دستیار' : 'تعیین دستیار جدید'}
                     </h1>
-
-                    <SelectAssistaneTabs
-                        setSelectedCourse={handleSelecteCourse}
-                        setSelectedUser={handleSelecteUser}
-                        singleUser={singleUser}
-                    />
 
                     <Card
                         tag={Form}
@@ -228,6 +227,13 @@ export function CreateAssistanceModal({showEdit, setShowEdit, singleUser}) {
                             </Col>
                         </Row>
                     </Card>
+
+                    <SelectAssistaneTabs
+                        setSelectedCourse={handleSelecteCourse}
+                        setSelectedUser={handleSelecteUser}
+                        singleUser={singleUser}
+                        singleCourse={singleCourse}
+                    />
                 </ModalBody>
             </Modal>
         </>

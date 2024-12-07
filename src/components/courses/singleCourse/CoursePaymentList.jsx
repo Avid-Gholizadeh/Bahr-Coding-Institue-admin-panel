@@ -1,21 +1,34 @@
-import {acceptCoursePayment, deleteCoursePayment, getCoursesPayments} from '@core/services/api/payment'
+import {
+    acceptCoursePayment,
+    deleteCoursePayment,
+    getCoursesPayments,
+} from '@core/services/api/payment'
 import {useMutation, useQuery} from '@tanstack/react-query'
 import moment from 'jalali-moment'
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import DataTable from 'react-data-table-component'
-import { createPortal } from 'react-dom'
-import { Check, MoreVertical, Trash } from 'react-feather'
+import {createPortal} from 'react-dom'
+import {Check, MoreVertical, Trash} from 'react-feather'
 import toast from 'react-hot-toast'
-import { CustomPagination } from '@Components/common/CustomPagination';
-import { CustomHeader } from '@Components/courses/reserve/CustomHeader';
-import {Badge, Button, Card, DropdownItem, DropdownMenu, DropdownToggle, Spinner, UncontrolledDropdown} from 'reactstrap'
+import {CustomPagination} from '@Components/common/CustomPagination'
+import {CustomHeader} from '@Components/courses/reserve/CustomHeader'
+import {
+    Badge,
+    Button,
+    Card,
+    DropdownItem,
+    DropdownMenu,
+    DropdownToggle,
+    Spinner,
+    UncontrolledDropdown,
+} from 'reactstrap'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
 
 export function CoursePaymentList({singleCourseId}) {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerpage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1)
+    const [rowsPerPage, setRowsPerpage] = useState(10)
+    const [searchTerm, setSearchTerm] = useState(null)
     const {data, isLoading, isError} = useQuery({
         queryKey: ['course_allPayments'],
         queryFn: getCoursesPayments,
@@ -41,20 +54,20 @@ export function CoursePaymentList({singleCourseId}) {
             toast.error(' پذیرش ناموفق ')
         },
     })
-    const {mutate:deleteMutate} = useMutation({
+    const {mutate: deleteMutate} = useMutation({
         mutationFn: deleteCoursePayment,
-        onSuccess: (response) => {
-          if (response.success) {
-            toast.success('حذف شد');
-          } else {
-            toast.error('حذف ناموفق');
-          }
+        onSuccess: response => {
+            if (response.success) {
+                toast.success('حذف شد')
+            } else {
+                toast.error('حذف ناموفق')
+            }
         },
-        onError: (err) => {
-          console.log('response', err);
-          toast.error('حذف ناموفق');
+        onError: err => {
+            console.log('response', err)
+            toast.error('حذف ناموفق')
         },
-      })
+    })
 
     function handleAccept(paymentId) {
         const formData = new FormData()
@@ -68,55 +81,55 @@ export function CoursePaymentList({singleCourseId}) {
 
         deleteMutate(formData)
     }
-    const PortalDropdownMenu = ({ children }) => {
-        return createPortal(children, document.getElementById('portal-root'));
-      };
-      let filteredPayments = coursePayment ? [...coursePayment] : [];
-  if (searchTerm && searchTerm?.trim().length !== 0) {
-    filteredPayments = coursePayment.filter(
-      (item) =>
-        item.studentName?.includes(searchTerm) ||
-        item.groupName?.includes(searchTerm) ||
-        item.title?.includes(searchTerm)
-    );
-  }
-
-  const handlePagination = (page) => {
-    setCurrentPage(page.selected + 1);
-  };
-
-  function handlePerPage(e) {
-    const value = parseInt(e.currentTarget.value);
-    setRowsPerpage(value);
-  }
-
-  function dataToRender() {
-    if (coursePayment) {
-      const allData = [...filteredPayments];
-      return allData?.filter(
-        (_, index) =>
-          index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
-      );
+    const PortalDropdownMenu = ({children}) => {
+        return createPortal(children, document.getElementById('portal-root'))
     }
-  }
+    let filteredPayments = coursePayment ? [...coursePayment] : []
+    if (searchTerm && searchTerm?.trim().length !== 0) {
+        filteredPayments = coursePayment.filter(
+            item =>
+                item.studentName?.includes(searchTerm) ||
+                item.groupName?.includes(searchTerm) ||
+                item.title?.includes(searchTerm)
+        )
+    }
 
-  function handleSearch(val) {
-    setSearchTerm(val);
-    setCurrentPage(1);
-  }
+    const handlePagination = page => {
+        setCurrentPage(page.selected + 1)
+    }
 
-  function Pagination() {
-    return (
-      <>
-        <CustomPagination
-          totalItem={filteredPayments.length}
-          rowsPerPage={rowsPerPage}
-          currentPage={currentPage}
-          handlePagination={handlePagination}
-        />
-      </>
-    );
-  }
+    function handlePerPage(e) {
+        const value = parseInt(e.currentTarget.value)
+        setRowsPerpage(value)
+    }
+
+    function dataToRender() {
+        if (coursePayment) {
+            const allData = [...filteredPayments]
+            return allData?.filter(
+                (_, index) =>
+                    index >= (currentPage - 1) * rowsPerPage && index < currentPage * rowsPerPage
+            )
+        }
+    }
+
+    function handleSearch(val) {
+        setSearchTerm(val)
+        setCurrentPage(1)
+    }
+
+    function Pagination() {
+        return (
+            <>
+                <CustomPagination
+                    totalItem={filteredPayments.length}
+                    rowsPerPage={rowsPerPage}
+                    currentPage={currentPage}
+                    handlePagination={handlePagination}
+                />
+            </>
+        )
+    }
 
     const columns = [
         {
@@ -130,9 +143,9 @@ export function CoursePaymentList({singleCourseId}) {
             cell: row => row.currentRemainder + 'تومان',
         },
         {
-          name: '  دانشجو',
-          minWidth: '130px',
-          cell: row => <span className='d-inline-block text-truncate'> {row.studentName} </span> 
+            name: '  دانشجو',
+            minWidth: '130px',
+            cell: row => <span className="d-inline-block text-truncate"> {row.studentName} </span>,
         },
         {
             name: ' تاریخ ثبت پرداخت',
@@ -155,73 +168,74 @@ export function CoursePaymentList({singleCourseId}) {
             cell: row =>
                 row.accept ? (
                     <Badge color="light-success" className="">
-                    پذیرفته
-                  </Badge>
+                        پذیرفته
+                    </Badge>
                 ) : (
-                  <UncontrolledDropdown>
-                    <DropdownToggle
-                      className="icon-btn hide-arrow"
-                      color="transparent"
-                      size="sm"
-                      caret>
-                      <MoreVertical size={15} />
-                    </DropdownToggle>
-                    <PortalDropdownMenu>
-                      <DropdownMenu>
-                        <DropdownItem
-                          className="text-primary"
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleAccept(row.id);
-                          }}
+                    <UncontrolledDropdown>
+                        <DropdownToggle
+                            className="icon-btn hide-arrow"
+                            color="transparent"
+                            size="sm"
+                            caret
                         >
-                          <Check className="me-50" size={15} />{' '}
-                          <span className="align-middle"> تایید </span>
-                        </DropdownItem>
-                        <DropdownItem
-                          className="text-danger"
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDelete(row.id);
-                          }}
-                        >
-                          <Trash className="me-50" size={15} />{' '}
-                          <span className="align-middle">رد کردن</span>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </PortalDropdownMenu>
-                  </UncontrolledDropdown>
+                            <MoreVertical size={15} />
+                        </DropdownToggle>
+                        <PortalDropdownMenu>
+                            <DropdownMenu>
+                                <DropdownItem
+                                    className="text-primary"
+                                    href="#"
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        handleAccept(row.id)
+                                    }}
+                                >
+                                    <Check className="me-50" size={15} />{' '}
+                                    <span className="align-middle"> تایید </span>
+                                </DropdownItem>
+                                <DropdownItem
+                                    className="text-danger"
+                                    href="#"
+                                    onClick={e => {
+                                        e.preventDefault()
+                                        handleDelete(row.id)
+                                    }}
+                                >
+                                    <Trash className="me-50" size={15} />{' '}
+                                    <span className="align-middle">رد کردن</span>
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </PortalDropdownMenu>
+                    </UncontrolledDropdown>
                 ),
         },
     ]
     return (
         <Card className="overflow-hidden">
             <div className="react-dataTable app-user-list">
-              <DataTable
-              noHeader
-              subHeader
-              sortServer
-              pagination
-              responsive
-              paginationServer
-              className="react-dataTable"
-              columns={columns}
-              progressPending={isLoading}
-              progressComponent={<Spinner color="primary" size="md" />}
-              noDataComponent={<div style={{ padding: '20px' }}>پرداختی ای موجود نیست</div>}
-              data={dataToRender()}
-              paginationComponent={Pagination}
-              subHeaderComponent={
-                <CustomHeader
-                  RowsOfPage={rowsPerPage}
-                  handlePerPage={handlePerPage}
-                  onSearch={handleSearch}
-                  title="دسته‌بندی"
+                <DataTable
+                    noHeader
+                    subHeader
+                    sortServer
+                    pagination
+                    responsive
+                    paginationServer
+                    className="react-dataTable"
+                    columns={columns}
+                    progressPending={isLoading}
+                    progressComponent={<Spinner color="primary" size="sm" />}
+                    noDataComponent={<div style={{padding: '20px'}}>پرداختی ای موجود نیست</div>}
+                    data={dataToRender()}
+                    paginationComponent={Pagination}
+                    subHeaderComponent={
+                        <CustomHeader
+                            RowsOfPage={rowsPerPage}
+                            handlePerPage={handlePerPage}
+                            onSearch={handleSearch}
+                            title="دسته‌بندی"
+                        />
+                    }
                 />
-              }
-            />
             </div>
         </Card>
     )

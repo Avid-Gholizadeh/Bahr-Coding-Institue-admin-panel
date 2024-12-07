@@ -173,6 +173,7 @@ export function CourseInfoCard({course}) {
                                                     {status.statusName}
                                                 </DropdownItem>
                                             ))}
+                                            {!allStatus && <p></p>}
                                         </DropdownMenu>
                                     </UncontrolledButtonDropdown>
                                 </div>
